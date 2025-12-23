@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – Wissen & Details</title>
+    <link rel="stylesheet" href="./assets/css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+        .wiki-container { max-width: 900px; margin: 30px auto; background: white; padding: 50px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .wiki-grid { display: grid; grid-template-columns: 1fr 300px; gap: 40px; }
+        
+        .info-card { background: #f8f9fa; padding: 25px; border-radius: 8px; border: 1px solid #e9ecef; }
+        .info-card h3 { margin-top: 0; color: var(--accent-brot); font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
+        
+        .tech-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dotted #ccc; font-size: 0.9em; }
+        .tech-label { font-weight: bold; color: #555; }
+        
+        .article-text { font-size: 1.1em; line-height: 1.8; color: #333; }
+        .article-text h2 { color: var(--accent-brot); margin-top: 30px; }
+        
+        .property-box { background: #fffde7; padding: 20px; border-left: 5px solid #fbc02d; margin-top: 30px; border-radius: 4px; }
+        .property-box h4 { margin: 0 0 10px 0; color: #827717; }
+
+        .img-placeholder-wiki { width: 100%; height: 200px; background: #eee; display: flex; align-items: center; justify-content: center; border-radius: 6px; margin-bottom: 20px; color: #aaa; }
+        
+        @media (max-width: 768px) { .wiki-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body class="BG_Wissen">
+
+<div class="no-print" style="max-width:900px; margin:20px auto; display:flex; justify-content:space-between;">
+    <button class="btn" onclick="history.back()">← Zurück</button>
+    <button class="btn" onclick="window.print()">Drucken</button>
+</div>
+
+<div id="wikiOutput" class="wiki-container">Lade Wissen...</div>
+
+<script src="./assets/js/util.js"></script>
+<script>
+(async () => {
+    const params = new URLSearchParams(window.location.search);
+    const wissenId = params.get('id');
+
+    if (!wissenId) {
+        document.getElementById('wikiOutput').innerHTML = "Keine Wissens-ID übergeben.";
+        return;
+    }
+
+    const data = await window.$util.loadCsv('./assets/data/wdb_wissen.csv');
+    const entry = data.find(r => r.wissen_id === wissenId);
+
+    if (!entry) {
+        document.getElementById('wikiOutput').innerHTML = "Eintrag nicht im Lexikon gefunden.";
+        return;
+    }
+
+    // Design-Farbe anpassen (Grün für Triebmittel, etc.)
+    if (entry.kategorie === "Triebmittel") {
+        document.body.classList.add("cat-triebmittel");
+    }
+
+    const html = `
+        <div style="margin-bottom:40px;">
+            <small style="color:#888; letter-spacing:2px; text-transform:uppercase;">${entry.kategorie}</small>
+            <h1 style="font-size:3em; margin:10px 0; color:var(--accent-brot);">${entry.name}</h1>
+        </div>
+
+        <div class="wiki-grid">
+            <div class="main-content">
+                <div class="article-text">
+                    <h2>Geschichte & Hintergrund</h2>
+                    <p>${entry.beschreibung_history || 'Keine Beschreibung verfügbar.'}</p>
+                </div>
+
+                <div class="property-box">
+                    <h4>💡 Backeigenschaften & Tipps</h4>
+                    <p>${entry.back_eigenschaften || 'Hierzu liegen noch keine spezifischen Tipps vor.'}</p>
+                </div>
+            </div>
+
+            <aside class="sidebar">
+                <div class="img-placeholder-wiki">
+                    ${entry.bild_ref ? `<img src="./assets/img/wissen/${entry.bild_ref}" style="width:100%; height:100%; object-fit:cover; border-radius:6px;">` : 'Kein Bild'}
+                </div>
+
+                <div class="info-card">
+                    <h3>Technische Daten</h3>
+                    ${window.$util.parsePipe(entry.technische_daten).map(pair => {
+                        const [label, val] = pair.split(':');
+                        return `<div class="tech-row">
+                                    <span class="tech-label">${label || ''}</span>
+                                    <span>${val || ''}</span>
+                                </div>`;
+                    }).join('')}
+                </div>
+            </aside>
+        </div>
+    `;
+
+    document.getElementById('wikiOutput').innerHTML = html;
+})();
+</script>
+</body>
+</html>

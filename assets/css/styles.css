@@ -1,0 +1,59 @@
+/* ============================================================
+   1. BASICS (Aus deinem Lexikon-Projekt)
+   ============================================================ */
+body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    margin: 0; background: #eef2f6; color: #333; line-height: 1.6; 
+}
+
+.page { 
+    max-width: 1000px; margin: 30px auto; background: white; 
+    padding: 40px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
+}
+
+.header { 
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 25px; 
+}
+
+.brand { font-weight: bold; font-size: 1.2em; color: #4e342e; }
+
+.btn { 
+    padding: 8px 16px; cursor: pointer; border: none; 
+    background: #4e342e; color: white; border-radius: 4px; font-weight: 500; 
+}
+
+/* ============================================================
+   2. WdB SPEZIAL (Brot-Designs & Kategorien)
+   ============================================================ */
+:root {
+    --accent-brot: #4e342e;    /* Erdbraun */
+    --accent-trieb: #00695c;   /* Teal für Hefen/Sauerteig */
+    --accent-spez: #bf360c;    /* Terrakotta für Pizza/Tacos */
+}
+
+/* Dynamische Farbanpassung je nach Kategorie */
+body.cat-triebmittel { --accent-brot: var(--accent-trieb); background-color: #e0f2f1; }
+body.cat-sonderteil { --accent-brot: var(--accent-spez); background-color: #fbe9e7; }
+
+/* Rezept-Layout */
+.phase-section { margin-bottom: 40px; border-bottom: 1px solid #f0f0f0; padding-bottom: 20px; }
+.phase-title { 
+    background: var(--accent-brot); color: white; padding: 8px 15px; 
+    border-radius: 4px; display: inline-block; margin-bottom: 20px; text-transform: uppercase;
+}
+
+.recipe-grid { display: grid; grid-template-columns: 300px 1fr; gap: 30px; }
+.ing-box { background: #fafafa; padding: 20px; border-radius: 6px; border: 1px solid #eee; }
+
+/* Badge-System für Triebmittel & Technik */
+.tech-badge { 
+    background: #eef2f6; color: var(--accent-brot); padding: 3px 8px; 
+    border-radius: 4px; font-size: 0.85em; margin-right: 5px; border: 1px solid #d1d5db; 
+}
+
+/* Tabelle & Suche */
+#t { width: 100%; border-collapse: collapse; margin-top: 20px; }
+#t th { background: #f8f9fa; padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6; }
+#t td { padding: 12px; border-bottom: 1px solid #eee; }
+#t tr:hover { background-color: #fff9f0; cursor: pointer; }
