@@ -1,0 +1,29 @@
+/* wdb_style.css */
+:root {
+    --brown-dark: #4e342e;
+    --brown-light: #d7ccc8;
+    --accent: #bf360c;
+    --bg-creme: #fafafa;
+}
+
+body { font-family: 'Segoe UI', sans-serif; background: var(--bg-creme); color: #333; line-height: 1.6; }
+.container { max-width: 1000px; margin: auto; padding: 20px; }
+
+/* Header & Status */
+header { border-bottom: 3px solid var(--brown-dark); padding-bottom: 10px; margin-bottom: 30px; }
+.status-badge { background: var(--accent); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8em; float: right; }
+
+/* Layout-Grid */
+.recipe-grid { display: grid; grid-template-columns: 300px 1fr; gap: 40px; }
+
+/* Zutaten-Liste */
+.ingredients-card { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+.ingredients-list { list-style: none; padding: 0; }
+.ingredients-list li { padding: 8px 0; border-bottom: 1px solid #eee; }
+
+/* Schritte */
+.step-box { margin-bottom: 25px; padding-left: 20px; border-left: 4px solid var(--brown-light); }
+.step-number { font-weight: bold; color: var(--accent); font-size: 1.2em; }
+
+/* Badges für Techniken */
+.tag { display: inline-block; background: var(--brown-light); padding: 2px 10px; border-radius: 4px; margin-right: 5px; font-size: 0.85em; }

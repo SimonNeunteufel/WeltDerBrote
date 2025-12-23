@@ -1,0 +1,50 @@
+<div class="container">
+    <header>
+        <span class="status-badge">{{ rezept.status }}</span>
+        <h1>{{ rezept.name }}</h1>
+        <p class="breadcrumbs">
+            Welt der Brote &gt; {{ atlas.parent_name }} &gt; <strong>{{ atlas.name }}</strong>
+        </p>
+    </header>
+
+    <div class="recipe-grid">
+        <aside class="ingredients-card">
+            <h3>Zutaten</h3>
+            <ul class="ingredients-list">
+                {# Wir splitten die Spalte 'zutaten_list' an der Pipe #}
+                {% for zutat in rezept.zutaten_list.split('|') %}
+                    <li>{{ zutat.strip() }}</li>
+                {% endfor %}
+            </ul>
+            
+            <div style="margin-top: 20px;">
+                <strong>Zeitaufwand:</strong><br>
+                {{ rezept.zeit_aufwand }}
+            </div>
+        </aside>
+
+        <main>
+            <h3>Zubereitung ({{ rezept.gruppe }})</h3>
+            
+            <div class="step-box">
+                <span class="step-number">Schritt {{ rezept.schritt_nr }}</span>
+                <p>{{ rezept.anweisung }}</p>
+                
+                {% if rezept.bild_ref %}
+                    <img src="../assets/images/{{ rezept.bild_ref }}" alt="Schrittbild" style="width:100%; border-radius:8px;">
+                {% endif %}
+            </div>
+
+            <div class="techniken">
+                {% for tag in rezept.techniken_tags.split('|') %}
+                    <span class="tag">#{{ tag.strip() }}</span>
+                {% endfor %}
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <hr>
+        <p>Quelle: <a href="{{ rezept.quelle }}">{{ rezept.quelle }}</a> | Referenz: {{ rezept.brot_id }}</p>
+    </footer>
+</div>

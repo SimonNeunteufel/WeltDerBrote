@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – Rezeptansicht</title>
+    <link rel="stylesheet" href="./assets/css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+        .recipe-container { max-width: 1000px; margin: 30px auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .phase-section { margin-bottom: 40px; border-bottom: 1px solid #f0f0f0; padding-bottom: 20px; }
+        .phase-title { background: #4e342e; color: white; padding: 8px 15px; border-radius: 4px; display: inline-block; margin-bottom: 20px; }
+        .recipe-grid { display: grid; grid-template-columns: 300px 1fr; gap: 30px; }
+        .ing-box { background: #fafafa; padding: 20px; border-radius: 6px; border: 1px solid #eee; }
+        .ing-list { list-style: none; padding: 0; }
+        .ing-list li { padding: 5px 0; border-bottom: 1px dotted #ccc; font-size: 0.95em; }
+        .step-text { font-size: 1.1em; line-height: 1.7; color: #333; }
+        .tech-badge { background: #eef2f6; color: #4e342e; padding: 3px 8px; border-radius: 4px; font-size: 0.85em; margin-right: 5px; border: 1px solid #d1d5db; }
+        @media print { .no-print { display: none; } .recipe-container { box-shadow: none; margin: 0; padding: 0; } }
+    </style>
+</head>
+<body>
+
+<div class="no-print" style="max-width:1000px; margin:20px auto; display:flex; justify-content:space-between;">
+    <button class="btn" onclick="history.back()">← Zurück</button>
+    <button class="btn" onclick="window.print()">Drucken / PDF</button>
+</div>
+
+<div id="recipeOutput" class="recipe-container">Lade Rezept...</div>
+
+<script src="./assets/js/util.js"></script>
+<script>
+(async () => {
+    const params = new URLSearchParams(window.location.search);
+    const breadId = params.get('id');
+
+    if (!breadId) {
+        document.getElementById('recipeOutput').innerHTML = "Keine ID übergeben.";
+        return;
+    }
+
+    const allData = await window.$util.loadCsv('./assets/data/wdb_rezepte.csv');
+    // Alle Zeilen für dieses eine Brot filtern
+    const steps = allData.filter(r => r.Brot_Referenz_Nummer === breadId);
+
+    if (steps.length === 0) {
+        document.getElementById('recipeOutput').innerHTML = "Rezept nicht gefunden.";
+        return;
+    }
+
+    const mainInfo = steps[0];
+    
+    let html = `
+        <div style="text-align:center; margin-bottom:40px;">
+            <small style="color:#888; letter-spacing:2px; text-transform:uppercase;">${mainInfo.atlas_ref_id || ''}</small>
+            <h1 style="font-size:3em; margin:10px 0;">${mainInfo.Brotname}</h1>
+            <div style="font-style:italic; color:#666;">ID: ${breadId}</div>
+        </div>
+    `;
+
+    // Schritte nach "Gruppe" (Teigphase) rendern
+    steps.forEach(s => {
+        html += `
+            <div class="phase-section">
+                <div class="phase-title">${s.Gruppe || 'Arbeitsschritt'}</div>
+                <div class="recipe-grid">
+                    <div class="ing-box">
+                        <h3>Zutaten</h3>
+                        <ul class="ing-list">
+                            ${window.$util.formatIngredients(s.Zutaten)}
+                        </ul>
+                    </div>
+                    <div class="instruction-box">
+                        <h3>Zubereitung</h3>
+                        <div class="step-text">${s.Zubereitung || 'Keine Anweisung.'}</div>
+                        <div style="margin-top:15px;">
+                            ${window.$util.parsePipe(s.Besondere_Techniken_Anmerkungen).map(t => `<span class="tech-badge">${t}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    document.getElementById('recipeOutput').innerHTML = html;
+})();
+</script>
+</body>
+</html>

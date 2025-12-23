@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – Bände & Regionen</title>
+    <link rel="stylesheet" href="./assets/css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+</head>
+<body class="BG_Atlas">
+    <div class="page">
+        <div class="header">
+            <button class="btn" onclick="location.href='./index.html'">← Home</button>
+            <div class="brand">Atlas der Brote</div>
+        </div>
+
+        <p class="sub">Navigiere durch Bände, Kontinente und Länder.</p>
+
+        <div class="table-wrap">
+            <table id="t">
+                <thead>
+                    <tr>
+                        <th>Band / Typ</th>
+                        <th>Region / Land</th>
+                        <th>Inhalte / Kategorien</th>
+                        <th>Aktion</th>
+                    </tr>
+                </thead>
+                <tbody id="atlasBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="./assets/js/util.js"></script>
+    <script>
+    (async () => {
+        const atlasData = await window.$util.loadCsv('./assets/data/wdb_struktur_atlas.csv');
+        const tbody = document.getElementById('atlasBody');
+
+        tbody.innerHTML = atlasData.map(r => `
+            <tr>
+                <td><b>${r.Band_Type || ''}</b><br><small>${r.Brot_Referenz_Nummer || ''}</small></td>
+                <td>${r.Kontinent || ''} ${r.Land ? '› ' + r.Land : ''}</td>
+                <td><small>${r.Kategorie || ''}</small></td>
+                <td><button class="btn" onclick="location.href='./rezepte.html?ref=${r.Brot_Referenz_Nummer}'">Anzeigen</button></td>
+            </tr>
+        `).join('');
+    })();
+    </script>
+</body>
+</html>
