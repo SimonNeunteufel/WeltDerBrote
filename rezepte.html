@@ -3,41 +3,68 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>WdB – Rezeptsuche</title>
+    <title>WdB – Rezepte-Finder</title>
     <link rel="stylesheet" href="./assets/css/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <style>
-        .table-wrap { max-height: calc(100vh - 250px); overflow: auto; border: 1px solid #eee; border-radius: 8px; }
-        #t { width: 100%; border-collapse: collapse; background: white; }
-        #t th { position: sticky; top: 0; background: #f8f9fa; padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6; z-index: 10; }
-        #t td { padding: 12px; border-bottom: 1px solid #eee; vertical-align: middle; }
-        #t tr:hover { background-color: #fff9f0; cursor: pointer; }
-        
-        /* Checkbox Styles */
-        .check-col { width: 40px; text-align: center; }
-        input[type="checkbox"] { transform: scale(1.2); cursor: pointer; }
+        /* --- Styling für die Rezept-Liste --- */
+        .page { padding-bottom: 80px; /* Platz für die Action-Bar unten */ }
 
-        .badge-status { padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; }
+        /* Toolbar mit Suche und Select All */
+        .toolbar { 
+            display: flex; align-items: center; gap: 20px; margin-bottom: 20px; 
+            background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .select-all-container { 
+            display: flex; align-items: center; font-size: 0.9em; color: #666; cursor: pointer;
+        }
+        .select-all-container input { margin-right: 8px; transform: scale(1.2); }
+
+        /* Tabelle */
+        .table-wrap { background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); overflow: hidden; }
+        #t { width: 100%; border-collapse: collapse; }
+        #t th { text-align: left; padding: 15px; background: #f8f9fa; border-bottom: 2px solid #eee; font-weight: 600; color: #4e342e; }
+        #t td { padding: 12px 15px; border-bottom: 1px solid #eee; vertical-align: middle; }
+        #t tr:hover { background-color: #fff9f0; }
+        
+        /* Spalten spezifisch */
+        .col-check { width: 40px; text-align: center; }
+        .col-id { font-family: monospace; color: #666; }
+        .col-action { text-align: right; }
+
+        /* Checkbox Styling */
+        .recipe-check { transform: scale(1.2); cursor: pointer; }
+
+        /* Status Badges */
+        .badge-status { padding: 4px 8px; border-radius: 12px; font-size: 0.8em; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;}
         .status-active { background: #d1fae5; color: #065f46; }
         .status-draft { background: #f3f4f6; color: #374151; }
 
-        /* Action Bar unten (fixiert) */
+        /* --- Action Bar (unten, fixiert) --- */
         #selectionBar {
             position: fixed; bottom: -100px; left: 0; right: 0;
             background: #4e342e; color: white;
             padding: 15px 30px;
-            display: flex; justify-content: space-between; align-items: center;
-            transition: bottom 0.3s ease;
-            box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
+            display: flex; justify-content: center; align-items: center; gap: 20px;
+            transition: bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.2);
             z-index: 100;
         }
         #selectionBar.visible { bottom: 0; }
-        .btn-white { background: white; color: #4e342e; border: none; font-weight: bold; }
-        .btn-white:hover { background: #eee; }
+        #selectionInfo { font-size: 1.1em; }
+        
+        /* Button in der Action Bar */
+        .btn-action { 
+            background: white; color: #4e342e; border: none; padding: 10px 25px; 
+            border-radius: 30px; font-weight: bold; cursor: pointer; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: all 0.2s;
+        }
+        .btn-action:hover { background: #f5f5f5; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body class="BG_Brot_Suche">
-    <div class="page" style="padding-bottom: 80px;"> <div class="header">
+    <div class="page"> 
+        <div class="header">
             <button class="btn" onclick="location.href='./index.html'">← Home</button>
             <div class="brand">Rezepte-Finder</div>
             <nav class="nav">
@@ -47,19 +74,22 @@
         </div>
 
         <div class="toolbar">
-            <input id="q" placeholder="Suche nach Brot, Mehl, Technik..." type="search" style="flex-grow:1; padding: 10px;">
+            <label class="select-all-container">
+                <input type="checkbox" id="selectAll">
+                <span>Alle auswählen</span>
+            </label>
+            <input id="q" placeholder="Suche nach Brot, Mehl, Technik..." type="search" style="flex-grow:1; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
         </div>
 
         <div class="table-wrap">
             <table id="t">
                 <thead>
                     <tr>
-                        <th class="check-col"><input type="checkbox" id="selectAll" title="Alle auswählen"></th>
-                        <th>ID</th>
+                        <th class="col-check"></th> <th>ID</th>
                         <th>Name</th>
                         <th>Kategorie / Band</th>
                         <th>Status</th>
-                        <th>Aktion</th>
+                        <th class="col-action">Aktion</th>
                     </tr>
                 </thead>
                 <tbody id="recipeBody"></tbody>
@@ -68,111 +98,136 @@
     </div>
 
     <div id="selectionBar">
-        <div>
-            <span id="countDisplay" style="font-size: 1.1em; font-weight: bold; margin-right: 10px;">0</span>
-            Rezepte ausgewählt
+        <div id="selectionInfo">
+            <span id="countDisplay" style="font-weight: bold;">0</span> Rezepte ausgewählt
         </div>
-        <button class="btn btn-white" onclick="viewSelected()">Auswahl ansehen / Drucken</button>
+        <button class="btn-action" onclick="viewSelected()">Auswahl anzeigen</button>
     </div>
 
     <script src="./assets/js/util.js"></script>
     <script>
     (async () => {
+        // --- Referenzen & Initialisierung ---
         const data = await window.$util.loadCsv('./assets/data/wdb_rezepte.csv');
         const tbody = document.getElementById('recipeBody');
         const selectAllBox = document.getElementById('selectAll');
         const selectionBar = document.getElementById('selectionBar');
         const countDisplay = document.getElementById('countDisplay');
         
-        // Daten aggregieren (wie vorher)
+        // --- Datenverarbeitung ---
+        // Gruppieren, um pro Brot-ID nur einen Eintrag zu haben
         const grouped = {};
         data.forEach(row => {
             const id = row.brot_id;
             if (!id) return;
             if (!grouped[id]) {
+                // Ersten Eintrag speichern & Such-String vorbereiten
                 grouped[id] = { ...row, searchContent: "" };
             }
+            // Alle Texte für die Suche zusammenfügen
             grouped[id].searchContent += " " + Object.values(row).join(" ").toLowerCase();
         });
-        const uniqueRecipes = Object.values(grouped);
+        let uniqueRecipes = Object.values(grouped); // Liste der einzigartigen Rezepte
 
-        // State für Suche
-        let currentList = uniqueRecipes; 
-
+        // --- Rendering ---
         const render = (list) => {
-            currentList = list; // Speichern, welche Liste gerade sichtbar ist
+            // Leere Liste behandeln
             if(list.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px;">Keine Rezepte gefunden.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:30px; color:#666;">Keine Rezepte gefunden.</td></tr>';
+                // Bei leerer Liste Select-All deaktivieren
+                selectAllBox.checked = false; selectAllBox.disabled = true;
+                updateSelectionUI(); // Bar ausblenden
                 return;
             }
+            
+            selectAllBox.disabled = false; // Select-All aktivieren
 
+            // Zeilen generieren
             tbody.innerHTML = list.map(r => `
                 <tr>
-                    <td class="check-col">
-                        <input type="checkbox" class="recipe-check" value="${r.brot_id}">
+                    <td class="col-check">
+                        <input type="checkbox" class="recipe-check" value="${r.brot_id}" onclick="event.stopPropagation()">
                     </td>
                     <td onclick="openOne('${r.brot_id}')" class="col-id">${r.brot_id}</td>
-                    <td onclick="openOne('${r.brot_id}')"><b>${r.name || 'Unbenannt'}</b></td>
-                    <td onclick="openOne('${r.brot_id}')"><small>${r.atlas_ref_id || r.gruppe || ''}</small></td>
-                    <td onclick="openOne('${r.brot_id}')"><span class="badge-status status-${(r.status || 'draft').toLowerCase()}">${r.status || 'Draft'}</span></td>
-                    <td><button class="btn-sm" onclick="openOne('${r.brot_id}')">Ansehen</button></td>
+                    <td onclick="openOne('${r.brot_id}')" style="cursor:pointer"><b>${r.name || 'Unbenannt'}</b></td>
+                    <td onclick="openOne('${r.brot_id}')" style="cursor:pointer"><small>${r.atlas_ref_id || r.gruppe || '-'}</small></td>
+                    <td onclick="openOne('${r.brot_id}')" style="cursor:pointer"><span class="badge-status status-${(r.status || 'draft').toLowerCase()}">${r.status || 'Draft'}</span></td>
+                    <td class="col-action">
+                        <button class="btn-sm" onclick="event.stopPropagation(); openOne('${r.brot_id}')">Ansehen</button>
+                    </td>
                 </tr>
             `).join('');
 
-            // Events für die neuen Checkboxen registrieren
+            // Listener für neue Checkboxen registrieren
             document.querySelectorAll('.recipe-check').forEach(cb => {
                 cb.addEventListener('change', updateSelectionUI);
             });
+            
+            // UI nach dem Rendern updaten (falls durch Suche Filterung stattfand)
+            updateSelectionUI();
         };
 
-        // Hilfsfunktion: Klick auf Zeile öffnet Einzelansicht
+
+        // --- Interaktionen ---
+
+        // Klick auf Zeile/Button öffnet Einzelansicht
         window.openOne = (id) => location.href = `./rezept_ansicht.html?id=${id}`;
 
-        // UI Update Logik
+        // UI Update: Prüft selektierte Checkboxen und steuert die Action-Bar
         const updateSelectionUI = () => {
             const checkedBoxes = document.querySelectorAll('.recipe-check:checked');
+            const visibleBoxes = document.querySelectorAll('.recipe-check'); // Nur die aktuell sichtbaren
             const count = checkedBoxes.length;
             
-            countDisplay.innerText = count;
+            countDisplay.innerText = count; // Zahl aktualisieren
+
+            // Bar ein-/ausblenden
             if (count > 0) {
                 selectionBar.classList.add('visible');
             } else {
                 selectionBar.classList.remove('visible');
-                selectAllBox.checked = false;
+            }
+
+            // Select-All Checkbox Statuslogik
+            if (visibleBoxes.length > 0 && checkedBoxes.length === visibleBoxes.length) {
+                selectAllBox.checked = true; selectAllBox.indeterminate = false;
+            } else if (count > 0) {
+                selectAllBox.checked = false; selectAllBox.indeterminate = true; // Teilweise ausgewählt
+            } else {
+                selectAllBox.checked = false; selectAllBox.indeterminate = false;
             }
         };
 
         // "Alle Auswählen" Logik
         selectAllBox.addEventListener('change', (e) => {
             const isChecked = e.target.checked;
+            // Nur die *aktuell sichtbaren* Checkboxen togglen
             document.querySelectorAll('.recipe-check').forEach(cb => {
-                // Nur sichtbare Checkboxen togglen
                 cb.checked = isChecked;
             });
             updateSelectionUI();
         });
 
-        // Funktion für den Button unten "Auswahl ansehen"
+        // Button "Auswahl anzeigen" (in der Action-Bar)
         window.viewSelected = () => {
             const checkedBoxes = document.querySelectorAll('.recipe-check:checked');
             const ids = Array.from(checkedBoxes).map(cb => cb.value);
             
-            if (ids.length === 0) return;
+            if (ids.length === 0) return; // Sollte nicht passieren, da Bar dann weg ist
             
-            // IDs mit Komma getrennt übergeben
+            // IDs komma-getrennt an die Ansichtsseite übergeben
             location.href = `./rezept_ansicht.html?id=${ids.join(',')}`;
         };
 
         // Suchfunktion
-        document.getElementById('q').oninput = (e) => {
+        document.getElementById('q').addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase();
+            // Filtern der Basis-Liste
             const filtered = uniqueRecipes.filter(r => r.searchContent.includes(query));
             render(filtered);
-            // Bei neuer Suche Auswahl zurücksetzen oder beibehalten? 
-            // Hier resetten wir die "Alle" Checkbox visuell
-            selectAllBox.checked = false;
-        };
+        });
 
+        // Initiales Rendern aller Rezepte
         render(uniqueRecipes);
     })();
     </script>
