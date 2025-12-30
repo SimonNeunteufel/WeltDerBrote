@@ -4,114 +4,246 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>WdB – Rezeptansicht</title>
-    <link rel="stylesheet" href="./assets/css/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <style>
-        /* Container Layout */
-        .recipe-wrapper { max-width: 1000px; margin: 30px auto; }
-        
-        /* Das eigentliche Rezept-Blatt */
-        .recipe-sheet { 
-            background: white; 
-            padding: 40px; 
-            border-radius: 8px; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
-            margin-bottom: 50px; /* Abstand am Bildschirm zwischen Broten */
-            page-break-after: always; /* WICHTIG: Druckt jedes Brot auf neue Seite */
+        /* --- Grundlayout & Reset --- */
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: sans-serif; background: #f4f7f6; color: #333; height: 100vh; overflow: hidden; }
+        .btn { padding: 8px 15px; background: #4e342e; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9em; text-decoration: none; display: inline-block;}
+        .btn:hover { background: #6d4c41; }
+
+        /* --- Hauptcontainer für Zweispaltiges Layout --- */
+        .app-layout {
+            display: flex;
+            height: 100%; /* Volle Höhe des Viewports */
+            width: 100%;
         }
-        .recipe-sheet:last-child { page-break-after: auto; }
 
-        .phase-section { margin-bottom: 40px; border-bottom: 1px solid #f0f0f0; padding-bottom: 20px; }
-        .phase-title { background: #4e342e; color: white; padding: 8px 15px; border-radius: 4px; display: inline-block; margin-bottom: 20px; font-weight: bold; font-size: 0.95em; }
-        .recipe-grid { display: grid; grid-template-columns: 300px 1fr; gap: 30px; }
-        .ing-box { background: #fafafa; padding: 20px; border-radius: 6px; border: 1px solid #eee; }
-        .ing-list { list-style: none; padding: 0; }
-        .ing-list li { padding: 5px 0; border-bottom: 1px dotted #ccc; font-size: 0.95em; }
-        .step-text { font-size: 1.1em; line-height: 1.6; color: #333; }
-        .tech-badge { background: #eef2f6; color: #4e342e; padding: 3px 8px; border-radius: 4px; font-size: 0.85em; margin-right: 5px; border: 1px solid #d1d5db; display: inline-block; margin-top: 5px; }
+        /* --- Sidebar (Links) --- */
+        .sidebar {
+            width: 260px;
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            display: flex; flex-direction: column;
+            flex-shrink: 0; /* Darf nicht schrumpfen */
+            z-index: 10;
+        }
+        .sidebar-top { padding: 20px; border-bottom: 1px solid #eee; background: #fafafa; }
+        .sidebar-scroll { padding: 20px; overflow-y: auto; flex-grow: 1; }
         
-        .meta-info { text-align:center; margin-bottom:40px; padding-bottom: 20px; border-bottom: 2px solid #eee; }
-        .cat-tag { text-transform: uppercase; letter-spacing: 1px; color: #888; font-size: 0.8em; font-weight: bold; }
+        .sidebar-header { font-weight: bold; margin-bottom: 15px; color: #4e342e; text-transform: uppercase; font-size: 0.9em; letter-spacing: 1px;}
+        .sidebar-list { list-style: none; padding: 0; margin: 0; }
+        .sidebar-list li { margin-bottom: 5px; }
+        .sidebar-list a {
+            text-decoration: none; color: #555; display: block; padding: 10px 12px;
+            border-radius: 6px; transition: all 0.2s; font-size: 0.95em; border-left: 3px solid transparent;
+        }
+        .sidebar-list a:hover { background: #f0f0f0; color: #000; }
+        /* Aktiver Link in der Sidebar */
+        .sidebar-list a.active { background: #eef2f6; color: #4e342e; font-weight: bold; border-left-color: #4e342e;}
 
-        @media print { 
-            .no-print { display: none; } 
-            .recipe-wrapper { margin: 0; }
-            .recipe-sheet { box-shadow: none; margin: 0; padding: 0; border-radius: 0; } 
-            .recipe-grid { display: block; } 
-            .ing-box { margin-bottom: 20px; border: 1px solid #ccc; page-break-inside: avoid; }
-            body { background: white; }
+
+        /* --- Content Bereich (Rechts) --- */
+        .main-content {
+            flex-grow: 1; /* Nimmt den Restplatz ein */
+            overflow-y: auto; /* Inhalt scrollt eigenständig */
+            padding: 40px;
+            scroll-behavior: smooth; /* Weiches Scrollen bei Anker-Links */
+            position: relative;
+            background: #f4f7f6;
+        }
+
+        /* --- Das eigentliche Rezept-Blatt --- */
+        .recipe-sheet {
+            background: white; padding: 50px; border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            margin-bottom: 80px; /* Abstand zwischen Rezepten */
+            max-width: 950px; margin-left: auto; margin-right: auto; /* Zentriert */
+            scroll-margin-top: 30px; /* Abstand beim Hinspringen per Anker */
+        }
+
+        /* --- Rezept Details CSS --- */
+        .phase-section { margin-bottom: 50px; border-bottom: 1px solid #eee; padding-bottom: 30px; }
+        .phase-section:last-child { border-bottom: none; }
+        .phase-title { background: #4e342e; color: white; padding: 8px 15px; border-radius: 4px; display: inline-block; margin-bottom: 25px; font-weight: bold; font-size: 0.95em; }
+        .recipe-grid { display: grid; grid-template-columns: 320px 1fr; gap: 40px; }
+        .ing-box { background: #fafafa; padding: 25px; border-radius: 8px; border: 1px solid #eee; align-self: start; }
+        .ing-list { list-style: none; padding: 0; margin: 0; }
+        .ing-list li { padding: 8px 0; border-bottom: 1px dotted #ccc; font-size: 0.95em; display: flex; justify-content: space-between; }
+        .step-text { font-size: 1.15em; line-height: 1.7; color: #333; }
+        .tech-badge { background: #eef2f6; color: #4e342e; padding: 4px 10px; border-radius: 12px; font-size: 0.85em; margin-right: 5px; border: 1px solid #d1d5db; display: inline-block; margin-top: 8px; }
+        
+        .meta-info { text-align:center; margin-bottom:50px; padding-bottom: 30px; border-bottom: 2px solid #eee; }
+        .cat-tag { text-transform: uppercase; letter-spacing: 1px; color: #888; font-size: 0.8em; font-weight: bold; margin-bottom: 10px; display: block;}
+        .recipe-title { font-size: 2.8em; margin: 0 0 15px 0; color: #2c1810; }
+
+        /* --- Bilder im Rezept & Overlay --- */
+        .instruction-box img {
+            max-width: 100%; height: auto; border-radius: 8px; display: block; margin-top: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: zoom-in; transition: transform 0.2s;
+            border: 1px solid #eee;
+        }
+        .instruction-box img:hover { transform: scale(1.02); }
+
+        /* Overlay (Lightbox) Styles */
+        #imageOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 2000;
+            display: none; /* Standardmäßig ausgeblendet */
+            justify-content: center; align-items: center; padding: 40px;
+            cursor: zoom-out;
+            backdrop-filter: blur(5px);
+        }
+        #imageOverlay.active { display: flex; animation: fadeIn 0.2s ease-out; }
+        #overlayImage {
+            max-width: 100%; max-height: 100%;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.5); border-radius: 4px;
+            object-fit: contain; transform: scale(0.95); transition: transform 0.3s ease-out;
+        }
+        #imageOverlay.active #overlayImage { transform: scale(1); }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+
+        /* --- Floating Nav Buttons (Prev/Next unten rechts) --- */
+        .floating-nav {
+            position: fixed; bottom: 30px; right: 40px;
+            background: white; padding: 8px; border-radius: 50px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15); display: flex; gap: 10px; z-index: 100;
+            border: 1px solid #eee;
+        }
+        .nav-btn {
+            width: 45px; height: 45px; border-radius: 50%; border: 1px solid #eee;
+            background: #f9f9f9; color: #333; font-weight: bold; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 1.4em;
+             text-decoration: none; transition: all 0.2s;
+        }
+        .nav-btn:hover { background: #4e342e; color: white; border-color: #4e342e; transform: translateY(-2px); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .nav-btn.disabled { opacity: 0.4; cursor: default; pointer-events: none; background: #eee; color: #aaa; border-color: #eee; box-shadow: none; transform: none;}
+
+
+        /* --- Print & Mobile Styles --- */
+        @media print {
+            .no-print, .sidebar, .floating-nav { display: none !important; }
+            body, .app-layout, .main-content { height: auto; overflow: visible; display: block; background: white; padding: 0; margin: 0;}
+            .recipe-sheet { box-shadow: none; margin: 0; padding: 0; border-radius: 0; page-break-after: always; max-width: none; border: none;}
+            .recipe-sheet:last-child { page-break-after: auto; }
+            .recipe-grid { display: block; }
+            .ing-box { margin-bottom: 20px; border: 1px solid #ccc; page-break-inside: avoid; background: none;}
+            .phase-section { page-break-inside: avoid; }
+        }
+        
+        @media (max-width: 900px) {
+            .app-layout { flex-direction: column; height: auto; overflow: visible;}
+            body { height: auto; overflow-y: auto; }
+            .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #e0e0e0; }
+            .sidebar-scroll { max-height: 200px; }
+            .main-content { padding: 20px; }
+            .recipe-sheet { padding: 25px; margin-bottom: 40px; }
+            .recipe-grid { grid-template-columns: 1fr; gap: 20px; }
+            .floating-nav { bottom: 20px; right: 20px; padding: 5px; }
+            .nav-btn { width: 40px; height: 40px; font-size: 1.2em; }
         }
     </style>
 </head>
 <body>
 
-<div class="no-print" style="max-width:1000px; margin:20px auto; display:flex; justify-content:space-between; padding: 0 10px;">
-    <button class="btn" onclick="history.back()">← Zurück</button>
-    <button class="btn" onclick="window.print()">Drucken / PDF</button>
+<div id="imageOverlay" class="no-print">
+    <img id="overlayImage" src="" alt="Großansicht">
 </div>
 
-<div id="recipeContainer" class="recipe-wrapper">
-    <div style="text-align: center; color: #666; padding: 50px;">Lade Rezepte...</div>
+<div class="app-layout">
+    
+    <aside class="sidebar no-print">
+        <div class="sidebar-top">
+             <a href="./rezepte.html" class="btn" style="width:100%; text-align:center;">← Zurück zur Liste</a>
+        </div>
+        <div class="sidebar-scroll">
+            <div class="sidebar-header">Ausgewählte Rezepte</div>
+            <ul id="sidebarLinkList" class="sidebar-list">
+                </ul>
+        </div>
+    </aside>
+
+    <main class="main-content" id="mainContentArea">
+        <div class="floating-nav no-print">
+            <a id="navPrev" class="nav-btn disabled" title="Vorheriges Rezept">←</a>
+            <a href="javascript:window.print()" class="nav-btn" title="Drucken" style="font-size: 1.1em;">🖨️</a>
+            <a id="navNext" class="nav-btn disabled" title="Nächstes Rezept">→</a>
+        </div>
+
+        <div id="recipeContainer">
+            <div style="text-align: center; color: #666; padding: 50px; font-size: 1.2em;">Lade Rezepte...</div>
+        </div>
+    </main>
+
 </div>
 
-<script src="./assets/js/util.js"></script>
+
+<script src="./assets/js/util.js"></script> 
 <script>
 (async () => {
-    // 1. IDs aus URL holen (Können jetzt mehrere sein, durch Komma getrennt)
+    // --- Initialisierung ---
     const params = new URLSearchParams(window.location.search);
     const idParam = params.get('id');
+    const recipeContainer = document.getElementById('recipeContainer');
+    const sidebarList = document.getElementById('sidebarLinkList');
+    const overlay = document.getElementById('imageOverlay');
+    const overlayImage = document.getElementById('overlayImage');
+    const navPrev = document.getElementById('navPrev');
+    const navNext = document.getElementById('navNext');
+    const mainContentArea = document.getElementById('mainContentArea');
 
     if (!idParam) {
-        document.getElementById('recipeContainer').innerHTML = "<p style='text-align:center; color:red'>Keine ID übergeben.</p>";
+        recipeContainer.innerHTML = "<p style='text-align:center; color:red; padding:50px;'>Keine Rezepte ausgewählt.</p>";
         return;
     }
 
-    // Array aus IDs erstellen (z.B. ["SOLO-01", "BASLER-01"])
     const requestedIds = idParam.split(',').map(s => s.trim()).filter(Boolean);
 
-    // 2. CSV laden
-    const allData = await window.$util.loadCsv('./assets/data/wdb_rezepte.csv');
+    // CSV laden
+    const data = await window.$util.loadCsv('./assets/data/wdb_rezepte.csv');
     
     let fullHtml = "";
+    let sidebarHtml = "";
 
-    // 3. Schleife über ALLE angeforderten IDs
-    requestedIds.forEach(breadId => {
+    // --- Hauptschleife: Rezepte generieren ---
+    requestedIds.forEach((breadId) => {
+        // Schritte filtern
+        const steps = data.filter(r => r.brot_id === breadId);
         
-        // Schritte für DIESES EINE Brot filtern
-        const steps = allData.filter(r => r.brot_id === breadId);
-
         if (steps.length === 0) {
-            fullHtml += `<div class="recipe-sheet"><p style='text-align:center; color:red'>Rezept ID "${breadId}" nicht gefunden.</p></div>`;
+            fullHtml += `<div class="recipe-sheet" id="${breadId}"><p style='color:red'>ID "${breadId}" nicht gefunden.</p></div>`;
+            sidebarHtml += `<li><span style="color:red; padding:10px;">${breadId} (Fehler)</span></li>`;
             return;
         }
 
-        // Sortieren nach Schritt
-        steps.sort((a, b) => parseInt(a.schritt_nr || 0) - parseInt(b.schritt_nr || 0));
         const mainInfo = steps[0];
+        const recipeName = mainInfo.name || breadId;
 
-        // --- HTML Aufbau für ein einzelnes Brot ---
+        // 1. Sidebar Link erstellen (mit ID als Anker)
+        sidebarHtml += `<li><a href="#${breadId}" data-id="${breadId}">${recipeName}</a></li>`;
+
+        // 2. Rezept HTML erstellen
         let breadHtml = `
-            <div class="recipe-sheet">
+            <div class="recipe-sheet" id="${breadId}">
                 <div class="meta-info">
-                    <div class="cat-tag">${mainInfo.gruppe || 'Rezept'}</div>
-                    <h1 style="font-size:2.5em; margin:10px 0; color:#2c1810;">${mainInfo.name || 'Unbenannt'}</h1>
-                    <div style="font-family:monospace; color:#666;">ID: ${breadId}</div>
-                    ${mainInfo.quelle ? `<div style="margin-top:5px; font-size:0.9em; color:#888;">Quelle: ${mainInfo.quelle}</div>` : ''}
+                    <span class="cat-tag">${mainInfo.atlas_ref_id || mainInfo.gruppe || 'Rezept'}</span>
+                    <h1 class="recipe-title">${recipeName}</h1>
+                    <div style="font-family:monospace; color:#666; margin-bottom: 10px;">ID: ${breadId}</div>
+                    ${mainInfo.quelle ? `<div style="font-size:0.9em; color:#888;">Quelle: ${mainInfo.quelle}</div>` : ''}
                 </div>
         `;
 
-        steps.forEach((s, index) => {
-            // Smarte Titel (Doppelpunkt-Logik)
+        steps.forEach((s, stepIndex) => {
             let fullText = s.anweisung || '';
-            let stepTitle = '';
+            let stepTitle = s.schritt_name || `Schritt ${s.schritt_nr || stepIndex + 1}`;
             let stepBody = fullText;
+
+            // Falls Anweisung mit "Titel:" beginnt, dies trennen (Fallback)
             const splitIndex = fullText.indexOf(':');
-            
-            if (splitIndex > -1 && splitIndex < 50) {
+            if (splitIndex > -1 && splitIndex < 50 && !s.schritt_name) {
                 stepTitle = fullText.substring(0, splitIndex).trim();
                 stepBody = fullText.substring(splitIndex + 1).trim();
-            } else {
-                stepTitle = `Schritt ${s.schritt_nr || index + 1}`;
             }
 
             breadHtml += `
@@ -119,23 +251,22 @@
                     <div class="phase-title">${stepTitle}</div>
                     <div class="recipe-grid">
                         <div class="ing-box">
-                            <h3 style="margin-top:0; font-size:1.1em;">Zutaten</h3>
+                            <h3 style="margin-top:0; font-size:1.1em; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">Zutaten</h3>
                             <ul class="ing-list">
                                 ${window.$util.formatIngredients(s.zutaten_list)}
                             </ul>
-                            ${s.zeit_aufwand ? `<div style="margin-top:15px; font-size:0.9em; color:#666; border-top:1px solid #ddd; padding-top:10px;">⏱ <b>Zeit:</b> ${s.zeit_aufwand}</div>` : ''}
+                            ${s.zeit_aufwand ? `<div style="margin-top:20px; font-size:0.95em; color:#555; border-top:1px solid #eee; padding-top:15px; display:flex; align-items:center;"><span style="font-size:1.2em; margin-right:8px;">⏱</span> ${s.zeit_aufwand}</div>` : ''}
                         </div>
                         <div class="instruction-box">
-                            <h3 style="margin-top:0; font-size:1.1em;">Anweisung</h3>
+                            <h3 style="margin-top:0; font-size:1.1em; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">Anweisung</h3>
                             <div class="step-text">${stepBody || 'Keine Anweisung.'}</div>
-                            <div style="margin-top:15px;">
+                            <div style="margin-top:20px;">
                                 ${window.$util.parsePipe(s.techniken_tags).map(t => `<span class="tech-badge">${t}</span>`).join('')}
                             </div>
                             ${s.bild_ref ? `
-                                <div style="margin-top:20px;">
+                                <div>
                                     <img src="./assets/image/${s.bild_ref}" 
-                                         style="max-width:100%; border-radius:6px;" 
-                                         alt="Schrittbild"
+                                         alt="${stepTitle}"
                                          onerror="this.style.display='none'">
                                 </div>
                             ` : ''}
@@ -144,12 +275,80 @@
                 </div>
             `;
         });
-
         breadHtml += `</div>`; // Ende recipe-sheet
         fullHtml += breadHtml;
     });
 
-    document.getElementById('recipeContainer').innerHTML = fullHtml;
+    recipeContainer.innerHTML = fullHtml;
+    sidebarList.innerHTML = sidebarHtml;
+
+
+    // --- Funktionalität: Overlay & Navigation ---
+
+    // 1. Image Overlay (Event Delegation)
+    recipeContainer.addEventListener('click', (e) => {
+        if (e.target.tagName === 'IMG' && e.target.closest('.instruction-box')) {
+            overlayImage.src = e.target.src;
+            overlay.classList.add('active');
+        }
+    });
+    overlay.addEventListener('click', () => overlay.classList.remove('active'));
+
+    // 2. Navigation Status aktualisieren (beim Scrollen)
+    function updateNavigationState() {
+        let currentId = null;
+        let currentIndex = -1;
+
+        // Offset, damit der Wechsel etwas früher passiert
+        const scrollOffset = mainContentArea.scrollTop + 200; 
+
+        requestedIds.forEach((id, index) => {
+            const el = document.getElementById(id);
+            if (el && el.offsetTop <= scrollOffset) {
+                currentId = id;
+                currentIndex = index;
+            }
+        });
+
+        if(currentIndex === -1 && requestedIds.length > 0) {
+             currentIndex = 0; currentId = requestedIds[0];
+        }
+
+        // A) Sidebar Links aktiv setzen
+        document.querySelectorAll('.sidebar-list a').forEach(a => a.classList.remove('active'));
+        if (currentId) {
+            const activeLink = document.querySelector(`.sidebar-list a[data-id="${currentId}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+                // Optional: Sidebar scrollen, damit aktiver Link sichtbar ist
+                // activeLink.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); 
+            }
+        }
+
+        // B) Prev/Next Buttons updaten
+        if (currentIndex > 0) {
+            navPrev.classList.remove('disabled');
+            navPrev.href = `#${requestedIds[currentIndex - 1]}`;
+        } else {
+            navPrev.classList.add('disabled');
+            navPrev.removeAttribute('href');
+        }
+        
+        if (currentIndex < requestedIds.length - 1) {
+            navNext.classList.remove('disabled');
+            navNext.href = `#${requestedIds[currentIndex + 1]}`;
+        } else {
+            navNext.classList.add('disabled');
+            navNext.removeAttribute('href');
+        }
+    }
+
+    // Scroll-Event mit "Debounce" (Performance)
+    mainContentArea.addEventListener('scroll', window.$util.debounce(updateNavigationState, 50));
+    
+    // Initialer Aufruf
+    setTimeout(updateNavigationState, 100);
+
 })();
 </script>
 </body>
