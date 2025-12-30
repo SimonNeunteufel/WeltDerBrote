@@ -7,31 +7,39 @@
     <link rel="stylesheet" href="./assets/css/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <style>
-        .recipe-container { max-width: 1000px; margin: 30px auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        /* Container Layout */
+        .recipe-wrapper { max-width: 1000px; margin: 30px auto; }
+        
+        /* Das eigentliche Rezept-Blatt */
+        .recipe-sheet { 
+            background: white; 
+            padding: 40px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
+            margin-bottom: 50px; /* Abstand am Bildschirm zwischen Broten */
+            page-break-after: always; /* WICHTIG: Druckt jedes Brot auf neue Seite */
+        }
+        .recipe-sheet:last-child { page-break-after: auto; }
+
         .phase-section { margin-bottom: 40px; border-bottom: 1px solid #f0f0f0; padding-bottom: 20px; }
-        
-        /* Der braune Titel-Kasten */
         .phase-title { background: #4e342e; color: white; padding: 8px 15px; border-radius: 4px; display: inline-block; margin-bottom: 20px; font-weight: bold; font-size: 0.95em; }
-        
         .recipe-grid { display: grid; grid-template-columns: 300px 1fr; gap: 30px; }
         .ing-box { background: #fafafa; padding: 20px; border-radius: 6px; border: 1px solid #eee; }
         .ing-list { list-style: none; padding: 0; }
         .ing-list li { padding: 5px 0; border-bottom: 1px dotted #ccc; font-size: 0.95em; }
-        
-        /* Anweisungstext schön formatieren */
         .step-text { font-size: 1.1em; line-height: 1.6; color: #333; }
-        
         .tech-badge { background: #eef2f6; color: #4e342e; padding: 3px 8px; border-radius: 4px; font-size: 0.85em; margin-right: 5px; border: 1px solid #d1d5db; display: inline-block; margin-top: 5px; }
         
-        /* Kopfbereich */
         .meta-info { text-align:center; margin-bottom:40px; padding-bottom: 20px; border-bottom: 2px solid #eee; }
         .cat-tag { text-transform: uppercase; letter-spacing: 1px; color: #888; font-size: 0.8em; font-weight: bold; }
 
         @media print { 
             .no-print { display: none; } 
-            .recipe-container { box-shadow: none; margin: 0; padding: 0; } 
+            .recipe-wrapper { margin: 0; }
+            .recipe-sheet { box-shadow: none; margin: 0; padding: 0; border-radius: 0; } 
             .recipe-grid { display: block; } 
             .ing-box { margin-bottom: 20px; border: 1px solid #ccc; page-break-inside: avoid; }
+            body { background: white; }
         }
     </style>
 </head>
@@ -42,102 +50,106 @@
     <button class="btn" onclick="window.print()">Drucken / PDF</button>
 </div>
 
-<div id="recipeOutput" class="recipe-container">
-    <div style="text-align: center; color: #666; padding: 50px;">Lade Rezept...</div>
+<div id="recipeContainer" class="recipe-wrapper">
+    <div style="text-align: center; color: #666; padding: 50px;">Lade Rezepte...</div>
 </div>
 
 <script src="./assets/js/util.js"></script>
 <script>
 (async () => {
-    // 1. ID aus der URL holen
+    // 1. IDs aus URL holen (Können jetzt mehrere sein, durch Komma getrennt)
     const params = new URLSearchParams(window.location.search);
-    const breadId = params.get('id');
+    const idParam = params.get('id');
 
-    if (!breadId) {
-        document.getElementById('recipeOutput').innerHTML = "<p style='text-align:center; color:red'>Fehler: Keine ID übergeben.</p>";
+    if (!idParam) {
+        document.getElementById('recipeContainer').innerHTML = "<p style='text-align:center; color:red'>Keine ID übergeben.</p>";
         return;
     }
+
+    // Array aus IDs erstellen (z.B. ["SOLO-01", "BASLER-01"])
+    const requestedIds = idParam.split(',').map(s => s.trim()).filter(Boolean);
 
     // 2. CSV laden
     const allData = await window.$util.loadCsv('./assets/data/wdb_rezepte.csv');
     
-    // 3. Filtern nach ID
-    const steps = allData.filter(r => r.brot_id === breadId);
+    let fullHtml = "";
 
-    if (steps.length === 0) {
-        document.getElementById('recipeOutput').innerHTML = `<p style='text-align:center'>Rezept nicht gefunden.</p>`;
-        return;
-    }
+    // 3. Schleife über ALLE angeforderten IDs
+    requestedIds.forEach(breadId => {
+        
+        // Schritte für DIESES EINE Brot filtern
+        const steps = allData.filter(r => r.brot_id === breadId);
 
-    // 4. Sortieren nach Schritt-Nummer
-    steps.sort((a, b) => parseInt(a.schritt_nr || 0) - parseInt(b.schritt_nr || 0));
-
-    const mainInfo = steps[0];
-    
-    // Header bauen (Kategorie steht hier, Quelle etc.)
-    let html = `
-        <div class="meta-info">
-            <div class="cat-tag">${mainInfo.gruppe || 'Rezept'}</div>
-            <h1 style="font-size:2.5em; margin:10px 0; color:#2c1810;">${mainInfo.name || 'Unbenannt'}</h1>
-            <div style="font-family:monospace; color:#666;">ID: ${breadId}</div>
-            ${mainInfo.quelle ? `<div style="margin-top:5px; font-size:0.9em; color:#888;">Quelle: ${mainInfo.quelle}</div>` : ''}
-        </div>
-    `;
-
-    // Schritte durchgehen
-    steps.forEach((s, index) => {
-        // --- INTELLIGENTE TITEL-ERKENNUNG ---
-        // Wenn im Text ein Doppelpunkt am Anfang steht (z.B. "Vorteig mischen: Mehl..."),
-        // nutzen wir den Teil davor als Titel.
-        let fullText = s.anweisung || '';
-        let stepTitle = '';
-        let stepBody = fullText;
-
-        const splitIndex = fullText.indexOf(':');
-        // Bedingung: Doppelpunkt vorhanden UND er ist im ersten Drittel des Textes (kein Satzzeichen mitten im Satz)
-        if (splitIndex > -1 && splitIndex < 50) {
-            stepTitle = fullText.substring(0, splitIndex).trim(); // Teil VOR Doppelpunkt
-            stepBody = fullText.substring(splitIndex + 1).trim(); // Teil NACH Doppelpunkt
-        } else {
-            // Fallback: Einfach durchnummerieren
-            stepTitle = `Schritt ${s.schritt_nr || index + 1}`;
+        if (steps.length === 0) {
+            fullHtml += `<div class="recipe-sheet"><p style='text-align:center; color:red'>Rezept ID "${breadId}" nicht gefunden.</p></div>`;
+            return;
         }
 
-        html += `
-            <div class="phase-section">
-                <div class="phase-title">${stepTitle}</div>
-                
-                <div class="recipe-grid">
-                    <div class="ing-box">
-                        <h3 style="margin-top:0; font-size:1.1em;">Zutaten</h3>
-                        <ul class="ing-list">
-                            ${window.$util.formatIngredients(s.zutaten_list)}
-                        </ul>
-                        ${s.zeit_aufwand ? `<div style="margin-top:15px; font-size:0.9em; color:#666; border-top:1px solid #ddd; padding-top:10px;">⏱ <b>Zeit:</b> ${s.zeit_aufwand}</div>` : ''}
-                    </div>
+        // Sortieren nach Schritt
+        steps.sort((a, b) => parseInt(a.schritt_nr || 0) - parseInt(b.schritt_nr || 0));
+        const mainInfo = steps[0];
 
-                    <div class="instruction-box">
-                        <h3 style="margin-top:0; font-size:1.1em;">Anweisung</h3>
-                        <div class="step-text">${stepBody || 'Keine Anweisung hinterlegt.'}</div>
-                        
-                        <div style="margin-top:15px;">
-                            ${window.$util.parsePipe(s.techniken_tags).map(t => `<span class="tech-badge">${t}</span>`).join('')}
+        // --- HTML Aufbau für ein einzelnes Brot ---
+        let breadHtml = `
+            <div class="recipe-sheet">
+                <div class="meta-info">
+                    <div class="cat-tag">${mainInfo.gruppe || 'Rezept'}</div>
+                    <h1 style="font-size:2.5em; margin:10px 0; color:#2c1810;">${mainInfo.name || 'Unbenannt'}</h1>
+                    <div style="font-family:monospace; color:#666;">ID: ${breadId}</div>
+                    ${mainInfo.quelle ? `<div style="margin-top:5px; font-size:0.9em; color:#888;">Quelle: ${mainInfo.quelle}</div>` : ''}
+                </div>
+        `;
+
+        steps.forEach((s, index) => {
+            // Smarte Titel (Doppelpunkt-Logik)
+            let fullText = s.anweisung || '';
+            let stepTitle = '';
+            let stepBody = fullText;
+            const splitIndex = fullText.indexOf(':');
+            
+            if (splitIndex > -1 && splitIndex < 50) {
+                stepTitle = fullText.substring(0, splitIndex).trim();
+                stepBody = fullText.substring(splitIndex + 1).trim();
+            } else {
+                stepTitle = `Schritt ${s.schritt_nr || index + 1}`;
+            }
+
+            breadHtml += `
+                <div class="phase-section">
+                    <div class="phase-title">${stepTitle}</div>
+                    <div class="recipe-grid">
+                        <div class="ing-box">
+                            <h3 style="margin-top:0; font-size:1.1em;">Zutaten</h3>
+                            <ul class="ing-list">
+                                ${window.$util.formatIngredients(s.zutaten_list)}
+                            </ul>
+                            ${s.zeit_aufwand ? `<div style="margin-top:15px; font-size:0.9em; color:#666; border-top:1px solid #ddd; padding-top:10px;">⏱ <b>Zeit:</b> ${s.zeit_aufwand}</div>` : ''}
                         </div>
-                        
-                        ${s.bild_ref ? `
-                            <div style="margin-top:20px;">
-                                <img src="./assets/img/${s.bild_ref}" 
-                                     style="max-width:100%; border-radius:6px; box-shadow:0 2px 5px rgba(0,0,0,0.1);" 
-                                     alt="Bild zum Schritt"
-                                     onerror="this.style.display='none'"> </div>
-                        ` : ''}
+                        <div class="instruction-box">
+                            <h3 style="margin-top:0; font-size:1.1em;">Anweisung</h3>
+                            <div class="step-text">${stepBody || 'Keine Anweisung.'}</div>
+                            <div style="margin-top:15px;">
+                                ${window.$util.parsePipe(s.techniken_tags).map(t => `<span class="tech-badge">${t}</span>`).join('')}
+                            </div>
+                            ${s.bild_ref ? `
+                                <div style="margin-top:20px;">
+                                    <img src="./assets/img/${s.bild_ref}" 
+                                         style="max-width:100%; border-radius:6px;" 
+                                         alt="Schrittbild"
+                                         onerror="this.style.display='none'">
+                                </div>
+                            ` : ''}
+                        </div>
                     </div>
                 </div>
-            </div>
-        `;
+            `;
+        });
+
+        breadHtml += `</div>`; // Ende recipe-sheet
+        fullHtml += breadHtml;
     });
 
-    document.getElementById('recipeOutput').innerHTML = html;
+    document.getElementById('recipeContainer').innerHTML = fullHtml;
 })();
 </script>
 </body>
