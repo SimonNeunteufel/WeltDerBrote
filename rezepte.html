@@ -9,13 +9,12 @@
     <style>
         .table-wrap { max-height: calc(100vh - 250px); overflow: auto; border: 1px solid #eee; border-radius: 8px; }
         #t { width: 100%; border-collapse: collapse; background: white; }
-        #t th { position: sticky; top: 0; background: #f8f9fa; padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6; }
+        #t th { position: sticky; top: 0; background: #f8f9fa; padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6; z-index: 10; }
         #t td { padding: 12px; border-bottom: 1px solid #eee; vertical-align: middle; }
         #t tr:hover { background-color: #fff9f0; cursor: pointer; }
         .badge-status { padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; }
-        .status-final { background: #d1fae5; color: #065f46; }
-        .status-test { background: #fef3c7; color: #92400e; }
-        .status-draft { background: #f3f4f6; color: #374151; }
+        .status-active { background: #d1fae5; color: #065f46; } /* Grün für active */
+        .status-draft { background: #f3f4f6; color: #374151; }  /* Grau für draft */
     </style>
 </head>
 <body class="BG_Brot_Suche">
@@ -53,45 +52,62 @@
     <script src="./assets/js/util.js"></script>
     <script>
     (async () => {
-        // CSV laden
         const data = await window.$util.loadCsv('./assets/data/wdb_rezepte.csv');
         const tbody = document.getElementById('recipeBody');
         
-        // Da Rezepte mehrere Zeilen haben (Schritte), filtern wir auf eindeutige brot_id
-        const uniqueRecipes = [];
-        const seen = new Set();
-        
-        data.forEach(r => {
-            // Nur Zeilen hinzufügen, die eine ID haben und noch nicht in der Liste sind
-            if (r.brot_id && !seen.has(r.brot_id)) {
-                uniqueRecipes.push(r);
-                seen.add(r.brot_id);
+        // --- NEUE LOGIK: Daten aggregieren ---
+        // Wir fassen alle Zeilen eines Brotes zusammen, damit die Suche
+        // auch Zutaten findet, die erst in Schritt 3 stehen.
+        const grouped = {};
+
+        data.forEach(row => {
+            const id = row.brot_id;
+            if (!id) return; // Leere Zeilen überspringen
+
+            if (!grouped[id]) {
+                // Wenn wir das Brot zum ersten Mal sehen, legen wir den Haupteintrag an
+                grouped[id] = {
+                    ...row, // Nimm alle Daten der ersten Zeile (Name, Status etc.)
+                    searchContent: "" // Hier sammeln wir allen Text für die Suche
+                };
             }
+            
+            // Wir fügen den Text JEDER Zeile zum Such-Index dieses Brotes hinzu
+            // (Zutaten, Anweisungen aller Schritte)
+            grouped[id].searchContent += " " + Object.values(row).join(" ").toLowerCase();
         });
 
-        // Funktion zum Rendern der Tabelle
+        // Aus dem Objekt wieder ein Array machen für die Tabelle
+        const uniqueRecipes = Object.values(grouped);
+
         const render = (list) => {
+            if(list.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">Keine Rezepte gefunden.</td></tr>';
+                return;
+            }
+
             tbody.innerHTML = list.map(r => `
                 <tr onclick="location.href='./rezept_ansicht.html?id=${r.brot_id}'">
                     <td class="col-id">${r.brot_id}</td>
                     <td><b>${r.name || 'Unbenanntes Brot'}</b></td>
-                    <td><small>${r.atlas_ref_id || ''}</small></td>
+                    <td><small>${r.atlas_ref_id || r.gruppe || ''}</small></td>
                     <td><span class="badge-status status-${(r.status || 'draft').toLowerCase()}">${r.status || 'Draft'}</span></td>
                     <td><button class="btn-sm">Ansehen</button></td>
                 </tr>
             `).join('');
         };
 
-        // Suchfunktion
+        // Live Suche
         document.getElementById('q').oninput = (e) => {
             const query = e.target.value.toLowerCase();
             const filtered = uniqueRecipes.filter(r => 
-                Object.values(r).join(' ').toLowerCase().includes(query)
+                // Wir suchen im gesammelten "searchContent", nicht nur im Namen
+                r.searchContent.includes(query)
             );
             render(filtered);
         };
 
-        // Initiales Rendern
+        // Initial rendern (Alle anzeigen)
         render(uniqueRecipes);
     })();
     </script>
