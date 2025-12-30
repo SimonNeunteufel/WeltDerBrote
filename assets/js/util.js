@@ -12,9 +12,13 @@ window.$util = {
             return new Promise((resolve, reject) => {
                 Papa.parse(csvText, {
                     header: true,
-                    skipEmptyLines: true,
-                    delimiter: ";", // Dein Standard-Trenner
-                    complete: (results) => resolve(results.data),
+                    skipEmptyLines: true, // Leere Zeilen ignorieren
+                    delimiter: ";",       // WICHTIG: Semikolon als Trenner
+                    complete: (results) => {
+                        // Optional: Debugging, falls mal was nicht lädt
+                        // console.log("CSV geladen:", results.data); 
+                        resolve(results.data);
+                    },
                     error: (error) => reject(error)
                 });
             });
@@ -24,7 +28,7 @@ window.$util = {
         }
     },
 
-    // 2. Strings sicher verarbeiten
+    // 2. Strings sicher verarbeiten (entfernt Leerzeichen, verhindert 'null' Fehler)
     safe: (t) => t ? String(t).trim() : "",
 
     // 3. Pipe-Listen zerlegen (|)
@@ -41,18 +45,22 @@ window.$util = {
         if (items.length === 0) return "<li>Keine Angaben</li>";
         
         return items.map(item => {
-            // Optional: Die "1) " Präfixe entfernen, falls man nur den Text will
+            // Entfernt "1) ", "2) " am Anfang, falls vorhanden
             const cleanText = item.replace(/^\d+\)\s*/, '');
             return `<li>${cleanText}</li>`;
         }).join('');
     },
 
     // 5. Brotschritte gruppieren
-    // Da ein Rezept in deiner CSV über mehrere Zeilen geht (Vorteig, Hauptteig...)
-    // hilft diese Funktion, die Daten nach der Brot_ID zu bündeln.
+    // Hilft, Zeilen nach ID zu bündeln (falls man Daten anders verarbeiten will)
     groupSteps: function(data) {
         return data.reduce((acc, row) => {
-            const id = row.Brot_Referenz_Nummer;
+            // KORREKTUR: Hier jetzt 'brot_id' statt 'Brot_Referenz_Nummer'
+            const id = row.brot_id;
+            
+            // Leere IDs überspringen
+            if (!id) return acc;
+
             if (!acc[id]) acc[id] = [];
             acc[id].push(row);
             return acc;

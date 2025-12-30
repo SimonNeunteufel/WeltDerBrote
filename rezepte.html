@@ -15,6 +15,7 @@
         .badge-status { padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; }
         .status-final { background: #d1fae5; color: #065f46; }
         .status-test { background: #fef3c7; color: #92400e; }
+        .status-draft { background: #f3f4f6; color: #374151; }
     </style>
 </head>
 <body class="BG_Brot_Suche">
@@ -52,31 +53,36 @@
     <script src="./assets/js/util.js"></script>
     <script>
     (async () => {
+        // CSV laden
         const data = await window.$util.loadCsv('./assets/data/wdb_rezepte.csv');
         const tbody = document.getElementById('recipeBody');
         
-        // Da Rezepte mehrere Zeilen haben, filtern wir auf eindeutige Brot_IDs
+        // Da Rezepte mehrere Zeilen haben (Schritte), filtern wir auf eindeutige brot_id
         const uniqueRecipes = [];
         const seen = new Set();
+        
         data.forEach(r => {
-            if (!seen.has(r.Brot_Referenz_Nummer)) {
+            // Nur Zeilen hinzufügen, die eine ID haben und noch nicht in der Liste sind
+            if (r.brot_id && !seen.has(r.brot_id)) {
                 uniqueRecipes.push(r);
-                seen.add(r.Brot_Referenz_Nummer);
+                seen.add(r.brot_id);
             }
         });
 
+        // Funktion zum Rendern der Tabelle
         const render = (list) => {
             tbody.innerHTML = list.map(r => `
-                <tr onclick="location.href='./rezept_ansicht.html?id=${r.Brot_Referenz_Nummer}'">
-                    <td class="col-id">${r.Brot_Referenz_Nummer}</td>
-                    <td><b>${r.Brotname || 'Unbenanntes Brot'}</b></td>
+                <tr onclick="location.href='./rezept_ansicht.html?id=${r.brot_id}'">
+                    <td class="col-id">${r.brot_id}</td>
+                    <td><b>${r.name || 'Unbenanntes Brot'}</b></td>
                     <td><small>${r.atlas_ref_id || ''}</small></td>
-                    <td><span class="badge-status status-${(r.Status || 'draft').toLowerCase()}">${r.Status || 'Draft'}</span></td>
+                    <td><span class="badge-status status-${(r.status || 'draft').toLowerCase()}">${r.status || 'Draft'}</span></td>
                     <td><button class="btn-sm">Ansehen</button></td>
                 </tr>
             `).join('');
         };
 
+        // Suchfunktion
         document.getElementById('q').oninput = (e) => {
             const query = e.target.value.toLowerCase();
             const filtered = uniqueRecipes.filter(r => 
@@ -85,6 +91,7 @@
             render(filtered);
         };
 
+        // Initiales Rendern
         render(uniqueRecipes);
     })();
     </script>
