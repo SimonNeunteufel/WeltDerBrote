@@ -21,7 +21,7 @@
         .select-all-container input { margin-right: 8px; transform: scale(1.2); }
 
         /* Tabelle */
-        .table-wrap { background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); overflow: hidden; }
+        .table-wrap { background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); overflow: hidden; min-height: 200px;}
         #t { width: 100%; border-collapse: collapse; }
         #t th { text-align: left; padding: 15px; background: #f8f9fa; border-bottom: 2px solid #eee; font-weight: 600; color: #4e342e; }
         #t td { padding: 12px 15px; border-bottom: 1px solid #eee; vertical-align: middle; }
@@ -60,6 +60,9 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: all 0.2s;
         }
         .btn-action:hover { background: #f5f5f5; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        
+        /* Error Box Styling */
+        .error-box { color: #d32f2f; background: #fdecea; padding: 20px; border-radius: 4px; border: 1px solid #f5c6cb; }
     </style>
 </head>
 <body class="BG_Brot_Suche">
@@ -75,24 +78,27 @@
 
         <div class="toolbar">
             <label class="select-all-container">
-                <input type="checkbox" id="selectAll">
+                <input type="checkbox" id="selectAll" disabled>
                 <span>Alle auswählen</span>
             </label>
-            <input id="q" placeholder="Suche nach Brot, Mehl, Technik..." type="search" style="flex-grow:1; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
+            <input id="q" placeholder="Suche nach Brot, Mehl, Technik..." type="search" style="flex-grow:1; padding: 12px; border: 1px solid #ddd; border-radius: 6px;" disabled>
         </div>
 
         <div class="table-wrap">
             <table id="t">
                 <thead>
                     <tr>
-                        <th class="col-check"></th> <th>ID</th>
+                        <th class="col-check"></th>
+                        <th>ID</th>
                         <th>Name</th>
                         <th>Kategorie / Band</th>
                         <th>Status</th>
                         <th class="col-action">Aktion</th>
                     </tr>
                 </thead>
-                <tbody id="recipeBody"></tbody>
+                <tbody id="recipeBody">
+                    <tr><td colspan="6" style="text-align:center; padding:50px; color:#999;">Lade Daten... bitte warten.</td></tr>
+                </tbody>
             </table>
         </div>
     </div>
@@ -107,128 +113,165 @@
     <script src="./assets/js/util.js"></script>
     <script>
     (async () => {
-        // --- Referenzen & Initialisierung ---
-        const data = await window.$util.loadCsv('./assets/data/wdb_rezepte.csv');
         const tbody = document.getElementById('recipeBody');
         const selectAllBox = document.getElementById('selectAll');
-        const selectionBar = document.getElementById('selectionBar');
-        const countDisplay = document.getElementById('countDisplay');
-        
-        // --- Datenverarbeitung ---
-        // Gruppieren, um pro Brot-ID nur einen Eintrag zu haben
-        const grouped = {};
-        data.forEach(row => {
-            const id = row.brot_id;
-            if (!id) return;
-            if (!grouped[id]) {
-                // Ersten Eintrag speichern & Such-String vorbereiten
-                grouped[id] = { ...row, searchContent: "" };
-            }
-            // Alle Texte für die Suche zusammenfügen
-            grouped[id].searchContent += " " + Object.values(row).join(" ").toLowerCase();
-        });
-        let uniqueRecipes = Object.values(grouped); // Liste der einzigartigen Rezepte
+        const searchInput = document.getElementById('q');
 
-        // --- Rendering ---
-        const render = (list) => {
-            // Leere Liste behandeln
-            if(list.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:30px; color:#666;">Keine Rezepte gefunden.</td></tr>';
-                // Bei leerer Liste Select-All deaktivieren
-                selectAllBox.checked = false; selectAllBox.disabled = true;
-                updateSelectionUI(); // Bar ausblenden
-                return;
+        try {
+            // --- 1. Prüfen ob util.js geladen wurde ---
+            if (!window.$util || !window.$util.loadCsv) {
+                throw new Error("Die Datei 'assets/js/util.js' wurde nicht gefunden oder ist fehlerhaft.");
             }
+
+            // --- 2. Daten laden mit Fehlerbehandlung ---
+            // Der Pfad geht davon aus, dass rezepte.html im Hauptordner liegt
+            // und assets ein Unterordner ist.
+            const csvPath = './assets/data/wdb_rezepte.csv';
+            console.log("Versuche CSV zu laden von:", csvPath);
             
-            selectAllBox.disabled = false; // Select-All aktivieren
+            const data = await window.$util.loadCsv(csvPath);
 
-            // Zeilen generieren
-            tbody.innerHTML = list.map(r => `
+            if (!data || data.length === 0) {
+                 throw new Error(`Die CSV-Datei unter '${csvPath}' wurde gefunden, scheint aber leer zu sein oder hat ein falsches Format.`);
+            }
+            console.log("CSV erfolgreich geladen. Einträge:", data.length);
+
+
+            // --- 3. Datenverarbeitung (nur wenn Laden erfolgreich) ---
+            
+            // Referenzen für UI Updates holen
+            const selectionBar = document.getElementById('selectionBar');
+            const countDisplay = document.getElementById('countDisplay');
+            
+            // Suche & SelectAll aktivieren
+            selectAllBox.disabled = false;
+            searchInput.disabled = false;
+
+            // Gruppieren
+            const grouped = {};
+            data.forEach((row, index) => {
+                // Einfache Validierung: Hat die Zeile eine ID?
+                if (!row.brot_id) {
+                    console.warn(`Zeile ${index} in der CSV hat keine 'brot_id' und wird übersprungen.`, row);
+                    return;
+                }
+                const id = row.brot_id;
+                if (!grouped[id]) {
+                    grouped[id] = { ...row, searchContent: "" };
+                }
+                // Such-String bauen
+                grouped[id].searchContent += " " + Object.values(row).join(" ").toLowerCase();
+            });
+            
+            let uniqueRecipes = Object.values(grouped);
+
+            if (uniqueRecipes.length === 0) {
+                 tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:30px; color:#666;">Keine gültigen Rezepte in der CSV gefunden (fehlende brot_id?).</td></tr>';
+                 return;
+            }
+
+            // --- 4. Rendering Funktion ---
+            const render = (list) => {
+                if(list.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:30px; color:#666;">Keine Rezepte gefunden, die der Suche entsprechen.</td></tr>';
+                    selectAllBox.checked = false; selectAllBox.disabled = true;
+                    updateSelectionUI();
+                    return;
+                }
+                
+                selectAllBox.disabled = false;
+
+                tbody.innerHTML = list.map(r => `
+                    <tr>
+                        <td class="col-check">
+                            <input type="checkbox" class="recipe-check" value="${r.brot_id}" onclick="event.stopPropagation()">
+                        </td>
+                        <td onclick="openOne('${r.brot_id}')" class="col-id">${r.brot_id}</td>
+                        <td onclick="openOne('${r.brot_id}')" style="cursor:pointer"><b>${r.name || 'Unbenannt'}</b></td>
+                        <td onclick="openOne('${r.brot_id}')" style="cursor:pointer"><small>${r.atlas_ref_id || r.gruppe || '-'}</small></td>
+                        <td onclick="openOne('${r.brot_id}')" style="cursor:pointer"><span class="badge-status status-${(r.status || 'draft').toLowerCase()}">${r.status || 'Draft'}</span></td>
+                        <td class="col-action">
+                            <button class="btn-sm" onclick="event.stopPropagation(); openOne('${r.brot_id}')">Ansehen</button>
+                        </td>
+                    </tr>
+                `).join('');
+
+                document.querySelectorAll('.recipe-check').forEach(cb => {
+                    cb.addEventListener('change', updateSelectionUI);
+                });
+                updateSelectionUI();
+            };
+
+            // --- 5. Event Handler ---
+            window.openOne = (id) => location.href = `./rezept_ansicht.html?id=${id}`;
+
+            const updateSelectionUI = () => {
+                const checkedBoxes = document.querySelectorAll('.recipe-check:checked');
+                const visibleBoxes = document.querySelectorAll('.recipe-check');
+                const count = checkedBoxes.length;
+                
+                countDisplay.innerText = count;
+
+                if (count > 0) {
+                    selectionBar.classList.add('visible');
+                } else {
+                    selectionBar.classList.remove('visible');
+                }
+
+                if (visibleBoxes.length > 0 && checkedBoxes.length === visibleBoxes.length) {
+                    selectAllBox.checked = true; selectAllBox.indeterminate = false;
+                } else if (count > 0) {
+                    selectAllBox.checked = false; selectAllBox.indeterminate = true;
+                } else {
+                    selectAllBox.checked = false; selectAllBox.indeterminate = false;
+                }
+            };
+
+            selectAllBox.addEventListener('change', (e) => {
+                const isChecked = e.target.checked;
+                document.querySelectorAll('.recipe-check').forEach(cb => {
+                    cb.checked = isChecked;
+                });
+                updateSelectionUI();
+            });
+
+            window.viewSelected = () => {
+                const checkedBoxes = document.querySelectorAll('.recipe-check:checked');
+                const ids = Array.from(checkedBoxes).map(cb => cb.value);
+                if (ids.length === 0) return;
+                location.href = `./rezept_ansicht.html?id=${ids.join(',')}`;
+            };
+
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const filtered = uniqueRecipes.filter(r => r.searchContent.includes(query));
+                render(filtered);
+            });
+
+            // Initiales Rendern
+            render(uniqueRecipes);
+
+        } catch (error) {
+            // --- FEHLERBEHANDLUNG ---
+            console.error("Kritischer Fehler in rezepte.html:", error);
+            tbody.innerHTML = `
                 <tr>
-                    <td class="col-check">
-                        <input type="checkbox" class="recipe-check" value="${r.brot_id}" onclick="event.stopPropagation()">
-                    </td>
-                    <td onclick="openOne('${r.brot_id}')" class="col-id">${r.brot_id}</td>
-                    <td onclick="openOne('${r.brot_id}')" style="cursor:pointer"><b>${r.name || 'Unbenannt'}</b></td>
-                    <td onclick="openOne('${r.brot_id}')" style="cursor:pointer"><small>${r.atlas_ref_id || r.gruppe || '-'}</small></td>
-                    <td onclick="openOne('${r.brot_id}')" style="cursor:pointer"><span class="badge-status status-${(r.status || 'draft').toLowerCase()}">${r.status || 'Draft'}</span></td>
-                    <td class="col-action">
-                        <button class="btn-sm" onclick="event.stopPropagation(); openOne('${r.brot_id}')">Ansehen</button>
+                    <td colspan="6" style="padding: 20px;">
+                        <div class="error-box">
+                            <strong>Es ist ein Fehler aufgetreten:</strong><br>
+                            ${error.message}<br><br>
+                            <small>
+                                Mögliche Ursachen:<br>
+                                1. Der Pfad zur CSV Datei <code>./assets/data/wdb_rezepte.csv</code> stimmt nicht.<br>
+                                2. Die Datei <code>./assets/js/util.js</code> wird nicht gefunden.<br>
+                                3. Die CSV Datei ist leer oder beschädigt.<br>
+                                (Drücke F12 für Details in der Browser-Konsole)
+                            </small>
+                        </div>
                     </td>
                 </tr>
-            `).join('');
-
-            // Listener für neue Checkboxen registrieren
-            document.querySelectorAll('.recipe-check').forEach(cb => {
-                cb.addEventListener('change', updateSelectionUI);
-            });
-            
-            // UI nach dem Rendern updaten (falls durch Suche Filterung stattfand)
-            updateSelectionUI();
-        };
-
-
-        // --- Interaktionen ---
-
-        // Klick auf Zeile/Button öffnet Einzelansicht
-        window.openOne = (id) => location.href = `./rezept_ansicht.html?id=${id}`;
-
-        // UI Update: Prüft selektierte Checkboxen und steuert die Action-Bar
-        const updateSelectionUI = () => {
-            const checkedBoxes = document.querySelectorAll('.recipe-check:checked');
-            const visibleBoxes = document.querySelectorAll('.recipe-check'); // Nur die aktuell sichtbaren
-            const count = checkedBoxes.length;
-            
-            countDisplay.innerText = count; // Zahl aktualisieren
-
-            // Bar ein-/ausblenden
-            if (count > 0) {
-                selectionBar.classList.add('visible');
-            } else {
-                selectionBar.classList.remove('visible');
-            }
-
-            // Select-All Checkbox Statuslogik
-            if (visibleBoxes.length > 0 && checkedBoxes.length === visibleBoxes.length) {
-                selectAllBox.checked = true; selectAllBox.indeterminate = false;
-            } else if (count > 0) {
-                selectAllBox.checked = false; selectAllBox.indeterminate = true; // Teilweise ausgewählt
-            } else {
-                selectAllBox.checked = false; selectAllBox.indeterminate = false;
-            }
-        };
-
-        // "Alle Auswählen" Logik
-        selectAllBox.addEventListener('change', (e) => {
-            const isChecked = e.target.checked;
-            // Nur die *aktuell sichtbaren* Checkboxen togglen
-            document.querySelectorAll('.recipe-check').forEach(cb => {
-                cb.checked = isChecked;
-            });
-            updateSelectionUI();
-        });
-
-        // Button "Auswahl anzeigen" (in der Action-Bar)
-        window.viewSelected = () => {
-            const checkedBoxes = document.querySelectorAll('.recipe-check:checked');
-            const ids = Array.from(checkedBoxes).map(cb => cb.value);
-            
-            if (ids.length === 0) return; // Sollte nicht passieren, da Bar dann weg ist
-            
-            // IDs komma-getrennt an die Ansichtsseite übergeben
-            location.href = `./rezept_ansicht.html?id=${ids.join(',')}`;
-        };
-
-        // Suchfunktion
-        document.getElementById('q').addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            // Filtern der Basis-Liste
-            const filtered = uniqueRecipes.filter(r => r.searchContent.includes(query));
-            render(filtered);
-        });
-
-        // Initiales Rendern aller Rezepte
-        render(uniqueRecipes);
+            `;
+        }
     })();
     </script>
 </body>
