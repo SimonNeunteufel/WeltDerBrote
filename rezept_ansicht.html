@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rezept Ansicht</title>
+    <title>Brot Rezept Ansicht</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <style>
-        /* --- STYLING (Clean Paper Look) --- */
+        /* --- STYLING (Paper / Tradition Look) --- */
         :root {
-            --text-dark: #3e2723;
+            --text-dark: #2c1810;
             --text-light: #5d4037;
             --accent: #8d6e63;
             --bg: #fdfbf7;
-            --card-bg: #fff;
+            --card-bg: #ffffff;
+            --line: #e0e0e0;
         }
 
         body {
-            font-family: 'Georgia', 'Times New Roman', serif; /* Serif für Tradition-Look */
+            font-family: 'Georgia', 'Times New Roman', serif;
             background-color: var(--bg);
             color: var(--text-dark);
             margin: 0;
@@ -29,72 +30,84 @@
             margin: 0 auto;
             background: var(--card-bg);
             padding: 60px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            border-radius: 4px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            border-radius: 6px;
+            position: relative;
         }
 
-        /* HEADER BEREICH */
+        /* HEADER */
         header {
             text-align: center;
             margin-bottom: 40px;
-            border-bottom: 1px solid #eee;
             padding-bottom: 30px;
+            border-bottom: 2px solid var(--line);
         }
 
         h1 {
-            font-size: 3em;
-            margin: 0 0 10px 0;
-            color: #2c1810;
+            font-size: 3.2em;
+            margin: 0 0 15px 0;
+            color: var(--text-dark);
+            letter-spacing: -1px;
         }
 
-        .story-block {
+        /* STORY BLOCK (Herkunft, Geschichte) */
+        .story-section {
             font-family: 'Segoe UI', sans-serif;
-            font-size: 0.95em;
             color: #666;
-            max-width: 700px;
-            margin: 20px auto;
-            font-style: italic;
+            background: #faf8f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px auto 30px auto;
+            max-width: 80%;
+            font-size: 0.95em;
+            text-align: center;
+            border: 1px solid #eee;
         }
         
-        .story-meta {
+        .story-item {
             display: inline-block;
             margin: 0 10px;
+        }
+        .story-item b {
+            color: var(--accent);
+            text-transform: uppercase;
+            font-size: 0.8em;
+            letter-spacing: 1px;
+            margin-right: 5px;
         }
 
         /* HAUPTBILD */
         .lead-image-container {
             width: 100%;
-            margin: 30px 0;
-            text-align: center;
+            margin: 30px 0 10px 0;
         }
         .lead-image-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 4px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 100%;
             max-height: 500px;
             object-fit: cover;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
         /* SCHRITTE */
         .step-wrapper {
             display: flex;
             gap: 40px;
-            margin-bottom: 50px;
-            border-bottom: 1px dashed #eee;
+            margin-bottom: 40px;
+            border-bottom: 1px dashed var(--line);
             padding-bottom: 40px;
         }
-
         .step-wrapper:last-child { border-bottom: none; }
 
         .step-left {
             width: 30%;
-            background: #faf8f5;
+            background: #fafafa;
             padding: 20px;
             border-radius: 8px;
             font-family: 'Segoe UI', sans-serif;
             font-size: 0.9em;
             height: fit-content;
+            border: 1px solid #eee;
         }
 
         .step-right {
@@ -105,146 +118,176 @@
             margin-top: 0;
             color: var(--accent);
             text-transform: uppercase;
-            font-size: 0.85em;
+            font-size: 0.8em;
             letter-spacing: 1px;
+            margin-bottom: 10px;
         }
 
-        .zutaten-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+        .zutaten-list { list-style: none; padding: 0; margin: 0; }
         .zutaten-list li {
             margin-bottom: 6px;
-            border-bottom: 1px dotted #e0e0e0;
+            border-bottom: 1px dotted #ccc;
             padding-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
         }
 
         .anweisung-text {
-            font-size: 1.1em;
+            font-size: 1.15em;
             margin-bottom: 20px;
-            white-space: pre-wrap; /* Damit Zeilenumbrüche erhalten bleiben */
+            white-space: pre-wrap;
         }
 
         .step-image img {
             width: 100%;
             border-radius: 4px;
-            margin-top: 10px;
+            margin-top: 15px;
+            border: 1px solid #eee;
         }
 
-        .tech-tags {
-            margin-top: 15px;
-        }
+        .tech-tags { margin-top: 10px; }
         .tag {
-            background: #eee;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.7em;
-            color: #555;
-            text-transform: uppercase;
-            font-family: sans-serif;
+            background: #eee; padding: 3px 8px; border-radius: 4px;
+            font-size: 0.75em; color: #555; text-transform: uppercase;
+            font-family: sans-serif; letter-spacing: 0.5px;
+        }
+
+        .meta-time {
+            margin-top: 20px; color: #888; font-size: 0.9em;
+            display: flex; align-items: center; gap: 6px;
         }
 
         /* TIPPS BOX */
         .tipps-box {
-            background-color: #eefebe; /* Leichtes Grün/Gelb */
-            border-left: 5px solid #cddc39;
-            padding: 20px;
-            margin-top: 40px;
+            margin-top: 50px;
+            background: #eaf4e1; /* Sanftes Grün */
+            border-left: 5px solid #7cb342;
+            padding: 25px;
             border-radius: 4px;
             font-family: 'Segoe UI', sans-serif;
         }
-        .tipps-title {
+        .tipps-header {
             font-weight: bold;
+            color: #33691e;
             display: block;
-            margin-bottom: 5px;
-            color: #556b2f;
+            margin-bottom: 10px;
+            font-size: 1.1em;
         }
 
-        /* UTILS */
-        .hidden { display: none; }
-        .meta-time { display: flex; align-items: center; gap: 5px; margin-top: 20px; color: #888; font-size: 0.9em; }
-
-        /* Navigation für Demo */
-        #recipeSelector {
-            position: fixed; top: 10px; right: 10px; 
-            padding: 10px; background: white; border: 1px solid #ccc; 
-            border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            font-family: sans-serif; z-index: 999;
+        /* NAV & ERROR */
+        #navBar {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: white; padding: 10px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex; justify-content: flex-end; align-items: center; gap: 15px;
+            z-index: 100;
+            font-family: sans-serif;
+        }
+        select { padding: 5px; border: 1px solid #ccc; border-radius: 4px; }
+        
+        .fallback-box {
+            text-align: center; padding: 40px; background: #fff3cd; 
+            border: 1px solid #ffeeba; color: #856404; border-radius: 6px; margin: 50px;
+        }
+        .btn-load {
+            padding: 8px 15px; background: #333; color: white; 
+            border: none; border-radius: 4px; cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <select id="recipeSelector" onchange="loadRecipeById(this.value)">
-        <option value="">-- Rezept wählen --</option>
-    </select>
+    <div id="navBar">
+        <span style="font-size:0.9em; color:#888;">Rezept wählen:</span>
+        <select id="recipeSelector" onchange="loadRecipeById(this.value)">
+            <option value="">(Wird geladen...)</option>
+        </select>
+        <input type="file" id="fileInput" accept=".csv" style="display:none" onchange="handleManualFile(this)">
+        <button class="btn-load" onclick="document.getElementById('fileInput').click()" title="Falls automatisches Laden nicht geht">📂 CSV manuell laden</button>
+    </div>
 
     <div class="container" id="recipeContainer">
-        <div style="text-align:center; color:#999; padding:50px;">Lade Rezeptdaten...</div>
+        <div style="text-align:center; padding:100px; color:#aaa;">
+            Lade Daten...<br>
+            <small>Falls nichts passiert, klicke oben rechts auf "CSV manuell laden".</small>
+        </div>
     </div>
 
 <script>
     // --- KONFIGURATION ---
-    // Passe diese Pfade an deine Ordnerstruktur an
-    const PATH_DATA = "./assets/data/BrotRezepte_Master.csv"; // Oder Pfad zur CSV
+    // Passe diese Pfade an deinen lokalen Ordner an
+    const PATH_DATA = "./assets/data/BrotRezepte_Master.csv";
     const PATH_IMG  = "./assets/image/";
 
     let allRecipes = [];
 
-    // Init
+    // Init beim Laden
     window.onload = function() {
-        // Versuche CSV zu laden
+        // Versuche Auto-Load
         Papa.parse(PATH_DATA, {
             download: true,
             delimiter: ";",
             skipEmptyLines: true,
             complete: function(results) {
+                console.log("Auto-Load erfolgreich");
                 parseRecipes(results.data);
-                
-                // Prüfe URL Parameter ?id=...
-                const urlParams = new URLSearchParams(window.location.search);
-                const id = urlParams.get('id');
-                
-                if(id) {
-                    loadRecipeById(id);
-                    document.getElementById('recipeSelector').value = id;
-                } else if(allRecipes.length > 0) {
-                    // Lade das erste als Fallback
-                    loadRecipeById(allRecipes[0].id);
-                }
+                checkUrlParam();
             },
-            error: function() {
-                // Fallback für lokales Testen ohne Server (File Input simulieren oder Dummy Data)
-                document.getElementById('recipeContainer').innerHTML = "<p style='color:red; text-align:center'>CSV konnte nicht geladen werden.<br>Bitte stelle sicher, dass die Datei unter assets/data liegt oder nutze einen lokalen Server.</p>";
+            error: function(err) {
+                console.warn("Auto-Load fehlgeschlagen (meist CORS lokal). Zeige Fallback.", err);
+                showFallbackError();
             }
         });
     };
 
+    function handleManualFile(input) {
+        if(!input.files[0]) return;
+        Papa.parse(input.files[0], {
+            skipEmptyLines: true,
+            complete: function(results) {
+                parseRecipes(results.data);
+                checkUrlParam();
+            }
+        });
+    }
+
+    function showFallbackError() {
+        document.getElementById('recipeContainer').innerHTML = `
+            <div class="fallback-box">
+                <h3>Keine Daten geladen</h3>
+                <p>Da du die Datei lokal öffnest (file://), verhindert der Browser das automatische Laden.</p>
+                <p><b>Lösung:</b> Klicke oben rechts auf <b>"📂 CSV manuell laden"</b> und wähle deine <code>BrotRezepte_Master.csv</code> aus.</p>
+            </div>
+        `;
+        document.getElementById('recipeSelector').innerHTML = "<option>Bitte CSV laden...</option>";
+    }
+
+    // Header Mapping basierend auf deiner Angabe:
+    // 0:status; 1:atlas; 2:id; 3:var; 4:name; 5:grp; 6:step_nr; 7:zut; 8:anw; 9:tag; 10:zeit; 11:b_ref; 
+    // 12:quelle; 13:b_lead; 14-17:prompts; 18:tipps; 19:gemini1; 20:gemini2; 
+    // 21:Herkunft; 22:Geschichte; 23:Tradition
+
     function parseRecipes(rows) {
         let startIdx = 0;
-        // Header Skip check
+        // Header überspringen, wenn erste Zelle "status" heißt
         if (rows[0] && (rows[0][0]||"").toLowerCase().includes('status')) startIdx = 1;
 
         const map = new Map();
 
-        // SPALTEN INDEX (Neuer Header):
-        // 0:status; 1:atlas; 2:id; 3:var; 4:name; 5:grp; 6:step_nr; 7:zut; 8:anw; 9:tag; 10:zeit; 11:b_ref; 
-        // 12:quelle; 13:b_lead; ... 18:tipps ... 21:herkunft; 22:geschichte; 23:tradition
-
         for (let i = startIdx; i < rows.length; i++) {
-            const c = rows[i];
-            if (c.length < 3) continue;
+            const cols = rows[i];
+            // Fix für Semikolon-Split falls PapaParse Array liefert oder String
+            const c = Array.isArray(cols) ? cols : cols.split(';'); 
+            
+            if (c.length < 5) continue; // Zu wenig Daten
 
-            const id = c[2];
+            const id = c[2]; // brot_id
             
             if (!map.has(id)) {
                 map.set(id, {
                     id: id,
                     name: c[4],
-                    variante: c[3],
-                    gruppe: c[5],
-                    bild_lead: c[13],
+                    bild_lead: c[13], // Hauptbild Filename
                     tipps: c[18],
                     herkunft: c[21],
                     geschichte: c[22],
@@ -253,6 +296,7 @@
                 });
             }
 
+            // Schritt hinzufügen
             map.get(id).steps.push({
                 nr: parseInt(c[6]) || 0,
                 zutaten: c[7],
@@ -265,8 +309,9 @@
 
         allRecipes = Array.from(map.values());
         
-        // Dropdown füllen
+        // Selector füllen
         const sel = document.getElementById('recipeSelector');
+        sel.innerHTML = '<option value="">-- Wähle ein Brot --</option>';
         allRecipes.forEach(r => {
             const opt = document.createElement('option');
             opt.value = r.id;
@@ -275,55 +320,68 @@
         });
     }
 
+    function checkUrlParam() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        if(id) {
+            loadRecipeById(id);
+            document.getElementById('recipeSelector').value = id;
+        } else if(allRecipes.length > 0) {
+            // Lade erstes Rezept als Demo
+            loadRecipeById(allRecipes[0].id);
+            document.getElementById('recipeSelector').value = allRecipes[0].id;
+        }
+    }
+
     function loadRecipeById(id) {
+        if(!id) return;
         const r = allRecipes.find(x => x.id === id);
         if (!r) return;
 
         // Steps sortieren
         r.steps.sort((a,b) => a.nr - b.nr);
 
-        // --- HTML GENERIERUNG ---
         const container = document.getElementById('recipeContainer');
         
-        // 1. HEADER (Name, Fliesstext, Bild)
-        // IDs und Quelle sind ausgeblendet wie gewünscht
-        
-        // Fliesstext bauen (Herkunft, Geschichte, Tradition)
+        // 1. STORY BLOCK BAUEN
         let storyHTML = "";
-        const parts = [];
-        if(r.herkunft) parts.push(`<b>Herkunft:</b> ${r.herkunft}`);
-        if(r.geschichte) parts.push(`<b>Geschichte:</b> ${r.geschichte}`);
-        if(r.tradition) parts.push(`<b>Tradition:</b> ${r.tradition}`);
+        let infoParts = [];
+        if(r.herkunft) infoParts.push(`<b>Herkunft:</b> ${r.herkunft}`);
+        if(r.geschichte) infoParts.push(`<b>Geschichte:</b> ${r.geschichte}`);
+        if(r.tradition) infoParts.push(`<b>Tradition:</b> ${r.tradition}`);
         
-        if (parts.length > 0) {
-            storyHTML = `<div class="story-block">${parts.join(' &nbsp;|&nbsp; ')}</div>`;
+        if (infoParts.length > 0) {
+            storyHTML = `<div class="story-section"><div class="story-item">${infoParts.join('</div><div class="story-item"> • </div><div class="story-item">')}</div></div>`;
         }
 
-        // Hauptbild
-        let leadImgHTML = "";
-        if(r.bild_lead) {
-            leadImgHTML = `
-                <div class="lead-image-container">
-                    <img src="${PATH_IMG}${r.bild_lead}" onerror="this.style.display='none'">
-                </div>
-            `;
-        }
+        // 2. HAUPTBILD (Lead)
+        // Fallback Logik: Wenn Spalte 13 leer ist, versuchen wir ID.jpg
+        let imgName = r.bild_lead;
+        if(!imgName || imgName.trim() === "") imgName = r.id + ".jpg";
+        
+        let imgHTML = `
+            <div class="lead-image-container">
+                <img src="${PATH_IMG}${imgName}" onerror="this.style.display='none'" alt="${r.name}">
+            </div>`;
 
-        // 2. SCHRITTE
+        // 3. SCHRITTE RENDERN
         let stepsHTML = "";
         r.steps.forEach(step => {
-            // Zutatenliste formatieren (Kommas zu neuen Zeilen für bessere Lesbarkeit)
-            const zutatenRaw = step.zutaten || "";
-            // Einfache Logik: Wir splitten bei Komma, falls es lang ist, oder lassen es
-            // Hier: Wir splitten bei Komma für Listendarstellung
-            const zutatenList = zutatenRaw.split(',').filter(x => x.trim() !== "").map(x => `<li>${x.trim()}</li>`).join('');
-            const zutatenHTML = zutatenList ? `<ul class="zutaten-list">${zutatenList}</ul>` : "<span style='color:#ccc'>-</span>";
+            // Zutatenliste splitten (angenommen Komma-getrennt)
+            let zutatenHTML = "<span style='color:#ccc'>-</span>";
+            if(step.zutaten && step.zutaten.trim() !== "") {
+                const lines = step.zutaten.split(',').map(s => s.trim()).filter(s => s);
+                zutatenHTML = `<ul class="zutaten-list">${lines.map(l => `<li><span>${l}</span></li>`).join('')}</ul>`;
+            }
+
+            // Step Image
+            let stepImgHTML = "";
+            if(step.bild_ref) {
+                stepImgHTML = `<div class="step-image"><img src="${PATH_IMG}${step.bild_ref}" onerror="this.style.display='none'"></div>`;
+            }
 
             // Tags
-            const tagsHTML = step.tags ? `<div class="tech-tags"><span class="tag">${step.tags}</span></div>` : "";
-            
-            // Step Bild
-            const stepImgHTML = step.bild_ref ? `<div class="step-image"><img src="${PATH_IMG}${step.bild_ref}" onerror="this.style.display='none'"></div>` : "";
+            let tagsHTML = step.tags ? `<div class="tech-tags"><span class="tag">${step.tags}</span></div>` : "";
 
             stepsHTML += `
                 <div class="step-wrapper">
@@ -342,29 +400,27 @@
             `;
         });
 
-        // 3. TIPPS
+        // 4. TIPPS
         let tippsHTML = "";
-        if (r.tipps && r.tipps.trim() !== "") {
+        if(r.tipps) {
             tippsHTML = `
                 <div class="tipps-box">
-                    <span class="tipps-title">💡 Tipps vom Bäcker:</span>
+                    <span class="tipps-header">💡 Bäcker-Tipp</span>
                     ${r.tipps}
                 </div>
             `;
         }
 
-        // ZUSAMMENBAU
+        // DOM Update
         container.innerHTML = `
             <header>
                 <h1>${r.name}</h1>
                 ${storyHTML}
-                ${leadImgHTML}
+                ${imgHTML}
             </header>
-            
             <div class="steps-container">
                 ${stepsHTML}
             </div>
-
             ${tippsHTML}
         `;
     }
