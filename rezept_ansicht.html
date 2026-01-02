@@ -126,14 +126,12 @@
 
 <script>
 // --- CONFIGURATION ---
-// ACHTUNG: Hier den Dateinamen anpassen, falls er anders heißt!
-// Standard ist der Output vom neuen Admin V17:
-const CSV_FILE = './assets/data/BrotRezepte_Master.csv'; 
+// ACHTUNG: Hier ist jetzt der korrekte Dateiname!
+const CSV_FILE = './assets/data/wdb_rezepte.csv'; 
 const IMG_PATH = './assets/image/';
 
 (async () => {
     // --- 1. Helper Logic (Inline) ---
-    // Wir bauen die Parse-Logik direkt ein, um Fehler in externen Utils zu vermeiden
     const parseTags = (str) => (!str ? [] : str.split(/,|\|/).map(s => s.trim()).filter(Boolean));
     const formatIng = (str) => {
         if (!str) return "<li>Keine Zutaten</li>";
@@ -319,7 +317,7 @@ const IMG_PATH = './assets/image/';
     document.getElementById('navPrev').addEventListener('click', () => { if(currentRecipeIndex > 0) showRecipe(currentRecipeIndex - 1); });
     document.getElementById('navNext').addEventListener('click', () => { if(currentRecipeIndex < allIds.length - 1) showRecipe(currentRecipeIndex + 1); });
     
-    // Overlay logic (Original)
+    // Overlay logic
     const overlay = document.getElementById('imageOverlay');
     const overlayImage = document.getElementById('overlayImage');
     recipeContainer.addEventListener('click', (e) => {
