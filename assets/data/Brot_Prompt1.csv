@@ -342,5 +342,46 @@ ESP-00001-G-001-st1.jpg;Tapas (Pan con Tomate);1;Professional food photography, 
 ESP-00001-G-001-st2.jpg;Tapas (Tortilla Española);2;Professional food photography, thick Spanish potato omelet (Tortilla) cut into cubes on a wooden board, toothpick skewers, soft center, 8k;blurry, text, cartoon, illustration, low quality
 ESP-00001-G-001-st3.jpg;Tapas (Albondigas);3;Professional food photography, spanish meatballs (albondigas) cooking in rich tomato sauce in a clay pot, steam, herbs, 8k;blurry, text, cartoon, illustration, low quality
 
+überarbeiten
+Brot Illu ID;Brot Name;Positive Prompt;Negativ Prompt
+ITA-00001-B-001;Levito Madre (Neuzucht);Professional food photography, strong active Levito Madre (stiff sourdough starter) in a tall glass jar, honeycomb structure visible from side, cross cut on top opened up like a flower, bubbling, sitting on a marble table, flour dust, 8k, photorealistic;blurry, text, dead, moldy, liquid, dark
+ITA-00001-B-001-st1.jpg;Levito Madre (Neuzucht);1;Professional food photography, mixing flour water and honey in a bowl to start sourdough, sticky dough ball;blurry, text, cartoon, illustration, low quality
+ITA-00001-B-001-st2.jpg;Levito Madre (Neuzucht);2;Professional food photography, discarding half of sourdough starter and adding fresh flour, feeding process;blurry, text, cartoon, illustration, low quality
+ITA-00001-B-001-st3.jpg;Levito Madre (Neuzucht);3;Professional food photography, kneading stiff sourdough ball, smooth texture;blurry, text, cartoon, illustration, low quality
+ITA-00001-B-001-st4.jpg;Levito Madre (Neuzucht);4;Professional food photography, slices of sourdough starter floating in a bowl of water (Bagnetto Piemontese), washing acidity;blurry, text, cartoon, illustration, low quality
 
+ARG-00002-G-001;Empanada-Teig (Weizen / Argentinisch);Professional food photography, Stack of raw empanada dough discs (tapas) separated by wax paper, flour dusted, rolling pin nearby, rustic wooden table, 8k, photorealistic;blurry, text, cartoon, illustration, low quality, neon colors, cooked food
+ARG-00002-G-001-st1.jpg;Empanada-Teig (Weizen / Argentinisch);1;Professional food photography, kneading smooth empanada dough ball on wooden table;blurry, text, cartoon, illustration, low quality
+ARG-00002-G-001-st2.jpg;Empanada-Teig (Weizen / Argentinisch);2;Professional food photography, cutting circular dough discs from rolled out dough sheet;blurry, text, cartoon, illustration, low quality
+ARG-00002-R-001;Empanadas Mendocinas (Gericht mit Rind);Professional food photography, Platter of baked Argentine Empanadas, golden crust, Chimichurri side, red wine, rustic style, 8k, photorealistic;blurry, text, cartoon, illustration, low quality, neon colors
+ARG-00002-R-001-st1.jpg;Empanadas Mendocinas (Gericht mit Rind);1;Professional food photography, beef filling with onions and egg in a bowl;blurry, text, cartoon, illustration, low quality
+ARG-00002-R-001-st2.jpg;Empanadas Mendocinas (Gericht mit Rind);2;Professional food photography, folding and crimping empanadas;blurry, text, cartoon, illustration, low quality
+COL-00001-G-001;Empanada-Teig (Mais / Kolumbianisch);Professional food photography, Ball of yellow corn masa dough and plastic sheets for pressing, rustic setting, ingredients for colombian empanadas, 8k, photorealistic;blurry, text, cartoon, illustration, low quality, neon colors, cooked food
+COL-00001-G-001-st1.jpg;Empanada-Teig (Mais / Kolumbianisch);1;Professional food photography, mixing yellow corn dough in a bowl;blurry, text, cartoon, illustration, low quality
+COL-00001-R-001;Empanadas Colombianas (Frittiert);Professional food photography, Colombian Empanadas, crispy fried yellow corn crust, served with Aji salsa and lime, 8k, photorealistic;blurry, text, cartoon, illustration, low quality, neon colors
+COL-00001-R-001-st1.jpg;Empanadas Colombianas (Frittiert);1;Professional food photography, forming empanada with plastic sheet aid;blurry, text, cartoon, illustration, low quality
+COL-00001-R-001-st2.jpg;Empanadas Colombianas (Frittiert);2;Professional food photography, frying empanadas in oil pot;blurry, text, cartoon, illustration, low quality
+MEX-00001-G-001;Maistortillas (Original);Professional food photography, Stack of fresh warm corn tortillas wrapped in a traditional cloth, tortilla press in background, rustic, 8k, photorealistic;blurry, text, cartoon, illustration, low quality, neon colors
+MEX-00001-G-001-st1.jpg;Maistortillas (Original);1;Professional food photography, kneading corn masa dough by hand;blurry, text, cartoon, illustration, low quality
+MEX-00001-G-001-st2.jpg;Maistortillas (Original);2;Professional food photography, cooking tortilla on a dry cast iron comal;blurry, text, cartoon, illustration, low quality
+MEX-00001-R-001;Tacos al Pastor (Gericht);Professional food photography, Tacos al Pastor on soft corn tortillas, pork, pineapple, cilantro, lime wedges, rustic board, 8k, photorealistic;blurry, text, cartoon, illustration, low quality, neon colors
+MEX-00001-R-001-st1.jpg;Tacos al Pastor (Gericht);1;Professional food photography, taco assembly with pork and pineapple;blurry, text, cartoon, illustration, low quality
+USA-00001-G-001;Weizentortillas (TexMex);Professional food photography, Stack of soft flour tortillas on a wooden board, flour dust, rolling pin, 8k, photorealistic;blurry, text, cartoon, illustration, low quality, neon colors
+USA-00001-G-001-st1.jpg;Weizentortillas (TexMex);1;Professional food photography, kneading elastic white flour dough;blurry, text, cartoon, illustration, low quality
+USA-00001-G-001-st2.jpg;Weizentortillas (TexMex);2;Professional food photography, rolling out flour tortilla very thin;blurry, text, cartoon, illustration, low quality
+USA-00001-R-001;Fajitas (Rind);Professional food photography, Sizzling Beef Fajitas skillet, side of flour tortillas, guacamole, sour cream, festive setting, 8k, photorealistic;blurry, text, cartoon, illustration, low quality, neon colors
+USA-00001-R-001-st1.jpg;Fajitas (Rind);1;Professional food photography, sizzling fajita skillet with meat and peppers;blurry, text, cartoon, illustration, low quality
+ITA-00001-B-001;Levito Madre (Neuzucht);Professional food photography, strong active Levito Madre (stiff sourdough starter) in a tall glass jar, honeycomb structure visible from side, cross cut on top opened up like a flower, bubbling, sitting on a marble table, flour dust, 8k, photorealistic;blurry, text, dead, moldy, liquid, dark
+ITA-00001-B-001-st1.jpg;Levito Madre (Neuzucht);1;Professional food photography, mixing flour water and honey in a bowl to start sourdough, sticky dough ball;blurry, text, cartoon, illustration, low quality
+ITA-00001-B-001-st2.jpg;Levito Madre (Neuzucht);2;Professional food photography, discarding half of sourdough starter and adding fresh flour, feeding process;blurry, text, cartoon, illustration, low quality
+ITA-00001-B-001-st3.jpg;Levito Madre (Neuzucht);3;Professional food photography, kneading stiff sourdough ball, smooth texture;blurry, text, cartoon, illustration, low quality
+ITA-00001-B-001-st4.jpg;Levito Madre (Neuzucht);4;Professional food photography, slices of sourdough starter floating in a bowl of water (Bagnetto Piemontese), washing acidity;blurry, text, cartoon, illustration, low quality
 
+Neu
+Brot Illu ID;Brot Name;Positive Prompt;Negativ Prompt
+CHE-00002-B-001;Hefewasser (Wildhefe);Professional food photography, Fermented Yeast Water (Hefewasser) in a swing-top bottle, dried dates floating inside, vigorous carbonation bubbles rising, backlight, rustic setting, 8k, photorealistic;blurry, text, still, moldy, plastic bottle
+CHE-00002-B-001-st1.jpg;Hefewasser (Wildhefe);1;Professional food photography, filling a glass bottle with dried dates and water;blurry, text, cartoon, illustration, low quality
+CHE-00002-B-001-st2.jpg;Hefewasser (Wildhefe);2;Professional food photography, shaking a bottle of yeast water, motion blur, bubbles;blurry, text, cartoon, illustration, low quality
+CHE-00002-B-001-st3.jpg;Hefewasser (Wildhefe);3;Professional food photography, pouring yeast water through a sieve into a jar;blurry, text, cartoon, illustration, low quality
+CHE-00003-B-001;Dampfl (Hefestück);Professional food photography, Active Yeast Sponge (Dampfl) in a small bowl, mixture has risen high and cracked on top, frothy texture, spoon inside, 8k, photorealistic;blurry, text, flat, liquid, dead
+CHE-00003-B-001-st1.jpg;Dampfl (Hefestück);1;Professional food photography, dissolving fresh yeast in warm milk with sugar;blurry, text, cartoon, illustration, low quality

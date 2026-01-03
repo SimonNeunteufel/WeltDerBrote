@@ -35,29 +35,15 @@
         .cat-tag { text-transform: uppercase; letter-spacing: 1px; color: #888; font-size: 0.8em; font-weight: bold; margin-bottom: 10px; display: block;}
         .recipe-title { font-size: 2.8em; margin: 0 0 15px 0; color: #2c1810; }
         
-        /* Story & Bild im Header */
         .story-block { 
-            background: #fff8e1; 
-            color: #5d4037; 
-            padding: 15px 20px; 
-            margin: 20px auto; 
-            border-radius: 6px; 
-            font-style: italic; 
-            font-size: 0.95em;
-            display: inline-block;
-            border: 1px solid #ffe0b2;
+            background: #fff8e1; color: #5d4037; padding: 15px 20px; margin: 20px auto; 
+            border-radius: 6px; font-style: italic; font-size: 0.95em; display: inline-block; border: 1px solid #ffe0b2;
         }
         .story-part { margin: 0 10px; display: inline-block; }
         .story-label { font-weight: bold; text-transform: uppercase; font-size: 0.8em; color: #8d6e63; margin-right: 5px; }
 
         .lead-image-wrapper { margin-top: 25px; margin-bottom: 10px; }
-        .lead-image { 
-            width: 100%; 
-            max-height: 450px; 
-            object-fit: cover; 
-            border-radius: 8px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
-        }
+        .lead-image { width: 100%; max-height: 450px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
 
         /* --- Steps --- */
         .phase-section { margin-bottom: 50px; border-bottom: 1px solid #eee; padding-bottom: 30px; }
@@ -73,18 +59,30 @@
         .instruction-box img { max-width: 100%; height: auto; border-radius: 8px; display: block; margin-top: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: zoom-in; transition: transform 0.2s; border: 1px solid #eee; }
         .instruction-box img:hover { transform: scale(1.02); }
 
-        /* --- Tipps --- */
+        /* --- Tipps & Cross-Links --- */
         .tipps-container { margin-top: 40px; background: #e8f5e9; border-left: 5px solid #66bb6a; padding: 20px; border-radius: 4px; }
         .tipps-header { font-weight: bold; color: #2e7d32; display: block; margin-bottom: 5px; font-size: 1.1em; }
 
-        /* --- Overlay --- */
+        .cross-link-box { 
+            margin-top: 40px; background: #fff3e0; border-left: 5px solid #ff9800; padding: 25px; border-radius: 4px; 
+        }
+        .cross-link-header { font-weight: bold; color: #e65100; display: block; margin-bottom: 15px; font-size: 1.2em; }
+        .cross-link-grid { display: flex; gap: 15px; flex-wrap: wrap; }
+        .cross-card { 
+            background: white; border: 1px solid #ffcc80; padding: 15px; border-radius: 8px; 
+            text-decoration: none; color: #333; display: flex; align-items: center; gap: 10px;
+            transition: transform 0.2s, box-shadow 0.2s; min-width: 200px;
+        }
+        .cross-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(255,152,0,0.2); }
+        .cross-icon { font-size: 1.5em; }
+
+        /* --- Overlay & Nav --- */
         #imageOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 40px; cursor: zoom-out; backdrop-filter: blur(5px); }
         #imageOverlay.active { display: flex; animation: fadeIn 0.2s ease-out; }
         #overlayImage { max-width: 100%; max-height: 100%; box-shadow: 0 5px 30px rgba(0,0,0,0.5); border-radius: 4px; object-fit: contain; transform: scale(0.95); transition: transform 0.3s ease-out; }
         #imageOverlay.active #overlayImage { transform: scale(1); }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- Nav --- */
         .floating-nav { position: fixed; bottom: 30px; right: 40px; background: white; padding: 8px; border-radius: 50px; box-shadow: 0 6px 20px rgba(0,0,0,0.15); display: flex; gap: 10px; z-index: 100; border: 1px solid #eee; }
         .nav-btn { width: 45px; height: 45px; border-radius: 50%; border: 1px solid #eee; background: #f9f9f9; color: #333; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.4em; text-decoration: none; transition: all 0.2s; user-select: none; }
         .nav-btn:hover { background: #4e342e; color: white; border-color: #4e342e; transform: translateY(-2px); }
@@ -107,7 +105,7 @@
     <aside class="sidebar no-print">
         <div class="sidebar-top"><a href="./rezepte.html" class="btn" style="width:100%; text-align:center;">← Übersicht</a></div>
         <div class="sidebar-scroll">
-            <div class="sidebar-header">Ausgewählte Rezepte</div>
+            <div class="sidebar-header">Rezeptliste</div>
             <ul id="sidebarLinkList" class="sidebar-list"></ul>
         </div>
     </aside>
@@ -125,13 +123,11 @@
 </div>
 
 <script>
-// --- CONFIGURATION ---
-// ACHTUNG: Hier ist jetzt der korrekte Dateiname!
 const CSV_FILE = './assets/data/wdb_rezepte.csv'; 
 const IMG_PATH = './assets/image/';
 
 (async () => {
-    // --- 1. Helper Logic (Inline) ---
+    // --- Helper Logic ---
     const parseTags = (str) => (!str ? [] : str.split(/,|\|/).map(s => s.trim()).filter(Boolean));
     const formatIng = (str) => {
         if (!str) return "<li>Keine Zutaten</li>";
@@ -141,32 +137,20 @@ const IMG_PATH = './assets/image/';
     const loadData = () => {
         return new Promise((resolve, reject) => {
             Papa.parse(CSV_FILE, {
-                download: true,
-                delimiter: ";",
-                skipEmptyLines: true,
-                complete: (res) => {
-                    resolve(mapData(res.data));
-                },
+                download: true, delimiter: ";", skipEmptyLines: true,
+                complete: (res) => resolve(mapData(res.data)),
                 error: (err) => reject(err)
             });
         });
     };
 
-    // Mapping auf die neuen Spalten (V17 Header)
     function mapData(rows) {
         let startIdx = 0;
         if (rows[0] && (rows[0][0]||"").toLowerCase().includes('status')) startIdx = 1;
-
         const recipes = [];
         for (let i = startIdx; i < rows.length; i++) {
             const c = rows[i];
-            // Sicherheitscheck
             if (c.length < 5) continue; 
-
-            // CSV Struktur V17:
-            // 0:status; 1:atlas; 2:id; 3:var; 4:name; 5:grp; 6:nr; 7:zut; 8:anw; 9:tag; 10:zeit; 11:b_ref; 
-            // 12:quelle; 13:b_lead; ... 18:tipps ... 21:herkunft; 22:geschichte; 23:tradition
-            
             recipes.push({
                 brot_id: c[2],
                 name: c[4],
@@ -188,7 +172,7 @@ const IMG_PATH = './assets/image/';
         return recipes;
     }
 
-    // --- 2. Main Logic ---
+    // --- Main Logic ---
     const params = new URLSearchParams(window.location.search);
     const idParam = params.get('id');
     const recipeContainer = document.getElementById('recipeContainer');
@@ -206,11 +190,11 @@ const IMG_PATH = './assets/image/';
     try {
         allData = await loadData();
     } catch(e) {
-        recipeContainer.innerHTML = `<p style='text-align:center; padding:50px; color:red;'>Fehler beim Laden der CSV.<br>Pfad: ${CSV_FILE}</p>`;
+        recipeContainer.innerHTML = `<p style='text-align:center; padding:50px; color:red;'>Fehler beim Laden der CSV.</p>`;
         return;
     }
 
-    // Sidebar bauen
+    // Sidebar
     let sidebarHtml = "";
     allIds.forEach((breadId, index) => {
         const firstStep = allData.find(r => r.brot_id === breadId);
@@ -219,43 +203,62 @@ const IMG_PATH = './assets/image/';
     });
     sidebarList.innerHTML = sidebarHtml;
 
-    // Funktion: Show Recipe
+    // FIND RELATED RECIPES FUNCTION
+    // Sucht Rezepte, die die aktuelle ID (oder Namen) in den Zutaten haben
+    const findRelatedDishes = (currentId, currentName) => {
+        // Nur suchen, wenn aktuelles Rezept ein Grundteig (-G-) ist
+        if (!currentId.includes('-G-')) return [];
+
+        const related = new Set();
+        const searchName = currentName.toLowerCase();
+        
+        allData.forEach(r => {
+            // Wir suchen nur nach Gerichten (-R-)
+            if (r.brot_id.includes('-R-') && r.zutaten_list) {
+                // Check auf ID im Zutatenstring (falls verlinkt) oder Name
+                const zutaten = r.zutaten_list.toLowerCase();
+                if (zutaten.includes(currentId.toLowerCase()) || zutaten.includes(searchName)) {
+                    related.add(r.brot_id); // Nur ID speichern
+                }
+            }
+        });
+        
+        // Hole Metadaten für die gefundenen IDs (nur 1x pro ID)
+        return Array.from(related).map(id => {
+            const match = allData.find(d => d.brot_id === id);
+            return match ? { id: match.brot_id, name: match.name } : null;
+        }).filter(Boolean);
+    };
+
+    // Show Recipe Logic
     window.showRecipe = (index) => {
         if (index < 0 || index >= allIds.length) return;
         currentRecipeIndex = index;
         const breadId = allIds[index];
         
-        // Daten filtern
         const steps = allData.filter(r => r.brot_id === breadId);
-        
         if (steps.length === 0) {
             recipeContainer.innerHTML = `<div class="recipe-sheet"><p style="color:red">ID "${breadId}" nicht gefunden.</p></div>`;
-            updateUI();
-            return;
+            updateUI(); return;
         }
 
         steps.sort((a, b) => a.schritt_nr - b.schritt_nr);
         const meta = steps[0];
 
-        // --- HTML GENERIERUNG ---
+        // LOGIC: Cross Linking
+        const relatedDishes = findRelatedDishes(meta.brot_id, meta.name);
+
         let html = `<div class="recipe-sheet">`;
 
-        // 1. Header (Name, Gruppe, Story, Bild)
-        // ID und Quelle entfernt!
-        
+        // Header
         let storyHTML = "";
         let infoParts = [];
         if(meta.herkunft) infoParts.push(`<span class="story-part"><span class="story-label">Herkunft:</span> ${meta.herkunft}</span>`);
         if(meta.geschichte) infoParts.push(`<span class="story-part"><span class="story-label">Geschichte:</span> ${meta.geschichte}</span>`);
         if(meta.tradition) infoParts.push(`<span class="story-part"><span class="story-label">Tradition:</span> ${meta.tradition}</span>`);
-        
-        if (infoParts.length > 0) {
-            storyHTML = `<div class="story-block">${infoParts.join(' ')}</div>`;
-        }
+        if (infoParts.length > 0) storyHTML = `<div class="story-block">${infoParts.join(' ')}</div>`;
 
-        // Hauptbild: Wenn kein "bild_lead" (Spalte 13), versuche ID.jpg als Fallback
-        let leadImgFile = meta.bild_lead;
-        if(!leadImgFile) leadImgFile = meta.brot_id + ".jpg";
+        let leadImgFile = meta.bild_lead || (meta.brot_id + ".jpg");
 
         html += `
             <div class="meta-info">
@@ -268,7 +271,7 @@ const IMG_PATH = './assets/image/';
             </div>
         `;
 
-        // 2. Schritte
+        // Steps
         steps.forEach((s, i) => {
             html += `
                 <div class="phase-section">
@@ -290,12 +293,25 @@ const IMG_PATH = './assets/image/';
             `;
         });
 
-        // 3. Tipps
+        // Tipps
         if(meta.tipps && meta.tipps.trim()) {
+            html += `<div class="tipps-container"><span class="tipps-header">💡 Tipps & Tricks</span>${meta.tipps}</div>`;
+        }
+
+        // --- NEW: Related Recipes Section ---
+        if (relatedDishes.length > 0) {
             html += `
-                <div class="tipps-container">
-                    <span class="tipps-header">💡 Tipps & Tricks</span>
-                    ${meta.tipps}
+                <div class="cross-link-box">
+                    <span class="cross-link-header">🍽️ Passende Gerichte & Verwendung</span>
+                    <p>Dieser Grundteig ist die Basis für folgende Rezepte:</p>
+                    <div class="cross-link-grid">
+                        ${relatedDishes.map(d => `
+                            <a href="./rezept_ansicht.html?id=${d.id}" class="cross-card">
+                                <span class="cross-icon">🌮</span>
+                                <div><b>${d.name}</b><br><small>Zum Rezept →</small></div>
+                            </a>
+                        `).join('')}
+                    </div>
                 </div>
             `;
         }
@@ -312,12 +328,10 @@ const IMG_PATH = './assets/image/';
         document.getElementById('navNext').classList.toggle('disabled', currentRecipeIndex >= allIds.length - 1);
     }
 
-    // Events
     sidebarList.addEventListener('click', (e) => { const l = e.target.closest('.sidebar-link'); if(l) showRecipe(parseInt(l.dataset.index)); });
     document.getElementById('navPrev').addEventListener('click', () => { if(currentRecipeIndex > 0) showRecipe(currentRecipeIndex - 1); });
     document.getElementById('navNext').addEventListener('click', () => { if(currentRecipeIndex < allIds.length - 1) showRecipe(currentRecipeIndex + 1); });
     
-    // Overlay logic
     const overlay = document.getElementById('imageOverlay');
     const overlayImage = document.getElementById('overlayImage');
     recipeContainer.addEventListener('click', (e) => {
@@ -328,9 +342,7 @@ const IMG_PATH = './assets/image/';
     });
     overlay.addEventListener('click', () => overlay.classList.remove('active'));
 
-    // Start
     if(allIds.length > 0) showRecipe(0);
-
 })();
 </script>
 </body>
