@@ -204,7 +204,7 @@
         // --- 5. HTML Zusammenbauen ---
 
         // Bildpfad
-        const imgPath = entry.bild_ref ? `./assets/img/wissen/${entry.bild_ref}` : null;
+        const imgPath = entry.bild_ref ? `./assets/image/wissen/${entry.bild_ref}` : null;
         const imgHtml = imgPath 
             ? `<img src="${imgPath}" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentNode.innerHTML='<span style=\\'color:#999\\'>Bild nicht gefunden</span>'">`
             : `<span style="color:#aaa;">Kein Bild hinterlegt</span>`;
