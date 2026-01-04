@@ -3,55 +3,54 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>WdB – Brote & Teige</title>
+    <title>WdB – Gerichte & Snacks</title>
     <link rel="stylesheet" href="./assets/css/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <style>
-        /* Bestehende Styles */
+        /* Styles wie rezepte.html, aber mit Gericht-Akzenten */
         .table-wrap { max-height: calc(100vh - 250px); overflow: auto; border: 1px solid #eee; border-radius: 8px; }
         #t { width: 100%; border-collapse: collapse; background: white; }
-        #t th { position: sticky; top: 0; background: #f8f9fa; padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6; }
+        #t th { position: sticky; top: 0; background: #fff3e0; padding: 12px; text-align: left; border-bottom: 2px solid #ffcc80; }
         #t td { padding: 12px; border-bottom: 1px solid #eee; vertical-align: middle; }
-        #t tr:hover { background-color: #fff9f0; cursor: pointer; }
+        #t tr:hover { background-color: #fff8e1; cursor: pointer; }
         .badge-status { padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; }
         .status-final { background: #d1fae5; color: #065f46; }
         .status-test { background: #fef3c7; color: #92400e; }
         .status-draft { background: #f3f4f6; color: #374151; }
 
-        /* Styles für die Auswahl */
         .col-check { width: 40px; text-align: center; }
         .recipe-check { transform: scale(1.2); cursor: pointer; }
         
         #selectionBar {
             position: fixed; bottom: -100px; left: 0; right: 0;
-            background: #4e342e; color: white;
+            background: #d84315; color: white;
             padding: 15px 30px; display: flex; justify-content: center; align-items: center; gap: 20px;
             transition: bottom 0.3s ease-in-out; box-shadow: 0 -4px 15px rgba(0,0,0,0.2); z-index: 100;
         }
         #selectionBar.visible { bottom: 0; }
         .btn-action { 
-            background: white; color: #4e342e; border: none; padding: 10px 25px; 
+            background: white; color: #d84315; border: none; padding: 10px 25px; 
             border-radius: 30px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
         
-        .type-badge { font-size: 0.75em; padding: 2px 6px; border-radius: 4px; background: #e3f2fd; color: #0d47a1; border: 1px solid #90caf9; }
+        .type-badge { font-size: 0.75em; padding: 2px 6px; border-radius: 4px; background: #fbe9e7; color: #bf360c; border: 1px solid #ffccbc; }
     </style>
 </head>
-<body class="BG_Brot_Suche">
+<body class="BG_Gericht">
     <div class="page">
         <div class="header">
             <button class="btn" onclick="location.href='./index.html'">← Home</button>
-            <div class="brand">Brote & Teige</div>
+            <div class="brand">Gerichte & Snacks</div>
             <nav class="nav">
                 <a href="./baender.html">Bände</a>
-                <a href="./rezepte.html" class="active">Brote</a>
-                <a href="./gerichte_liste.html">Gerichte</a>
+                <a href="./rezepte.html">Brote</a>
+                <a href="./gerichte_liste.html" class="active">Gerichte</a>
             </nav>
         </div>
 
         <div class="toolbar">
-            <input id="q" placeholder="Brotname, Tortilla oder Teig suchen..." type="search" style="flex-grow:1; padding: 10px;">
-            <button class="btn" id="go">Suchen</button>
+            <input id="q" placeholder="Gericht suchen (z.B. Tacos, Empanadas)..." type="search" style="flex-grow:1; padding: 10px;">
+            <button class="btn" id="go" style="background:#d84315;">Suchen</button>
         </div>
 
         <div class="table-wrap">
@@ -60,8 +59,8 @@
                     <tr>
                         <th class="col-check"><input type="checkbox" id="selectAll" style="transform: scale(1.2); cursor: pointer;"></th>
                         <th>ID</th>
-                        <th>Name</th>
-                        <th>Kategorie / Band</th>
+                        <th>Name des Gerichts</th>
+                        <th>Region / Herkunft</th>
                         <th>Status</th>
                         <th>Aktion</th>
                     </tr>
@@ -85,10 +84,10 @@
         const selectionBar = document.getElementById('selectionBar');
         const countDisplay = document.getElementById('countDisplay');
         
-        // FILTER: Nur IDs mit -G- (Grundteige/Brote) anzeigen
+        // FILTER: Nur IDs mit -R- (Rezepte/Gerichte) anzeigen
         const filteredData = data.filter(r => {
             if(!r.brot_id) return false;
-            return r.brot_id.toUpperCase().includes('-G-');
+            return r.brot_id.toUpperCase().includes('-R-');
         });
 
         const uniqueRecipes = [];
@@ -102,16 +101,16 @@
 
         const render = (list) => {
             tbody.innerHTML = list.map(r => `
-                <tr onclick="location.href='./rezept_ansicht.html?id=${r.brot_id}'">
+                <tr onclick="location.href='./gerichte_detail.html?id=${r.brot_id}'">
                     <td class="col-check" onclick="event.stopPropagation()">
                         <input type="checkbox" class="recipe-check" value="${r.brot_id}">
                     </td>
                     <td class="col-id">${r.brot_id}</td>
-                    <td><b>${r.name || 'Unbenannt'}</b> <span class="type-badge">Basis</span></td>
-                    <td><small>${r.atlas_ref_id || ''}</small></td>
+                    <td><b>${r.name || 'Unbenannt'}</b> <span class="type-badge">Gericht</span></td>
+                    <td><small>${r.atlas_ref_id || ''} (${r.herkunft || ''})</small></td>
                     <td><span class="badge-status status-${(r.status || 'draft').toLowerCase()}">${r.status || 'Draft'}</span></td>
                     <td onclick="event.stopPropagation()">
-                        <button class="btn-sm" onclick="location.href='./rezept_ansicht.html?id=${r.brot_id}'">Rezept</button>
+                        <button class="btn-sm" style="background:#d84315;" onclick="location.href='./gerichte_detail.html?id=${r.brot_id}'">Kochen</button>
                     </td>
                 </tr>
             `).join('');
@@ -150,7 +149,7 @@
             const checkedBoxes = document.querySelectorAll('.recipe-check:checked');
             const ids = Array.from(checkedBoxes).map(cb => cb.value);
             if (ids.length === 0) return;
-            location.href = `./rezept_ansicht.html?id=${ids.join(',')}`;
+            location.href = `./gerichte_detail.html?id=${ids.join(',')}`;
         };
 
         document.getElementById('q').oninput = (e) => {

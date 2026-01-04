@@ -7,13 +7,15 @@
     <link rel="stylesheet" href="./assets/css/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 </head>
-<body class="BG_Brot"> <div class="page">
+<body class="BG_Brot"> 
+    <div class="page">
         <div class="header">
             <div class="brand">WdB – Welt der Brote</div>
             <nav class="nav">
                 <a href="./baender.html">Bände</a>
-                <a href="./rezepte.html">Rezepte</a>
-                <a href="./mehle.html">Mehle & Wissen</a>
+                <a href="./rezepte.html">Brote</a>
+                <a href="./gerichte_liste.html">Gerichte</a>
+                <a href="./mehle.html">Wissen</a>
                 <a href="./admin.html">Admin</a>
             </nav>
         </div>
@@ -21,9 +23,10 @@
         <div class="h1">Die Welt des Backens</div>
         <p class="sub">Entdecke Rezepte, Techniken und Kulturen rund um das Brot.</p>
         
-        <div class="toolbar" style="justify-content:center; gap: 15px;">
+        <div class="toolbar" style="justify-content:center; gap: 15px; flex-wrap:wrap;">
             <button class="btn" onclick="location.href='./baender.html'">📖 Bände / Atlas</button>
-            <button class="btn" onclick="location.href='./rezepte.html'">🥖 Rezepte-Finder</button>
+            <button class="btn" onclick="location.href='./rezepte.html'">🥖 Brote & Teige</button>
+            <button class="btn" style="background-color: #d84315;" onclick="location.href='./gerichte_liste.html'">🥘 Gerichte & Snacks</button>
             <button class="btn" onclick="location.href='./mehle.html'">🌾 Mehl-Lexikon</button>
         </div>
         
@@ -37,9 +40,13 @@
     (async () => {
         try {
             const rezepte = await window.$util.loadCsv('./assets/data/wdb_rezepte.csv');
-            const atlas = await window.$util.loadCsv('./assets/data/wdb_struktur_atlas.csv');
-            document.getElementById('stats').textContent = 
-                `Einträge: ${rezepte.length} Rezepte in ${atlas.length} Kategorien/Ländern`;
+            
+            // Statistik berechnen
+            const brote = rezepte.filter(r => r.brot_id && r.brot_id.includes('-G-')).length;
+            const gerichte = rezepte.filter(r => r.brot_id && r.brot_id.includes('-R-')).length;
+            
+            document.getElementById('stats').innerHTML = 
+                `Datenbank: <b>${brote}</b> Brote/Teige und <b>${gerichte}</b> Gerichte erfasst.`;
         } catch (e) { document.getElementById('stats').textContent = 'Status aktuell nicht verfügbar'; }
     })();
     </script>
