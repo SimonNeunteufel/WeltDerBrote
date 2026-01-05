@@ -1,61 +1,4 @@
-<!doctype html>
-<html lang="de">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>WdB – Welt der Brote</title>
-    <link rel="stylesheet" href="./assets/css/styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <style>
-        /* Optional: Kleines Styling für die Stats-Leiste, damit es hübsch aussieht */
-        .stat-badges {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .stat-item {
-            background: #fff;
-            border: 1px solid #e0e0e0;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 0.85em;
-            color: #5d4037;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-        .stat-num { font-weight: bold; color: #d84315; }
-    </style>
-</head>
-<body class="BG_Brot"> 
-    <div class="page">
-        <div class="header">
-            <div class="brand">WdB – Welt der Brote</div>
-            <nav class="nav">
-                <a href="./baender.html">Bände</a>
-                <a href="./rezepte.html">Brote</a>
-                <a href="./gerichte_liste.html">Gerichte</a>
-                <a href="./mehle.html">Wissen</a>
-                <a href="./admin.html">Admin</a>
-            </nav>
-        </div>
-        
-        <div class="h1">Die Welt des Backens</div>
-        <p class="sub">Entdecke Rezepte, Techniken und Kulturen rund um das Brot.</p>
-        
-        <div class="toolbar" style="justify-content:center; gap: 15px; flex-wrap:wrap;">
-            <button class="btn" onclick="location.href='./baender.html'">📖 Bände / Atlas</button>
-            <button class="btn" onclick="location.href='./rezepte.html'">🥖 Brote & Teige</button>
-            <button class="btn" style="background-color: #d84315;" onclick="location.href='./gerichte_liste.html'">🥘 Gerichte & Snacks</button>
-            <button class="btn" onclick="location.href='./mehle.html'">🌾 Mehl-Lexikon</button>
-        </div>
-        
-        <div class="footer-note">
-            <div id="stats">Lade Datenbank-Status …</div>
-        </div>
-    </div>
-
-    <script src="./assets/js/util.js"></script>
+<script src="./assets/js/util.js"></script>
     <script>
     (async () => {
         try {
@@ -74,45 +17,56 @@
                 if (!r.brot_id) return;
                 const id = r.brot_id.trim();
                 
+                // Wir zählen Unique IDs, damit Steps nicht doppelt zählen
                 if (id.includes('-G-')) broteSet.add(id);
                 else if (id.includes('-R-')) gerichteSet.add(id);
                 else if (id.includes('-B-')) basicsSet.add(id);
             });
 
-            // --- 2. Wissen zählen ---
+            // --- 2. Wissen zählen (aus wdb_wissen.csv) ---
             let mehlCount = 0;
             let technikCount = 0;
-            let wissenTreibmittelCount = 0;
+            let wissenTreibmittelCount = 0; // Falls Hefe/Salz im Lexikon stehen
 
             wissenData.forEach(w => {
+                // Wir schauen auf die Spalte 'kategorie'
                 const kat = (w.kategorie || "").trim();
-                if (kat === 'Mehl') mehlCount++;
-                else if (kat === 'Technik') technikCount++;
+                
+                if (kat === 'Mehl' || kat === 'Getreide') mehlCount++;
+                else if (kat === 'Technik' || kat === 'Methode') technikCount++;
                 else if (kat === 'Triebmittel') wissenTreibmittelCount++;
             });
 
-            // Treibmittel kombinieren (Starter aus Rezepten + Einträge aus Wissen)
+            // Treibmittel kombinieren (Aktive Starter aus Rezepten + Passive Infos aus Wissen)
             const totalTreibmittel = basicsSet.size + wissenTreibmittelCount;
 
             // --- 3. Ausgabe ---
             const statsDiv = document.getElementById('stats');
             
             statsDiv.innerHTML = `
-                <div style="margin-bottom:8px; font-weight:bold; color:#8d6e63;">Aktueller Datenbank-Bestand:</div>
-                <div class="stat-badges">
-                    <span class="stat-item"><span class="stat-num">${broteSet.size}</span> Brote & Teige</span>
-                    <span class="stat-item"><span class="stat-num">${gerichteSet.size}</span> Gerichte</span>
-                    <span class="stat-item"><span class="stat-num">${totalTreibmittel}</span> Treibmittel & Starter</span>
-                    <span class="stat-item"><span class="stat-num">${mehlCount}</span> Mehle</span>
-                    <span class="stat-item"><span class="stat-num">${technikCount}</span> Techniken</span>
+                <div style="margin-bottom:8px; font-weight:bold; color:#5d4037;">Aktueller Datenbank-Bestand:</div>
+                <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px;">
+                    <span class="badge-stat" style="border:1px solid #ddd; padding:5px 10px; border-radius:15px; background:white;">
+                        <b style="color:#d84315;">${broteSet.size}</b> Brote & Teige
+                    </span>
+                    <span class="badge-stat" style="border:1px solid #ddd; padding:5px 10px; border-radius:15px; background:white;">
+                        <b style="color:#d84315;">${gerichteSet.size}</b> Gerichte
+                    </span>
+                    <span class="badge-stat" style="border:1px solid #ddd; padding:5px 10px; border-radius:15px; background:white;">
+                        <b style="color:#d84315;">${totalTreibmittel}</b> Treibmittel & Starter
+                    </span>
+                    <span class="badge-stat" style="border:1px solid #ddd; padding:5px 10px; border-radius:15px; background:white;">
+                        <b style="color:#d84315;">${mehlCount}</b> Mehle
+                    </span>
+                    <span class="badge-stat" style="border:1px solid #ddd; padding:5px 10px; border-radius:15px; background:white;">
+                        <b style="color:#d84315;">${technikCount}</b> Techniken
+                    </span>
                 </div>
             `;
 
         } catch (e) { 
             console.error(e);
-            document.getElementById('stats').textContent = 'Status aktuell nicht verfügbar (CSV Fehler)'; 
+            document.getElementById('stats').textContent = 'Datenbank wird geladen oder ist leer...'; 
         }
     })();
     </script>
-</body>
-</html>
