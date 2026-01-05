@@ -7,10 +7,10 @@
     <link rel="stylesheet" href="./assets/css/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <style>
-        /* Bestehende Styles */
+        /* --- Styles für Tabelle & Layout --- */
         .table-wrap { max-height: calc(100vh - 350px); overflow: auto; border: 1px solid #eee; border-radius: 8px; }
         #t { width: 100%; border-collapse: collapse; background: white; }
-        #t th { position: sticky; top: 0; background: #f8f9fa; padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6; z-index: 5;}
+        #t th { position: sticky; top: 0; background: #f8f9fa; padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6; z-index: 5; }
         #t td { padding: 12px; border-bottom: 1px solid #eee; vertical-align: middle; }
         #t tr:hover { background-color: #fff9f0; cursor: pointer; }
         
@@ -19,13 +19,9 @@
         .status-test { background: #fef3c7; color: #92400e; }
         .status-draft { background: #f3f4f6; color: #374151; }
 
-        /* Styles für die Auswahl */
-        .col-check { width: 40px; text-align: center; }
-        .recipe-check { transform: scale(1.2); cursor: pointer; }
-        
         .type-badge { font-size: 0.75em; padding: 2px 6px; border-radius: 4px; background: #e3f2fd; color: #0d47a1; border: 1px solid #90caf9; }
 
-        /* --- NEU: Filter Styles (aus Mischungen übernommen) --- */
+        /* --- Filter Sektion Styles --- */
         .filter-section { 
             background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 8px; margin-bottom: 20px; 
             display: flex; flex-direction: column; gap: 10px;
@@ -42,9 +38,13 @@
             padding: 8px; border: 1px solid #ddd; border-radius: 6px; min-width: 200px;
             background: white; font-family: inherit;
         }
-        #countrySelect[multiple]:focus { height: auto; min-height: 120px; position: absolute; z-index: 100; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        /* Trick für Multiselect Dropdown Verhalten */
+        #countrySelect[multiple]:focus { height: auto; min-height: 150px; position: absolute; right: 0; z-index: 100; box-shadow: 0 5px 15px rgba(0,0,0,0.15); border-color: #8d6e63; }
 
-        /* Bottom Bar */
+        /* --- Auswahl Leiste (unten) --- */
+        .col-check { width: 40px; text-align: center; }
+        .recipe-check { transform: scale(1.2); cursor: pointer; }
+        
         #selectionBar {
             position: fixed; bottom: -100px; left: 0; right: 0;
             background: #4e342e; color: white;
@@ -67,19 +67,21 @@
                 <a href="./baender.html">Bände</a>
                 <a href="./rezepte.html" class="active">Brote</a>
                 <a href="./gerichte_liste.html">Gerichte</a>
+                <a href="./mehle.html">Wissen</a>
             </nav>
         </div>
 
         <div class="filter-section">
             <div style="font-weight: bold; font-size: 0.9em;">Herkunft Vorfilter:</div>
-            <div style="display: flex; gap: 15px; width: 100%; align-items: flex-start; flex-wrap: wrap;">
-                <div class="filter-group" id="continentFilters" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
+            <div style="display: flex; gap: 15px; width: 100%; align-items: flex-start; position:relative;">
+                <div class="filter-group" id="continentFilters" style="display:flex; gap:8px; flex-wrap:wrap;">
+                    </div>
                 
-                <div style="margin-left: auto; position: relative;">
+                <div style="margin-left: auto;">
                     <select id="countrySelect" multiple size="1" onfocus="this.size=6;" onblur="this.size=1; applyFilters();">
                         <option value="" disabled selected>Land wählen...</option>
                     </select>
-                    <div style="font-size: 0.75em; color: #666; margin-top: 4px; text-align: right;">Mehrfachauswahl: STRG gedrückt halten</div>
+                    <div style="font-size: 0.75em; color: #666; margin-top: 4px; text-align: right;">STRG halten für Mehrfachauswahl</div>
                 </div>
             </div>
         </div>
@@ -114,7 +116,7 @@
 
     <script src="./assets/js/util.js"></script>
     <script>
-    // --- GEO DATEN FÜR FILTER ---
+    // --- 1. GEO DATENBANK ---
     const geoData = {
         "Europa": ["Schweiz", "Deutschland", "Frankreich", "Italien", "Spanien", "Österreich", "Portugal", "Grossbritannien", "Irland"],
         "Amerika": ["USA", "Mexiko", "Kanada", "Kolumbien", "Argentinien", "Chile", "Peru", "Brasilien"],
@@ -124,6 +126,7 @@
     };
 
     (async () => {
+        // --- 2. DATEN LADEN & VORBEREITEN ---
         const data = await window.$util.loadCsv('./assets/data/wdb_rezepte.csv');
         
         // DOM Elemente
@@ -135,9 +138,7 @@
         const countrySelect = document.getElementById('countrySelect');
         const searchInput = document.getElementById('q');
 
-        // --- 1. FILTER INITIALISIERUNG ---
-        
-        // Kontinent-Chips erstellen
+        // Filter Init
         const initContinentChips = () => {
             continentFilters.innerHTML = Object.keys(geoData).map(c => `
                 <label class="chip continent"><input type="checkbox" value="${c}"> ${c}</label>
@@ -145,7 +146,6 @@
         };
         initContinentChips();
 
-        // Länder-Dropdown aktualisieren basierend auf Kontinenten
         const updateCountryDropdown = () => {
             const selectedConts = Array.from(document.querySelectorAll('#continentFilters input:checked')).map(cb => cb.value);
             const currentSelection = Array.from(countrySelect.selectedOptions).map(o => o.value);
@@ -155,23 +155,20 @@
             let countries = selectedConts.length === 0 ? Object.values(geoData).flat() : [];
             selectedConts.forEach(c => countries.push(...(geoData[c] || [])));
             
-            // Duplikate entfernen und sortieren
             [...new Set(countries)].sort().forEach(land => {
                 const opt = document.createElement('option');
-                opt.value = land; 
-                opt.textContent = land;
+                opt.value = land; opt.textContent = land;
                 if (currentSelection.includes(land)) opt.selected = true;
                 countrySelect.appendChild(opt);
             });
         };
-        updateCountryDropdown(); // Initial call
+        updateCountryDropdown();
 
-        // --- 2. DATEN VORBEREITUNG ---
-
-        // Nur Grundteige (-G-) filtern
+        // --- 3. DATEN FILTERN (-G- Only) ---
+        // Nur Grundteige (-G-)
         const baseRecipes = data.filter(r => r.brot_id && r.brot_id.toUpperCase().includes('-G-'));
         
-        // Duplikate entfernen (unique IDs)
+        // Unique IDs
         const uniqueRecipes = [];
         const seen = new Set();
         baseRecipes.forEach(r => {
@@ -181,34 +178,32 @@
             }
         });
 
-        // --- 3. HAUPTFUNKTION: FILTERN & RENDERN ---
-        
+        // --- 4. FILTER LOGIK ---
         window.applyFilters = () => {
             const query = searchInput.value.toLowerCase().trim();
             const selectedContinents = Array.from(document.querySelectorAll('#continentFilters input:checked')).map(cb => cb.value);
             const selectedCountries = Array.from(countrySelect.selectedOptions).map(o => o.value);
 
-            // Liste der erlaubten Länder/Regionen erstellen
+            // Orte vorbereiten
             let allowedLocations = [];
             if (selectedCountries.length > 0) {
                 allowedLocations = selectedCountries;
             } else if (selectedContinents.length > 0) {
                 selectedContinents.forEach(c => {
-                    allowedLocations.push(c); // Der Kontinentname selbst (z.B. "Europa")
-                    if(geoData[c]) allowedLocations.push(...geoData[c]); // Und alle seine Länder
+                    allowedLocations.push(c);
+                    if(geoData[c]) allowedLocations.push(...geoData[c]);
                 });
             }
 
             const filteredList = uniqueRecipes.filter(r => {
-                // A: Textsuche (Name oder ID)
+                // Textsuche
                 const rowString = (r.name + " " + r.brot_id).toLowerCase();
                 const matchesText = query === "" || rowString.includes(query);
 
-                // B: Herkunft Filter
+                // Herkunftssuche
                 let matchesOrigin = true;
                 if (allowedLocations.length > 0) {
-                    const originString = (r.herkunft || "") + " " + (r.atlas_ref_id || ""); 
-                    // Prüfen ob einer der erlaubten Orte im Herkunftsstring enthalten ist
+                    const originString = (r.herkunft || "") + " " + (r.atlas_ref_id || "") + " " + (r.quelle || ""); 
                     matchesOrigin = allowedLocations.some(loc => originString.includes(loc));
                 }
 
@@ -218,8 +213,7 @@
             render(filteredList);
         };
 
-        // --- 4. RENDER FUNKTION ---
-
+        // --- 5. RENDER FUNKTION ---
         const render = (list) => {
             if(list.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:30px; color:#999;">Keine Ergebnisse gefunden.</td></tr>';
@@ -242,15 +236,14 @@
                 </tr>
             `).join('');
 
-            // Event Listener für Checkboxen erneuern
+            // Listener erneuern
             document.querySelectorAll('.recipe-check').forEach(cb => {
                 cb.addEventListener('change', updateSelectionUI);
             });
-            updateSelectionUI(); // UI Status prüfen (falls Auswahl durch Filterung versteckt wurde)
+            updateSelectionUI();
         };
 
-        // --- 5. UI LOGIK (Auswahl & Events) ---
-
+        // --- 6. UI EVENTS ---
         const updateSelectionUI = () => {
             const checkedBoxes = document.querySelectorAll('.recipe-check:checked');
             const visibleBoxes = document.querySelectorAll('.recipe-check');
@@ -269,7 +262,6 @@
             }
         };
 
-        // Event Listener
         searchInput.addEventListener('input', applyFilters);
         
         continentFilters.addEventListener('change', (e) => {
@@ -279,7 +271,6 @@
             }
         });
         
-        // Checkbox "Alle auswählen"
         selectAllBox.addEventListener('change', (e) => {
             const isChecked = e.target.checked;
             document.querySelectorAll('.recipe-check').forEach(cb => { cb.checked = isChecked; });
@@ -293,28 +284,20 @@
             location.href = `./rezept_ansicht.html?id=${ids.join(',')}`;
         };
 
-        // Initiale Anzeige
-        applyFilters();
-
-// ... (Code in rezepte.html script) ...
-
-        // NEU: Check auf SessionStorage vom Atlas
+        // --- 7. ATLAS CHECK (SessionStorage) ---
         const initSearch = sessionStorage.getItem('WdB_Search_Init');
         if (initSearch) {
-            document.getElementById('q').value = initSearch; // Suchfeld füllen
-            sessionStorage.removeItem('WdB_Search_Init'); // Löschen damit es nicht nervt
-            // Automatisch Filtern triggern
+            searchInput.value = initSearch;
+            sessionStorage.removeItem('WdB_Search_Init');
+            // Timeout damit DOM sicher da ist
             setTimeout(() => {
-                const query = initSearch.toLowerCase();
-                const filtered = uniqueRecipes.filter(r => 
-                    Object.values(r).join(' ').toLowerCase().includes(query)
-                );
-                render(filtered);
+                applyFilters();
             }, 100);
         } else {
-            render(uniqueRecipes); // Normaler Start
+            // Initial Render
+            render(uniqueRecipes);
         }
-        
+
     })();
     </script>
 </body>
