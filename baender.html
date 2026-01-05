@@ -3,49 +3,185 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>WdB – Bände & Regionen</title>
+    <title>WdB – Atlas & Bände</title>
     <link rel="stylesheet" href="./assets/css/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+        /* --- Atlas Spezifisches Design --- */
+        .atlas-container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+        .band-section { margin-bottom: 60px; }
+        .band-header { 
+            border-bottom: 2px solid #8d6e63; 
+            padding-bottom: 10px; margin-bottom: 20px; 
+            display: flex; align-items: baseline; gap: 15px;
+        }
+        .band-title { font-size: 2em; color: #3e2723; margin: 0; font-family: 'Segoe UI', serif; }
+        .band-desc { color: #666; font-style: italic; }
+
+        /* Grid für die Länder-Karten */
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 25px; 
+        }
+
+        .card {
+            background: white; border: 1px solid #e0e0e0; border-radius: 8px;
+            overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer; display: flex; flex-direction: column;
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+        .card-img { 
+            height: 140px; background: #eee; background-size: cover; background-position: center; 
+            border-bottom: 1px solid #eee; position: relative;
+        }
+        .card-img-overlay {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+            padding: 40px 15px 10px 15px;
+        }
+        
+        .card-body { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
+        .card-title { font-weight: bold; font-size: 1.2em; margin-bottom: 8px; color: #4e342e; }
+        .card-text { font-size: 0.9em; color: #555; line-height: 1.4; flex-grow: 1; margin-bottom: 15px;}
+        
+        .badge-count { 
+            font-size: 0.75em; background: #efebe9; color: #5d4037; 
+            padding: 3px 8px; border-radius: 10px; align-self: flex-start; 
+        }
+
+        .btn-open {
+            margin-top: auto;
+            text-align: center;
+            background: #4e342e; color: white;
+            padding: 8px; border-radius: 4px; text-decoration: none;
+            font-size: 0.9em; transition: background 0.2s;
+        }
+        .btn-open:hover { background: #6d4c41; }
+
+    </style>
 </head>
 <body class="BG_Atlas">
     <div class="page">
         <div class="header">
             <button class="btn" onclick="location.href='./index.html'">← Home</button>
             <div class="brand">Atlas der Brote</div>
+            <nav class="nav">
+                <a href="./baender.html" class="active">Bände</a>
+                <a href="./rezepte.html">Brote</a>
+                <a href="./gerichte_liste.html">Gerichte</a>
+                <a href="./mehle.html">Wissen</a>
+            </nav>
         </div>
 
-        <p class="sub">Navigiere durch Bände, Kontinente und Länder.</p>
-
-        <div class="table-wrap">
-            <table id="t">
-                <thead>
-                    <tr>
-                        <th>Band / Typ</th>
-                        <th>Region / Land</th>
-                        <th>Inhalte / Kategorien</th>
-                        <th>Aktion</th>
-                    </tr>
-                </thead>
-                <tbody id="atlasBody"></tbody>
-            </table>
+        <div class="atlas-container" id="atlasOutput">
+            <div style="text-align:center; padding:50px; color:#888;">Lade Atlas-Daten...</div>
         </div>
     </div>
 
     <script src="./assets/js/util.js"></script>
     <script>
-    (async () => {
-        const atlasData = await window.$util.loadCsv('./assets/data/wdb_struktur_atlas.csv');
-        const tbody = document.getElementById('atlasBody');
+    const IMG_PATH = './assets/image/atlas/'; // Pfad zu Atlas-Bildern
 
-        tbody.innerHTML = atlasData.map(r => `
-            <tr>
-                <td><b>${r.Band_Type || ''}</b><br><small>${r.Brot_Referenz_Nummer || ''}</small></td>
-                <td>${r.Kontinent || ''} ${r.Land ? '› ' + r.Land : ''}</td>
-                <td><small>${r.Kategorie || ''}</small></td>
-                <td><button class="btn" onclick="location.href='./rezepte.html?ref=${r.Brot_Referenz_Nummer}'">Anzeigen</button></td>
-            </tr>
-        `).join('');
+    (async () => {
+        try {
+            // Lade Struktur-Daten UND Rezepte (um zu zählen)
+            const [atlasData, rezepteData] = await Promise.all([
+                window.$util.loadCsv('./assets/data/wdb_struktur_atlas.csv'),
+                window.$util.loadCsv('./assets/data/wdb_rezepte.csv')
+            ]);
+
+            const container = document.getElementById('atlasOutput');
+            container.innerHTML = '';
+
+            // 1. Gruppieren: Bände (Top Level) und Länder (Children)
+            // Struktur CSV: id;parent_id;typ;name;titelbild_ref;intro_text;...
+            
+            const bands = atlasData.filter(r => !r.parent_id || r.typ === 'Band').sort((a,b) => (a.sortierung||99) - (b.sortierung||99));
+            const countries = atlasData.filter(r => r.parent_id && r.typ !== 'Band');
+
+            if(bands.length === 0) {
+                container.innerHTML = '<div style="text-align:center; padding:40px;">Keine Bände in der Struktur-Datei gefunden.</div>';
+                return;
+            }
+
+            // 2. HTML generieren
+            bands.forEach(band => {
+                // Suche Länder, die zu diesem Band gehören
+                const bandCountries = countries.filter(c => c.parent_id === band.id);
+                
+                // Falls Band keine Länder hat, überspringen (optional)
+                if(bandCountries.length === 0) return;
+
+                // Band Header
+                let html = `
+                    <div class="band-section">
+                        <div class="band-header">
+                            <h2 class="band-title">${band.name}</h2>
+                            <span class="band-desc">${band.intro_text || ''}</span>
+                        </div>
+                        <div class="grid">
+                `;
+
+                // Länder Karten
+                bandCountries.forEach(land => {
+                    // Zähle Rezepte für dieses Land
+                    // Filterlogik: Wir schauen, ob die 'herkunft' im Rezept den Landnamen enthält
+                    // oder ob die atlas_ref_id übereinstimmt.
+                    const count = rezepteData.filter(r => {
+                        if (!r.brot_id) return false;
+                        const matchId = r.atlas_ref_id === land.id;
+                        const matchName = r.herkunft && r.herkunft.includes(land.name);
+                        return matchId || matchName;
+                    }).length;
+
+                    const imgStyle = land.titelbild_ref 
+                        ? `background-image: url('${IMG_PATH}${land.titelbild_ref}');` 
+                        : `background-color: #ddd;`; // Fallback Grau
+
+                    // Link zur Rezeptseite mit Vorfilter (Wir nutzen die Textsuche als einfachen Filter)
+                    // Wir übergeben den Landnamen an die Suche.
+                    // Da rezepte.html noch keine URL-Parameter liest, machen wir das simple:
+                    // Der User klickt und muss (aktuell) noch suchen, ODER wir bauen rezepte.html später um.
+                    // Für jetzt verlinken wir auf rezepte.html. 
+                    // *Besser*: Wir nutzen localStorage um den Filter zu setzen, aber das ist komplex.
+                    // Wir lassen es beim Link.
+                    
+                    html += `
+                        <div class="card" onclick="openCountry('${land.name}')">
+                            <div class="card-img" style="${imgStyle}"></div>
+                            <div class="card-body">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                                    <div class="card-title">${land.name}</div>
+                                    ${count > 0 ? `<span class="badge-count">${count} Rezepte</span>` : ''}
+                                </div>
+                                <div class="card-text">${land.intro_text || 'Entdecke die Brotvielfalt dieser Region.'}</div>
+                                <span class="btn-open">Rezepte anzeigen →</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `</div></div>`; // Close Grid & Section
+                container.innerHTML += html;
+            });
+
+        } catch (e) {
+            console.error(e);
+            document.getElementById('atlasOutput').innerHTML = `<p style='color:red'>Fehler beim Laden: ${e.message}</p>`;
+        }
     })();
+
+    // Funktion zum Öffnen und (simulierten) Filtern
+    function openCountry(countryName) {
+        // Wir tricksen etwas: Wir speichern den Suchbegriff im SessionStorage
+        // Die rezepte.html müsste das lesen. Wenn nicht, öffnet sie einfach so.
+        // Das ist eine einfache Methode ohne URL-Parameter-Logik umzubauen.
+        sessionStorage.setItem('WdB_Search_Init', countryName);
+        window.location.href = './rezepte.html';
+    }
     </script>
 </body>
 </html>
