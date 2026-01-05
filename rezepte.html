@@ -296,6 +296,25 @@
         // Initiale Anzeige
         applyFilters();
 
+// ... (Code in rezepte.html script) ...
+
+        // NEU: Check auf SessionStorage vom Atlas
+        const initSearch = sessionStorage.getItem('WdB_Search_Init');
+        if (initSearch) {
+            document.getElementById('q').value = initSearch; // Suchfeld füllen
+            sessionStorage.removeItem('WdB_Search_Init'); // Löschen damit es nicht nervt
+            // Automatisch Filtern triggern
+            setTimeout(() => {
+                const query = initSearch.toLowerCase();
+                const filtered = uniqueRecipes.filter(r => 
+                    Object.values(r).join(' ').toLowerCase().includes(query)
+                );
+                render(filtered);
+            }, 100);
+        } else {
+            render(uniqueRecipes); // Normaler Start
+        }
+        
     })();
     </script>
 </body>
