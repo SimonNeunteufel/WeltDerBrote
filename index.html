@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./assets/css/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <style>
-        /* --- NEU: Button zum Universum (Stil wie Admin-Button) --- */
+        /* --- NEU: Button zum Universum --- */
         .univ-home-btn {
             position: absolute;
             top: 20px;
@@ -30,7 +30,32 @@
             transform: scale(1.05);
         }
 
-        /* Styling für die Statistik-Badges auf der Startseite */
+        /* --- NEU: Button-Design (Wie Bild 3) --- */
+        .btn {
+            background-color: #f5f5f5;  /* Hellgrau */
+            border: 1px solid #999;     /* Dunkelgrauer Rand */
+            color: #333;                /* Dunkler Text */
+            border-radius: 4px;         /* Leicht abgerundet */
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1); /* Leichter Schatten */
+            transition: all 0.2s ease;
+            text-decoration: none;
+            font-family: inherit;
+        }
+
+        .btn:hover {
+            background-color: #e0e0e0; /* Etwas dunkler beim Drüberfahren */
+            border-color: #666;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+
+        /* Statistik Badges */
         .stat-container {
             display: flex;
             flex-wrap: wrap;
@@ -52,14 +77,15 @@
         }
         .stat-num {
             font-weight: bold;
-            color: #d84315; /* Rostrot für die Zahlen */
+            color: #d84315;
             font-size: 1.1em;
         }
     </style>
 </head>
 <body class="BG_Brot"> 
     <div class="page">
-        <div class="header" style="position: relative;"> <a href="https://simonneunteufel.github.io/Kulinarisches-Universum/" class="univ-home-btn" title="Zurück zum Universum">🏠</a>
+        <div class="header" style="position: relative;"> 
+            <a href="https://simonneunteufel.github.io/Kulinarisches-Universum/" class="univ-home-btn" title="Zurück zum Universum">🏠</a>
 
             <div class="brand">WdB – Welt der Brote</div>
             <nav class="nav">
@@ -77,7 +103,7 @@
         <div class="toolbar" style="justify-content:center; gap: 15px; flex-wrap:wrap; padding: 20px 0;">
             <button class="btn" onclick="location.href='./baender.html'">📖 Bände / Atlas</button>
             <button class="btn" onclick="location.href='./rezepte.html'">🥖 Brote & Teige</button>
-            <button class="btn" style="background-color: #d84315;" onclick="location.href='./gerichte_liste.html'">🥘 Gerichte & Snacks</button>
+            <button class="btn" onclick="location.href='./gerichte_liste.html'">🥘 Gerichte & Snacks</button>
             <button class="btn" onclick="location.href='./mehle.html'">🌾 Mehl-Lexikon</button>
         </div>
         
@@ -88,69 +114,50 @@
 
     <script src="./assets/js/util.js"></script>
     <script>
+    /* ... (Dein Script Code bleibt unverändert) ... */
     (async () => {
         try {
-            // Wir laden BEIDE Dateien parallel für die Statistik
             const [rezepteData, wissenData] = await Promise.all([
                 window.$util.loadCsv('./assets/data/wdb_rezepte.csv'),
                 window.$util.loadCsv('./assets/data/wdb_wissen.csv')
             ]);
             
-            // --- 1. Rezepte zählen (Unique IDs via Set um Steps zu ignorieren) ---
             const broteSet = new Set();
             const gerichteSet = new Set();
-            const basicsSet = new Set(); // Aktive Starter aus der Rezept-DB (-B-)
+            const basicsSet = new Set(); 
 
             rezepteData.forEach(r => {
                 if (!r.brot_id) return;
-                const id = r.brot_id.trim(); // Leerzeichen bereinigen
-                
-                // Wir zählen Unique IDs
+                const id = r.brot_id.trim();
                 if (id.includes('-G-')) broteSet.add(id);
                 else if (id.includes('-R-')) gerichteSet.add(id);
                 else if (id.includes('-B-')) basicsSet.add(id);
             });
 
-            // --- 2. Wissen zählen (aus wdb_wissen.csv) ---
             let mehlCount = 0;
             let technikCount = 0;
-            let wissenTreibmittelCount = 0; // Passive Infos (z.B. "Hefe" als Eintrag)
+            let wissenTreibmittelCount = 0; 
 
             wissenData.forEach(w => {
                 const kat = (w.kategorie || "").trim();
-                
                 if (kat === 'Mehl' || kat === 'Getreide') mehlCount++;
                 else if (kat === 'Technik' || kat === 'Methode') technikCount++;
                 else if (kat === 'Triebmittel') wissenTreibmittelCount++;
             });
 
-            // Treibmittel kombinieren (Aktive Starter aus Rezepten + Passive Infos aus Wissen)
             const totalTreibmittel = basicsSet.size + wissenTreibmittelCount;
-
-            // --- 3. Ausgabe ---
             const statsDiv = document.getElementById('stats');
             
             statsDiv.innerHTML = `
                 <div style="margin-bottom:10px; font-weight:bold; color:#5d4037; text-transform:uppercase; font-size:0.8em; letter-spacing:1px;">Aktueller Datenbank-Bestand</div>
                 <div class="stat-container">
-                    <span class="stat-badge">
-                        <span class="stat-num">${broteSet.size}</span> Brote & Teige
-                    </span>
-                    <span class="stat-badge">
-                        <span class="stat-num">${gerichteSet.size}</span> Gerichte
-                    </span>
-                    <span class="stat-badge">
-                        <span class="stat-num">${totalTreibmittel}</span> Treibmittel & Starter
-                    </span>
-                    <span class="stat-badge">
-                        <span class="stat-num">${mehlCount}</span> Mehle
-                    </span>
-                    <span class="stat-badge">
-                        <span class="stat-num">${technikCount}</span> Techniken
-                    </span>
+                    <span class="stat-badge"><span class="stat-num">${broteSet.size}</span> Brote & Teige</span>
+                    <span class="stat-badge"><span class="stat-num">${gerichteSet.size}</span> Gerichte</span>
+                    <span class="stat-badge"><span class="stat-num">${totalTreibmittel}</span> Treibmittel & Starter</span>
+                    <span class="stat-badge"><span class="stat-num">${mehlCount}</span> Mehle</span>
+                    <span class="stat-badge"><span class="stat-num">${technikCount}</span> Techniken</span>
                 </div>
             `;
-
         } catch (e) { 
             console.error(e);
             document.getElementById('stats').innerHTML = '<span style="color:red">Fehler beim Laden der Datenbank.</span>'; 
