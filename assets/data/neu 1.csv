@@ -1,4 +1,134 @@
 Dateiname;Thema;Prompt
+            // Phase 1: Teig-Probleme
+            { name: "Teig-Suppe", error: "Zu viel Wasser / Überknetet", desc: "Teig fließt vom Tisch, lässt sich nicht formen. Klebrig, glänzend, keine Struktur.", img: "fail_soup.jpg", phase: "phase-1" },
+            { name: "Offener Schluss", error: "Mehl-Barriere", desc: "Der Boden des Brotes geht immer wieder auf. Zu viel Mehl beim Wirken verwendet.", img: "fail_seam.jpg", phase: "phase-1" },
+            { name: "Gerissene Haut", error: "Zu viel Spannung", desc: "Oberfläche reißt beim Schleifen ein. Teig war zu trocken oder wurde überstrapaziert.", img: "fail_skin.jpg", phase: "phase-1" }, 
+            // Phase 2: Back-Probleme
+            { name: "Übergare (Fladen)", error: "Overproofed", desc: "Teig ist kollabiert. Flach, Schnitte nicht aufgegangen, blasse Kruste.", img: "fail_uebergare.jpg", phase: "phase-2" },
+            { name: "Untergare (Explosion)", error: "Underproofed", desc: "Brot ist fast rund, seitlich aufgerissen. Dichte Krume mit wenigen riesigen Löchern.", img: "fail_untergare.jpg", phase: "phase-2" },
+            { name: "Flying Top", error: "Formfehler", desc: "Die Kruste hebt sich wie ein Deckel ab. Ursache: Zu viel Mehl beim Wirken oder Haut angetrocknet.", img: "fail_flyingtop.jpg", phase: "phase-2" },
+            { name: "Wasserring (Klitsch)", error: "Backfehler", desc: "Dichter, nasser Streifen am Boden. Ursache: Brot zu früh angeschnitten.", img: "fail_klitsch.jpg", phase: "phase-2" },
+            { name: "Verbrannter Boden", error: "Hitze", desc: "Schwarz unten. Ursache: Backstein zu heiß oder zu weit unten im Ofen.", img: "fail_boden.jpg", phase: "phase-2" },
+            { name: "Fader Geschmack", error: "Salzmangel", desc: "Brot geht extrem schnell auf, schmeckt nach Pappe. Salz vergessen.", img: "fail_salz.jpg", phase: "phase-2" },
+            { name: "Elefantenhaut", error: "Hautfehler", desc: "Kruste ist rissig und ledrig. Ursache: Übergare im Kühlschrank oder zu viel Feuchtigkeit.", img: "fail_elefant.jpg", phase: "phase-2" }
+
+
+
+            { name: "Linguine", origin: "Ligurien", desc: "Plattgedrückte Spaghetti ('Kleine Zungen'). Traditionell zu Pesto oder Meeresfrüchten.", img: "pasta_linguine.jpg" },
+            { name: "Pappardelle", origin: "Toskana", desc: "Sehr breite Bandnudeln (2-3 cm). Mächtig und rustikal. Werden oft zu Wildragout (Wildschwein/Hase) serviert.", img: "pasta_pappardelle.jpg" },
+            { name: "Bucatini", origin: "Latium (Rom)", desc: "Dicke Spaghetti mit einem Loch in der Mitte. Klassiker für Amatriciana. Vorsicht: Spritzen beim Essen!", img: "pasta_bucatini.jpg" },
+            { name: "Capellini", origin: "Italien", desc: "Engelshaar. Hauchdünn. Garen in 2 Minuten. Meist als Suppeneinlage oder mit sehr leichter Buttersoße.", img: "pasta_capellini.jpg" },
+            { name: "Mafaldine", origin: "Neapel", desc: "Bandnudeln mit gewelltem Rand (benannt nach Prinzessin Mafalda). Der Rand fängt Soße, die Mitte bleibt bissfest.", img: "pasta_mafaldine.jpg" }
+            { name: "Penne Rigate", origin: "Kampanien", desc: "Schräg geschnittene Röhren mit Rillen ('rigate'). Die Rillen sind essenziell für die Soßenhaftung.", img: "pasta_penne.jpg" },
+
+            { name: "Farfalle", origin: "Lombardei", desc: "Schmetterlinge. In der Mitte zusammengekniffen (hart), außen dünn (weich). Interessanter Textur-Mix.", img: "pasta_farfalle.jpg" },
+
+            { name: "Trofie", origin: "Ligurien", desc: "Handgerollte, gedrehte Nudeln aus Wasser und Mehl. Der Partner für Pesto Genovese.", img: "pasta_trofie.jpg" },
+            { name: "Paccheri", origin: "Neapel", desc: "Riesige Röhren, die beim Mischen mit Soße ein klatschendes Geräusch machen ('paccari' = Ohrfeige).", img: "pasta_paccheri.jpg" },
+            { name: "Conchiglie", origin: "Italien", desc: "Muscheln. Funktionieren wie kleine Löffel, die Soße in ihrem Inneren 'schöpfen'.", img: "pasta_conchiglie.jpg" }
+
+        const PASTA_RIPIENA = [
+            { name: "Ravioli", origin: "Italien", desc: "Quadratische Teigtaschen. Füllung variiert: Ricotta/Spinat, Fleisch oder Kürbis.", img: "pasta_ravioli.jpg" },
+            { name: "Tortellini", origin: "Bologna", desc: "Ringförmig, gefüllt mit Fleisch/Parmesan. Sollen aussehen wie der Nabel der Venus.", img: "pasta_tortellini.jpg" },
+            { name: "Cannelloni", origin: "Italien", desc: "Große Röhren, die gefüllt und im Ofen überbacken werden. Technisch gesehen Lasagneplatten, die gerollt wurden.", img: "pasta_cannelloni.jpg" },
+            { name: "Lasagne", origin: "Bologna", desc: "Keine Form, sondern Platten. Werden geschichtet (Verde = mit Spinat im Teig).", img: "pasta_lasagne.jpg" },
+            { name: "Garganelli", origin: "Romagna", desc: "Gerollte Quadrate mit Rillen (über einen Kamm gerollt). Sehen aus wie Penne, sind aber Eierpasta.", img: "pasta_garganelli.jpg" }
+        ];
+
+        const ASIA_NOODLES = [
+            { name: "Ramen", origin: "Japan", desc: "Weizennudeln mit Kansui (Alkali). Gelb, elastisch, bissfest. Bleiben in heißer Brühe lange stabil.", img: "asia_ramen.jpg" },
+            { name: "Udon", origin: "Japan", desc: "Dicke, weiße Weizennudeln. Weich und 'schlotzig' an der Außenseite, fester Kern. Werden oft geschlürft.", img: "asia_udon.jpg" },
+            { name: "Soba", origin: "Japan", desc: "Aus Buchweizenmehl. Grau-braun, nussig, brüchiger als Weizen. Oft kalt mit Dip-Soße serviert.", img: "asia_soba.jpg" },
+            { name: "Reisnudeln", origin: "Thailand/Vietnam", desc: "Aus Reismehl und Wasser. Glutenfrei. Müssen oft nur eingeweicht werden. Basis für Pad Thai oder Pho.", img: "asia_rice.jpg" },
+            { name: "Glasnudeln", origin: "China", desc: "Aus Mungbohnenstärke. Werden beim Kochen durchsichtig und haben selbst kaum Geschmack, nehmen aber Soßen super auf.", img: "asia_glass.jpg" },
+            { name: "Mie Nudeln", origin: "China/Indo", desc: "Der Klassiker für Wok-Gerichte (Bami Goreng). Weizenmehl und Ei, oft vorgegart und getrocknet als Block.", img: "asia_mie.jpg" },
+            { name: "Somen", origin: "Japan", desc: "Extrem dünne, weiße Weizennudeln (dünner als Capellini). Werden im Sommer eiskalt auf Eiswürfeln serviert.", img: "asia_somen.jpg" }
+
+
+
+
+
+            {
+                name: "Paratha (Indien)",
+                type: "Geschichtet (Ghee)",
+                desc: "Ein ungesäuerter Teig, der mehrfach mit Ghee gefaltet und ausgerollt wird (wie Blätterteig). Ergebnis: Knusprig und blättrig.",
+                img: "fladen_paratha.jpg"
+            },
+
+                name: "Yufka (Türkei)",
+                type: "Hauchdünn ohne Hefe",
+                desc: "Extrem dünn ausgerollter Teig. Basis für Börek, Baklava oder als Wrap für Dürüm Döner. Wird auf dem Sac (gewölbtes Blech) gebacken.",
+                img: "fladen_yufka.jpg"
+
+                name: "Bazlama (Türkei)",
+                type: "Hefeteig (Dorfbrot)",
+                desc: "Ein dickes, weiches Fladenbrot aus der Pfanne. Ähnelt einem englischen Muffin, aber größer. Perfekt zum Frühstück.",
+                img: "fladen_bazlama.jpg"
+
+
+                name: "Simit (Türkei)",
+                type: "Hefeteig (Kringel)",
+                desc: "Der 'Sesamring'. Wird vor dem Backen in Traubenmelasse (Pekmez) getaucht und dick mit Sesam paniert. Außen knusprig, innen weich.",
+                img: "fladen_simit.jpg"
+
+
+                name: "Batbout (Marokko)",
+                type: "Hefeteig (Grieß)",
+                desc: "Die marokkanische Pita. Wird in der Pfanne gebacken, nicht im Ofen. Besteht oft aus Hartweizengrieß.",
+                img: "fladen_batbout.jpg"
+            },
+            // Amerika
+            {
+                name: "Tortilla de Maíz (Mexiko)",
+                type: "Mais (Nixtamal)",
+                desc: "Das Original aus Mais, der in Kalkwasser gekocht wurde (Nixtamalisation). Kleiner, gelb und aromatischer als Weizen.",
+                img: "fladen_tortilla_maiz.jpg"
+            },
+            {
+                name: "Tortilla de Harina (Mexiko)",
+                type: "Weizen + Schmalz",
+                desc: "Die 'Tex-Mex' Version aus dem Norden Mexikos. Weizenmehl und Schmalz machen sie weich und dehnbar. Basis für Burritos.",
+                img: "fladen_tortilla_harina.jpg"
+            },
+            {
+                name: "Arepa (Venezuela/Kolumbien)",
+                type: "Maismehl (Vorgekocht)",
+                desc: "Dicker als Tortillas. Werden aufgeschnitten und gefüllt. Außen knusprige Kruste, innen weicher Mais-Teig.",
+                img: "fladen_arepa.jpg"
+
+
+
+            { name: "Bagel", origin: "USA / PL", desc: "Ringförmiger Hefeteig. Wird vor dem Backen in Wasser gekocht. Ergebnis: Dichte, zähe ('chewy') Konsistenz.", img: "roll_bagel.jpg" },
+            { name: "Croissant", origin: "Frankreich", desc: "Die Königsklasse des Tourierens. 27 Schichten Butter und Teig. Luftig, blättrig, fettig.", img: "roll_croissant.jpg" },
+            { name: "Scones", origin: "UK", desc: "Quickbread ohne Hefe (Backpulver). Mürbe, bröselige Struktur. Wird warm mit Clotted Cream gegessen.", img: "roll_scones.jpg" },
+            { name: "English Muffin", origin: "UK / USA", desc: "Hefeteig, der in der Pfanne (nicht Ofen!) gebacken wird. Wird mit der Gabel aufgerissen ('Fork split') für raue Struktur.", img: "roll_englishmuffin.jpg" },
+            { name: "Burger Bun", origin: "USA", desc: "Brioche-Teig. Weich, süßlich, stabil. Soll den Fleischsaft aufsaugen, ohne zu zerfallen.", img: "roll_burgerbun.jpg" },
+            { name: "Pão de Queijo", origin: "Brasilien", desc: "Glutenfrei. Brandteig aus Tapiokastärke (Maniok) und Käse. Innen hohl und gummiartig-elastisch.", img: "roll_paodequeijo.jpg" }
+
+
+
+            { name: "Serviettenknödel", origin: "AT/CZ", desc: "Semmelknödelteig, der als Rolle in einem Tuch (Serviette) im Wasserdampf gegart und dann in Scheiben geschnitten wird.", img: "knoedel_servietten.jpg" },
+            { name: "Leberknödel", origin: "DE/AT", desc: "Herzhaft! Semmelteig gemischt mit durchgedrehter Rinderleber. Klassisch als Suppeneinlage.", img: "knoedel_leber.jpg" },
+            { name: "Khinkali", origin: "GE (Georgien)", desc: "Große Teigsäcke mit einem 'Griff' oben. Enthalten Fleisch und Brühe. Man beißt ein Loch hinein, trinkt die Suppe und isst den Rest.", img: "knoedel_khinkali.jpg" },
+
+            { name: "Marillenknödel", origin: "AT", desc: "Quarkteig (Topfenteig), der um eine ganze Aprikose (Marille) geformt wird. Serviert mit gerösteten Semmelbröseln.", img: "knoedel_marillen.jpg" },
+            { name: "Dampfnudel", origin: "DE", desc: "Hefeteig, der in einer Pfanne mit Deckel gleichzeitig gebraten (Boden) und gedämpft (Oben) wird. Hat eine salzige Kruste unten.", img: "knoedel_dampfnudel.jpg" },
+            { name: "Xiao Long Bao", origin: "CN", desc: "Soup Dumplings. Enthalten Fleisch und geschmolzene Gelee-Brühe. Vorsicht heiß!", img: "knoedel_xiaolongbao.jpg" },
+            { name: "Wonton / Wan Tan", origin: "CN", desc: "Hauchdünner Teig, oft mit Schwein und Garnele. Schwimmen meist in einer klaren Suppe.", img: "knoedel_wonton.jpg" },
+            { name: "Gyoza", origin: "JP", desc: "Japanische Teigtaschen. Werden oft erst in der Pfanne angebraten und dann mit etwas Wasser gedämpft ('Potstickers').", img: "knoedel_gyoza.jpg" },
+            { name: "Momos", origin: "NP/Tibet", desc: "Gedämpfte Teigtaschen aus dem Himalaya. Dickerer Teig, würzige Füllung, serviert mit sehr scharfer Chilisauce.", img: "knoedel_momo.jpg" },
+            { name: "Matzah Balls", origin: "Jüdisch", desc: "Knödel aus Matzenmehl (ungesäuertes Brot), Ei und Fett (Schmaltz). Klassiker zur Pessach-Suppe.", img: "knoedel_matzah.jpg" },
+,
+            { name: "Montreal Bagel", origin: "CA", desc: "Kleiner, dünner und süßer als der NY Bagel. Wird in Honigwasser gekocht und im Holzofen gebacken.", img: "lauge_montreal.jpg" },
+            { name: "Simit", origin: "TR", desc: "Der 'türkische Sesamring'. Wird in Traubenmelasse (Pekmez) getaucht (nicht Lauge!) und dann in Sesam gewälzt. Knusprig und nussig.", img: "lauge_simit.jpg" },
+            { name: "Obwarzanek", origin: "PL (Krakau)", desc: "Der Vorfahre des Bagels. Ein großer, geflochtener Ring, der gekocht und dann gebacken wird. Straßenessen in Krakau.", img: "lauge_obwarzanek.jpg" }
+
+
+
+
+
+
+
 hirschhornsalz.jpg;Hirschhornsalz;Hirschhornsalz crystals (Ammonium carbonate), slightly coarser than baking powder
 pottasche.jpg;Pottasche;Potash (Potassium carbonate) white powder, in a small glass dish
 fermentation_bubbles.jpg;Gärung Makro;Extreme macro shot of dough surface showing gas bubbles trapped under the gluten skin
