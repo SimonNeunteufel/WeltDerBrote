@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – Bibliothek der Bände</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    
+    <style>
+        body { 
+            background-color: #fcfbf9; color: #333; font-family: sans-serif; margin: 0; 
+            /* Zähler initialisieren */
+            counter-reset: volume-counter;
+        }
+        
+        .library-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        
+        .library-header { text-align: center; margin-bottom: 60px; padding-top: 20px; }
+        .library-title { font-size: 3em; color: #3e2723; margin-bottom: 10px; }
+        .library-subtitle { color: #6d4c41; font-size: 1.2em; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+
+        .shelf-title { 
+            font-size: 1.5em; color: #8d6e63; border-bottom: 2px solid #e0e0e0; 
+            padding-bottom: 10px; margin: 70px 0 30px 0; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;
+        }
+
+        .volume-grid { 
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 30px; 
+        }
+
+        .volume-card {
+            background: white; border-radius: 12px; overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #f0f0f0;
+            transition: all 0.3s ease; text-decoration: none; color: inherit;
+            display: flex; flex-direction: column; height: 100%; position: relative;
+            
+            /* Zähler hochzählen pro Karte */
+            counter-increment: volume-counter;
+        }
+        
+        .volume-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-color: #d7ccc8; }
+
+        .volume-img-wrapper { height: 160px; background-color: #eee; overflow: hidden; position: relative; }
+        .volume-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .volume-card:hover .volume-img { transform: scale(1.05); }
+
+        .volume-content { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
+        
+        /* Hier passiert die Magie der Nummerierung */
+        .volume-number { 
+            font-size: 0.75em; text-transform: uppercase; color: #8d6e63; 
+            font-weight: bold; margin-bottom: 8px; letter-spacing: 1px;
+        }
+        .volume-number::before {
+            content: "Band " counter(volume-counter);
+        }
+        
+        .volume-title { font-size: 1.4em; font-weight: bold; color: #3e2723; margin-bottom: 10px; line-height: 1.2; }
+        .volume-desc { font-size: 0.95em; color: #666; line-height: 1.6; flex-grow: 1; }
+        .volume-arrow { margin-top: 20px; font-weight: bold; color: #8d6e63; font-size: 0.9em; display: flex; align-items: center; }
+        .volume-card:hover .volume-arrow { color: #5d4037; }
+        .volume-card:hover .volume-arrow::after { content: ' →'; margin-left: 5px; }
+
+        @media (max-width: 600px) { .library-title { font-size: 2em; } }
+    </style>
+</head>
+<body>
+
+    <div style="padding: 20px; text-align: right; background: #fff; border-bottom: 1px solid #eee;">
+        <button class="btn" onclick="location.href='../index.html'" style="padding: 8px 16px; cursor: pointer; border: 1px solid #ccc; background: #fcfbf9; border-radius: 4px; font-weight: bold; color: #555;">Zur Startseite</button>
+    </div>
+
+    <div class="library-container">
+        
+        <header class="library-header">
+            <h1 class="library-title">Wissensbibliothek</h1>
+            <p class="library-subtitle">Das gesammelte Wissen über Getreide, Teig und Technik. Von der Chemie des Korns bis zur Physik des Ofens.</p>
+        </header>
+
+        <div class="shelf-title">I. Die Theorie (Grundlagen)</div>
+        <div class="volume-grid">
+            <a href="baender/brot_geschichte.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/brot_origin.jpg" class="volume-img" alt="Urzeit" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Die Entstehung</div><div class="volume-desc">Vom heißen Stein der Urzeit bis zum modernen Sauerteigbrot.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/mehle.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/layout_intro_header.jpg" class="volume-img" alt="Mehl" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Geschichte der Mehle</div><div class="volume-desc">Atlas der Mehle. Weizen, Roggen und die Physik der Stärke.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/typenfrei.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/urkorn_header.jpg" class="volume-img" alt="Urkorn" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Typenfrei (Urkorn)</div><div class="volume-desc">Emmer, Einkorn und Dinkel. Backen jenseits der Industrienorm.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/triebmittel.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/hefe_sauerteig.jpg" class="volume-img" alt="Hefe" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Triebmittel</div><div class="volume-desc">Der Motor des Teigs. Hefe, Sauerteig, Backpulver und Chemie.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+        </div>
+
+        <div class="shelf-title">II. Brot & Form (Alltag)</div>
+        <div class="volume-grid">
+            <a href="baender/brot_laib.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/brot_laib_header.jpg" class="volume-img" alt="Laib" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Die großen Laibe</div><div class="volume-desc">Das tägliche Brot. Sauerteig, wilde Porung und Kruste.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/kleinbrote.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/kleinbrot_header.jpg" class="volume-img" alt="Brötchen" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Kleinbrote</div><div class="volume-desc">Das Glück im Korb. Kaisersemmel, Schrippe und Brötchen.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/soft_buns.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/soft_header.jpg" class="volume-img" alt="Buns" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Soft Buns & Burger</div><div class="volume-desc">Warum Fett weich macht und wie der perfekte Burger Bun gelingt.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/form_struktur.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/form_header.jpg" class="volume-img" alt="Formen" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Form & Struktur</div><div class="volume-desc">Vom Zopf zum Toast. Wie Flechten und Kastenformen die Krume verändern.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+        </div>
+
+        <div class="shelf-title">III. Spezial & Alternativ</div>
+        <div class="volume-grid">
+            <a href="baender/roggen_pur.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/roggen_header.jpg" class="volume-img" alt="Roggen" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Roggen pur</div><div class="volume-desc">Das schwarze Gold. Pumpernickel, Sauerteig-Pflicht und Pentosane.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/lauge_bagel.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/lauge_header.jpg" class="volume-img" alt="Brezel" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Lauge & Bagels</div><div class="volume-desc">Chemie der Bräunung. Natronlauge und gekochte Teige.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/glutenfrei.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/glutenfrei_header.jpg" class="volume-img" alt="Glutenfrei" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Glutenfrei & Alternativ</div><div class="volume-desc">Backen ohne Kleber. HPMC, Flohsamen und Low-Carb.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/reste.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/reste_header.jpg" class="volume-img" alt="Altbrot" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Das zweite Leben</div><div class="volume-desc">Resteverwertung. Altbrot als Brühstück, Knödel und Brösel.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+        </div>
+
+        <div class="shelf-title">IV. Fladen & Welt</div>
+        <div class="volume-grid">
+            <a href="baender/fladenbrote.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/fladenbrot_header.jpg" class="volume-img" alt="Fladen" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Fladenbrote</div><div class="volume-desc">Die Mutter aller Brote. Naan, Pita und Focaccia.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/pizza.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/pizza_header.jpg" class="volume-img" alt="Pizza" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Pizza</div><div class="volume-desc">485°C Hitze, Hydration und die Stile von Neapel bis NY.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/tortillas.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/tortilla_header.jpg" class="volume-img" alt="Tortilla" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Tortillas & Tacos</div><div class="volume-desc">Die Sonne Mexikos. Nixtamalisation und Mais-Chemie.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/empanadas.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/empanadas_header.jpg" class="volume-img" alt="Empanadas" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Empanadas</div><div class="volume-desc">Die Kunst des Einhüllens. Mürbeteig und Falttechniken.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/asia_bakery.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/asia_header.jpg" class="volume-img" alt="Asia" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Asia Bakery</div><div class="volume-desc">Tangzhong, Shokupan und gedämpfte Buns.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/spezialitaeten.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/global_intro.jpg" class="volume-img" alt="Global" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Globale Spezialitäten</div><div class="volume-desc">Exoten: Afrikas Swallows, Bannock und Mochi.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+        </div>
+
+        <div class="shelf-title">V. Fein & Süß</div>
+        <div class="volume-grid">
+            <a href="baender/viennoiserie.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/vien_header.jpg" class="volume-img" alt="Croissant" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Viennoiserie</div><div class="volume-desc">Die Kunst der Schichten. Croissants und Plunder.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/reiche_teige.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/festtag_header.jpg" class="volume-img" alt="Panettone" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Reiche Teige</div><div class="volume-desc">Panettone, Stollen und der osmotische Druck von Zucker.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/pfannkuchen.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/pancake_crepe.jpg" class="volume-img" alt="Pancake" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Pfannkuchen</div><div class="volume-desc">Flüssige Teige. Crêpes, Galettes und Kaiserschmarrn.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/siedegebaeck.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/fry_header.jpg" class="volume-img" alt="Berliner" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Siedegebäck</div><div class="volume-desc">Gold aus dem Fett. Berliner, Krapfen und Donuts.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/kuchen.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/kuchen_header.jpg" class="volume-img" alt="Kuchen" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Rührteige & Muffins</div><div class="volume-desc">Emulsionen und chemischer Trieb. Wenn Gluten unerwünscht ist.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+        </div>
+
+        <div class="shelf-title">VI. Kochtopf (Teig ohne Ofen)</div>
+        <div class="volume-grid">
+            <a href="baender/pasta.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/pasta_header.jpg" class="volume-img" alt="Pasta" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Pasta</div><div class="volume-desc">Architektur zum Essen. Hartweizen, Ei und Formgebung.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/spaetzle.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/spaetzle_header.jpg" class="volume-img" alt="Spätzle" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Spätzle & Knöpfle</div><div class="volume-desc">Das Gold der Alpen. Schaben, Drücken und Dunst.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/knoedel.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/knoedel_header.jpg" class="volume-img" alt="Knödel" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Knödel & Dumplings</div><div class="volume-desc">Gefüllt und gekocht. Von Thüringen bis China.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+        </div>
+
+        <div class="shelf-title">VII. Technik & Wissen</div>
+        <div class="volume-grid">
+            <a href="baender/brot_technik.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/tech_header.jpg" class="volume-img" alt="Technik" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Das Handwerk</div><div class="volume-desc">Wirken, Falten, Schneiden. Die Rheologie des Teigs.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/noknead.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/noknead_header.jpg" class="volume-img" alt="NoKnead" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">No-Knead</div><div class="volume-desc">Zeit statt Kraft. Topfbrot, Autolyse und High Hydration.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/ofen_physik.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/ofen_header.jpg" class="volume-img" alt="Ofen" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Feuer, Stein & Dampf</div><div class="volume-desc">Ofen-Physik. Strahlungshitze, Schwaden und Backstahl.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+             <a href="baender/pannenhilfe.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/fail_header.jpg" class="volume-img" alt="Fehler" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Die Pannenhilfe</div><div class="volume-desc">Fehleranalyse. Übergare, Untergare und Teig-Rettung.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/brot_gesundheit.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/gesundheit_header.jpg" class="volume-img" alt="Gesundheit" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Brot & Gesundheit</div><div class="volume-desc">Biochemie. FODMAPs, Phytin-Abbau und Bekömmlichkeit.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/dauergebaeck.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/dry_header.jpg" class="volume-img" alt="Zwieback" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Hart & Trocken</div><div class="volume-desc">Konservierung. Zwieback, Knäckebrot und Matze.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+            <a href="baender/brot_zeitreise.html" class="volume-card">
+                <div class="volume-img-wrapper"><img src="assets/image/baender/zeitreise_header.jpg" class="volume-img" alt="Zukunft" onerror="this.style.display='none'"></div>
+                <div class="volume-content"><div class="volume-number"></div><div class="volume-title">Gestern & Morgen</div><div class="volume-desc">Zeitreise. Pompeji, Notbrote und Space Bread.</div><div class="volume-arrow">Lesen</div></div>
+            </a>
+        </div>
+
+    </div>
+
+</body>
+</html>
+

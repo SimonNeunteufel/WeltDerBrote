@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – Brote & Teige</title>
+    <link rel="stylesheet" href="./assets/css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+        /* --- Styles für Tabelle & Layout --- */
+        .table-wrap { max-height: calc(100vh - 350px); overflow: auto; border: 1px solid #eee; border-radius: 8px; }
+        #t { width: 100%; border-collapse: collapse; background: white; }
+        #t th { position: sticky; top: 0; background: #f8f9fa; padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6; z-index: 5; }
+        #t td { padding: 12px; border-bottom: 1px solid #eee; vertical-align: middle; }
+        #t tr:hover { background-color: #fff9f0; cursor: pointer; }
+        
+        .badge-status { padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; }
+        .status-final { background: #d1fae5; color: #065f46; }
+        .status-test { background: #fef3c7; color: #92400e; }
+        .status-draft { background: #f3f4f6; color: #374151; }
+
+        .type-badge { font-size: 0.75em; padding: 2px 6px; border-radius: 4px; background: #e3f2fd; color: #0d47a1; border: 1px solid #90caf9; }
+
+        /* --- Filter Sektion Styles --- */
+        .filter-section { 
+            background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 8px; margin-bottom: 20px; 
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .chip {
+            display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; 
+            background: #f5f5f5; border-radius: 20px; border: 1px solid #ddd; 
+            cursor: pointer; font-size: 0.9em; user-select: none; transition: all 0.2s;
+        }
+        .chip:hover { background: #e0e0e0; }
+        .chip input { cursor: pointer; transform: scale(1.2); margin: 0; }
+        
+        #countrySelect {
+            padding: 8px; border: 1px solid #ddd; border-radius: 6px; min-width: 200px;
+            background: white; font-family: inherit;
+        }
+        /* Trick für Multiselect Dropdown Verhalten */
+        #countrySelect[multiple]:focus { height: auto; min-height: 150px; position: absolute; right: 0; z-index: 100; box-shadow: 0 5px 15px rgba(0,0,0,0.15); border-color: #8d6e63; }
+
+        /* --- Auswahl Leiste (unten) --- */
+        .col-check { width: 40px; text-align: center; }
+        .recipe-check { transform: scale(1.2); cursor: pointer; }
+        
+        #selectionBar {
+            position: fixed; bottom: -100px; left: 0; right: 0;
+            background: #4e342e; color: white;
+            padding: 15px 30px; display: flex; justify-content: center; align-items: center; gap: 20px;
+            transition: bottom 0.3s ease-in-out; box-shadow: 0 -4px 15px rgba(0,0,0,0.2); z-index: 100;
+        }
+        #selectionBar.visible { bottom: 0; }
+        .btn-action { 
+            background: white; color: #4e342e; border: none; padding: 10px 25px; 
+            border-radius: 30px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body class="BG_Brot_Suche">
+    <div class="page">
+        <div class="header">
+            <button class="btn" onclick="location.href='./index.html'">← Home</button>
+            <div class="brand">Brote & Teige</div>
+            <nav class="nav">
+                <a href="./baender.html">Bände</a>
+                <a href="./rezepte.html" class="active">Brote</a>
+                <a href="./gerichte_liste.html">Gerichte</a>
+                <a href="./mehle.html">Wissen</a>
+            </nav>
+        </div>
+
+        <div class="filter-section">
+            <div style="font-weight: bold; font-size: 0.9em;">Herkunft Vorfilter:</div>
+            <div style="display: flex; gap: 15px; width: 100%; align-items: flex-start; position:relative;">
+                <div class="filter-group" id="continentFilters" style="display:flex; gap:8px; flex-wrap:wrap;">
+                    </div>
+                
+                <div style="margin-left: auto;">
+                    <select id="countrySelect" multiple size="1" onfocus="this.size=6;" onblur="this.size=1; applyFilters();">
+                        <option value="" disabled selected>Land wählen...</option>
+                    </select>
+                    <div style="font-size: 0.75em; color: #666; margin-top: 4px; text-align: right;">STRG halten für Mehrfachauswahl</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="toolbar">
+            <input id="q" placeholder="Brotname, ID oder Stichwort suchen..." type="search" style="flex-grow:1; padding: 10px;">
+            <button class="btn" id="go" onclick="applyFilters()">Suchen</button>
+        </div>
+
+        <div class="table-wrap">
+            <table id="t">
+                <thead>
+                    <tr>
+                        <th class="col-check"><input type="checkbox" id="selectAll" style="transform: scale(1.2); cursor: pointer;"></th>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Kategorie / Band</th>
+                        <th>Herkunft</th>
+                        <th>Status</th>
+                        <th>Aktion</th>
+                    </tr>
+                </thead>
+                <tbody id="recipeBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="selectionBar">
+        <div style="font-size: 1.1em;"><span id="countDisplay" style="font-weight: bold;">0</span> ausgewählt</div>
+        <button class="btn-action" onclick="viewSelected()">Auswahl anzeigen</button>
+    </div>
+
+    <script src="./assets/js/util.js"></script>
+    <script>
+    // --- 1. GEO DATENBANK ---
+    const geoData = {
+        "Europa": ["Schweiz", "Deutschland", "Frankreich", "Italien", "Spanien", "Österreich", "Portugal", "Grossbritannien", "Irland"],
+        "Amerika": ["USA", "Mexiko", "Kanada", "Kolumbien", "Argentinien", "Chile", "Peru", "Brasilien"],
+        "Asien": ["Indien", "China", "Japan", "Thailand", "Vietnam", "Türkei"],
+        "Afrika": ["Marokko", "Ägypten", "Äthiopien", "Südafrika"],
+        "Ozeanien": ["Australien", "Neuseeland"]
+    };
+
+    (async () => {
+        // --- 2. DATEN LADEN & VORBEREITEN ---
+        const data = await window.$util.loadCsv('./assets/data/wdb_rezepte.csv');
+        
+        // DOM Elemente
+        const tbody = document.getElementById('recipeBody');
+        const selectAllBox = document.getElementById('selectAll');
+        const selectionBar = document.getElementById('selectionBar');
+        const countDisplay = document.getElementById('countDisplay');
+        const continentFilters = document.getElementById('continentFilters');
+        const countrySelect = document.getElementById('countrySelect');
+        const searchInput = document.getElementById('q');
+
+        // Filter Init
+        const initContinentChips = () => {
+            continentFilters.innerHTML = Object.keys(geoData).map(c => `
+                <label class="chip continent"><input type="checkbox" value="${c}"> ${c}</label>
+            `).join('');
+        };
+        initContinentChips();
+
+        const updateCountryDropdown = () => {
+            const selectedConts = Array.from(document.querySelectorAll('#continentFilters input:checked')).map(cb => cb.value);
+            const currentSelection = Array.from(countrySelect.selectedOptions).map(o => o.value);
+            
+            countrySelect.innerHTML = '<option value="" disabled>Land wählen...</option>';
+            
+            let countries = selectedConts.length === 0 ? Object.values(geoData).flat() : [];
+            selectedConts.forEach(c => countries.push(...(geoData[c] || [])));
+            
+            [...new Set(countries)].sort().forEach(land => {
+                const opt = document.createElement('option');
+                opt.value = land; opt.textContent = land;
+                if (currentSelection.includes(land)) opt.selected = true;
+                countrySelect.appendChild(opt);
+            });
+        };
+        updateCountryDropdown();
+
+        // --- 3. DATEN FILTERN (-G- Only) ---
+        // Nur Grundteige (-G-)
+        const baseRecipes = data.filter(r => r.brot_id && r.brot_id.toUpperCase().includes('-G-'));
+        
+        // Unique IDs
+        const uniqueRecipes = [];
+        const seen = new Set();
+        baseRecipes.forEach(r => {
+            if (!seen.has(r.brot_id)) {
+                uniqueRecipes.push(r);
+                seen.add(r.brot_id);
+            }
+        });
+
+        // --- 4. FILTER LOGIK ---
+        window.applyFilters = () => {
+            const query = searchInput.value.toLowerCase().trim();
+            const selectedContinents = Array.from(document.querySelectorAll('#continentFilters input:checked')).map(cb => cb.value);
+            const selectedCountries = Array.from(countrySelect.selectedOptions).map(o => o.value);
+
+            // Orte vorbereiten
+            let allowedLocations = [];
+            if (selectedCountries.length > 0) {
+                allowedLocations = selectedCountries;
+            } else if (selectedContinents.length > 0) {
+                selectedContinents.forEach(c => {
+                    allowedLocations.push(c);
+                    if(geoData[c]) allowedLocations.push(...geoData[c]);
+                });
+            }
+
+            const filteredList = uniqueRecipes.filter(r => {
+                // Textsuche
+                const rowString = (r.name + " " + r.brot_id).toLowerCase();
+                const matchesText = query === "" || rowString.includes(query);
+
+                // Herkunftssuche
+                let matchesOrigin = true;
+                if (allowedLocations.length > 0) {
+                    const originString = (r.herkunft || "") + " " + (r.atlas_ref_id || "") + " " + (r.quelle || ""); 
+                    matchesOrigin = allowedLocations.some(loc => originString.includes(loc));
+                }
+
+                return matchesText && matchesOrigin;
+            });
+
+            render(filteredList);
+        };
+
+        // --- 5. RENDER FUNKTION ---
+        const render = (list) => {
+            if(list.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:30px; color:#999;">Keine Ergebnisse gefunden.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = list.map(r => `
+                <tr onclick="location.href='./rezept_ansicht.html?id=${r.brot_id}'">
+                    <td class="col-check" onclick="event.stopPropagation()">
+                        <input type="checkbox" class="recipe-check" value="${r.brot_id}">
+                    </td>
+                    <td class="col-id">${r.brot_id}</td>
+                    <td><b>${r.name || 'Unbenannt'}</b> <span class="type-badge">Basis</span></td>
+                    <td><small>${r.atlas_ref_id || ''}</small></td>
+                    <td>${r.herkunft || '-'}</td>
+                    <td><span class="badge-status status-${(r.status || 'draft').toLowerCase()}">${r.status || 'Draft'}</span></td>
+                    <td onclick="event.stopPropagation()">
+                        <button class="btn-sm" onclick="location.href='./rezept_ansicht.html?id=${r.brot_id}'">Rezept</button>
+                    </td>
+                </tr>
+            `).join('');
+
+            // Listener erneuern
+            document.querySelectorAll('.recipe-check').forEach(cb => {
+                cb.addEventListener('change', updateSelectionUI);
+            });
+            updateSelectionUI();
+        };
+
+        // --- 6. UI EVENTS ---
+        const updateSelectionUI = () => {
+            const checkedBoxes = document.querySelectorAll('.recipe-check:checked');
+            const visibleBoxes = document.querySelectorAll('.recipe-check');
+            const count = checkedBoxes.length;
+            
+            countDisplay.innerText = count;
+            if (count > 0) selectionBar.classList.add('visible');
+            else selectionBar.classList.remove('visible');
+
+            if (visibleBoxes.length > 0 && checkedBoxes.length === visibleBoxes.length) {
+                selectAllBox.checked = true; selectAllBox.indeterminate = false;
+            } else if (count > 0) {
+                selectAllBox.checked = false; selectAllBox.indeterminate = true;
+            } else {
+                selectAllBox.checked = false; selectAllBox.indeterminate = false;
+            }
+        };
+
+        searchInput.addEventListener('input', applyFilters);
+        
+        continentFilters.addEventListener('change', (e) => {
+            if (e.target.tagName === 'INPUT') {
+                updateCountryDropdown();
+                applyFilters();
+            }
+        });
+        
+        selectAllBox.addEventListener('change', (e) => {
+            const isChecked = e.target.checked;
+            document.querySelectorAll('.recipe-check').forEach(cb => { cb.checked = isChecked; });
+            updateSelectionUI();
+        });
+
+        window.viewSelected = () => {
+            const checkedBoxes = document.querySelectorAll('.recipe-check:checked');
+            const ids = Array.from(checkedBoxes).map(cb => cb.value);
+            if (ids.length === 0) return;
+            location.href = `./rezept_ansicht.html?id=${ids.join(',')}`;
+        };
+
+        // --- 7. ATLAS CHECK (SessionStorage) ---
+        const initSearch = sessionStorage.getItem('WdB_Search_Init');
+        if (initSearch) {
+            searchInput.value = initSearch;
+            sessionStorage.removeItem('WdB_Search_Init');
+            // Timeout damit DOM sicher da ist
+            setTimeout(() => {
+                applyFilters();
+            }, 100);
+        } else {
+            // Initial Render
+            render(uniqueRecipes);
+        }
+
+    })();
+    </script>
+</body>
+</html>

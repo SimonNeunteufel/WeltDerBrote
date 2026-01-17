@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – Triebmittel: Wissenschaft & Chemie</title>
+    
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <script src="../assets/js/util.js"></script>
+    
+    <style>
+        /* --- Layout & Basis --- */
+        body { background-color: #fcfbf9; color: #333; font-family: sans-serif; margin: 0; padding: 0; }
+        .page { min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* HEADER */
+        .header { 
+            padding: 20px 40px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            background: #fff;
+        }
+        .brand { font-weight: bold; font-size: 1.2em; color: #3e2723; }
+        .btn-back {
+            background-color: #4e342e;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-back:hover { background-color: #5d4037; }
+
+        .knowledge-layout { display: flex; max-width: 1200px; margin: 40px auto; gap: 40px; padding: 0 20px; align-items: flex-start; flex-grow: 1; }
+        
+        /* Navigation Sidebar */
+        .chapter-nav { width: 250px; flex-shrink: 0; background: white; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow-y: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .chapter-nav h3 { margin-top: 0; border-bottom: 2px solid #8d6e63; padding-bottom: 10px; color: #4e342e; }
+        .chapter-link { display: block; padding: 10px 0; color: #666; text-decoration: none; border-bottom: 1px solid #eee; transition: all 0.2s; }
+        .chapter-link.sub-link { padding-left: 15px; font-size: 0.95em; border-left: 2px solid transparent; }
+        .chapter-link:hover { color: #8d6e63; padding-left: 5px; }
+        .chapter-link.active { font-weight: bold; color: #4e342e; border-left: 3px solid #8d6e63; padding-left: 10px; background: #fafafa; }
+        
+        /* Content Area */
+        .content-area { flex-grow: 1; background: white; padding: 40px; border-radius: 8px; border: 1px solid #e0e0e0; line-height: 1.8; color: #333; min-width: 0; }
+        .content-section { margin-bottom: 60px; scroll-margin-top: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 40px; }
+        .content-section:last-child { border-bottom: none; }
+        
+        /* Typografie */
+        h1.page-title { font-size: 2.5em; color: #3e2723; margin-top: 0; }
+        h2 { color: #5d4037; border-left: 5px solid #8d6e63; padding-left: 15px; margin-top: 0; margin-bottom: 20px; }
+        h3 { color: #6d4c41; margin-top: 30px; font-size: 1.3em; border-bottom: 1px solid #eee; padding-bottom: 8px;}
+        h4 { margin-top: 0; }
+        p { margin-bottom: 20px; font-size: 1.05em; }
+        .lead { font-size: 1.2em; color: #555; }
+        
+        /* Bilder */
+        .content-img { width: 100%; height: auto; border-radius: 4px; margin-bottom: 10px; border: 1px solid #e0e0e0; cursor: zoom-in; transition: transform 0.2s ease; display: block; }
+        .content-img:hover { transform: scale(1.02); }
+        .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+        .img-caption { font-size: 0.85em; margin-top: 5px; color: #666; font-style: italic; text-align: center; display: block;}
+
+        /* Karten Design */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
+        .info-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: transform 0.2s; display: flex; flex-direction: column; }
+        .info-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .info-card-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid #eee; cursor: zoom-in; }
+        .info-card-body { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
+        .info-card-title { font-weight: bold; font-size: 1.1em; color: #3e2723; margin-bottom: 5px; }
+        .info-card-cat { font-size: 0.8em; color: #666; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;}
+        .info-card-desc { font-size: 0.9em; color: #444; flex-grow: 1; }
+        .trivia-box { margin-top: 12px; padding: 10px 12px; background-color: #fff9c4; border-left: 4px solid #fbc02d; color: #5d4037; font-size: 0.9em; border-radius: 0 4px 4px 0; }
+
+        /* Highlight Boxen für Science */
+        .bio-box { background: #e8f5e9; border-left: 5px solid #4caf50; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .bio-box h4 { color: #2e7d32; }
+        
+        .chem-box { background: #e3f2fd; border-left: 5px solid #2196f3; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .chem-box h4 { color: #1565c0; }
+
+        @media (max-width: 800px) {
+            .knowledge-layout { flex-direction: column; }
+            .chapter-nav { width: 100%; position: static; margin-bottom: 20px; max-height: none;}
+            .img-grid { grid-template-columns: 1fr; }
+            .header { flex-direction: column; gap: 10px;}
+        }
+        
+        /* Lightbox */
+        #image-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); align-items: center; justify-content: center; cursor: zoom-out; opacity: 0; transition: opacity 0.3s ease; padding: 20px; box-sizing: border-box; }
+        #image-modal.show { display: flex; opacity: 1; }
+        #modal-img { max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 0 20px rgba(0,0,0,0.5); border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <a href="../baender.html" class="btn-back">← Zurück</a>
+            <div class="brand">Wissensbibliothek</div>
+        </div>
+
+        <div class="knowledge-layout">
+            <nav class="chapter-nav">
+                <h3>Inhalt</h3>
+                <a href="#intro" class="chapter-link active">Einleitung</a>
+                <a href="#biologisch" class="chapter-link">1. Biologie (Hefe & Co)</a>
+                <a href="#sauerteig-science" class="chapter-link sub-link">↳ Science: Sauerteig-Steuerung</a>
+                <a href="#chemisch" class="chapter-link">2. Chemie (Pulver)</a>
+                <a href="#backpulver-science" class="chapter-link sub-link">↳ Science: Double Acting</a>
+                <a href="#physikalisch" class="chapter-link">3. Physik (Dampf)</a>
+                <a href="#lexikon" class="chapter-link">4. Lexikon der Triebmittel</a>
+            </nav>
+
+            <main class="content-area">
+                <section id="intro" class="content-section">
+                    <h1 class="page-title">Triebmittel: Der Atem des Brotes</h1>
+                    <p class="lead">Mehl und Wasser allein ergeben nur Kleister. Erst das Triebmittel haucht dem Teig Leben ein, macht ihn luftig und aromatisch. Es ist der Motor der Bäckerei.</p>
+                    <img src="../assets/image/baender/hefe_sauerteig.jpg" class="content-img" alt="Hefe und Sauerteig nebeneinander" onerror="this.style.display='none'">
+                </section>
+
+                <section id="biologisch" class="content-section">
+                    <h2>1. Biologische Lockerung</h2>
+                    <p>Hier arbeiten lebende Mikroorganismen. Sie fressen Zucker und "atmen" Gas aus.</p>
+
+                    <div class="img-grid">
+                        <div class="bio-box">
+                            <h4>Hefe: Atmung vs. Gärung</h4>
+                            <p>Hefe hat zwei Modi, je nachdem ob Sauerstoff da ist:</p>
+                            <ul>
+                                <li><strong>Mit Sauerstoff (Atmung):</strong> Die Hefe vermehrt sich rasant, produziert aber kaum Gas. (Zu Beginn des Knetens).</li>
+                                <li><strong>Ohne Sauerstoff (Gärung):</strong> Die Hefe schaltet um. Sie produziert <strong>Alkohol (Ethanol)</strong> für den Geschmack und <strong>CO₂</strong> für den Trieb. Das ist der Modus, den wir beim "Gehenlassen" wollen.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div id="sauerteig-science" class="bio-box" style="background: #f1f8e9; border-color: #8bc34a;">
+                        <h4>Sauerteig: Die Temperatur-Steuerung</h4>
+                        <p>Ein Sauerteig enthält Hefen und Milchsäurebakterien. Man kann den Geschmack durch die Temperatur steuern:</p>
+                        <ul>
+                            <li><strong>Warm & Weich (26-30°C):</strong> Fördert <strong>Milchsäure</strong>. Der Teig schmeckt mild, joghurt-artig. (Gut für Weizen).</li>
+                            <li><strong>Kalt & Fest (20-24°C):</strong> Fördert <strong>Essigsäure</strong>. Der Teig schmeckt stechend sauer und kräftig. (Gut für Roggen).</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="chemisch" class="content-section">
+                    <h2>2. Chemische Lockerung</h2>
+                    <p>Wenn der Teig zu schwer für Hefe ist (viel Fett/Zucker) oder es schnell gehen muss.</p>
+                    
+                    <div id="backpulver-science" class="chem-box">
+                        <h4>Der "Double Acting" Effekt</h4>
+                        <p>Modernes Backpulver enthält Natron (CO₂-Quelle) und ein Säuerungsmittel (meist Phosphate). Aber warum schäumt es nicht schon in der Schüssel?</p>
+                        <ol>
+                            <li><strong>Phase 1 (Feuchtigkeit):</strong> Sobald Milch/Wasser dazu kommt, reagiert ein kleiner Teil. Der Teig wird locker.</li>
+                            <li><strong>Phase 2 (Hitze):</strong> Die meisten modernen Phosphate reagieren erst <strong>ab ca. 50°C</strong> im Ofen. Das ist der "Ofentrieb". Ohne diesen Effekt würden Kuchen zusammenfallen, bevor sie gebacken sind.</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <section id="physikalisch" class="content-section">
+                    <h2>3. Physikalische Lockerung</h2>
+                    <p>Hier gibt es keine chemische Reaktion, sondern einen Aggregatzustands-Wechsel. Wasser wird zu Dampf.</p>
+                    <div class="trivia-box">
+                        💡 <strong>Fakt:</strong> Wasser dehnt sich beim Verdampfen um den Faktor <strong>1600</strong> aus. Ein Milliliter Wasser wird zu 1,6 Litern Dampf. Diese gewaltige Kraft hebt die Butter-Schichten im Blätterteig an.
+                    </div>
+                </section>
+
+                <section id="lexikon" class="content-section">
+                    <h2>4. Lexikon der Triebmittel</h2>
+                    <p>Die wichtigsten Treibstoffe für Ihre Backstube.</p>
+                    <div id="container-triebmittel" class="card-grid"></div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <div id="image-modal"><img id="modal-img" src=""></div>
+
+    <script>
+        const IMG_PATH = '../assets/image/baender/';
+
+        // --- DATENBANK (Erweitert um Pottasche) ---
+        const TRIEBMITTEL_DATA = [
+            {
+                name: "Frische Hefe",
+                cat: "Biologisch",
+                img: "hefe_frisch.jpg",
+                desc: "Saccharomyces cerevisiae. Lebende Zellen im 42g Block. Am aktivsten, aber kältebedürftig.",
+                trivia: "Ein Würfel hat ca. 42g, weil das früher '1 Lot' entsprach – das Standardmaß der alten Bäcker."
+            },
+            {
+                name: "Trockenhefe",
+                cat: "Biologisch",
+                img: "hefe_trocken.jpg",
+                desc: "Granulierte Hefe im 'Schlafmodus'. Wirkt etwas langsamer beim Anspringen, ist aber Monate haltbar.",
+                trivia: "Aktive Trockenhefe (muss aufgelöst werden) vs. Instant-Hefe (kann direkt ins Mehl)."
+            },
+            {
+                name: "Roggen-Sauerteig",
+                cat: "Biologisch",
+                img: "sauerteig_roggen.jpg",
+                desc: "Symbiose aus wilden Hefen und Milchsäurebakterien. Die Säure schützt vor Schimmel und macht Roggen erst verdaulich.",
+                trivia: "Der älteste dokumentierte Sauerteig ist angeblich über 100 Jahre alt."
+            },
+            {
+                name: "Lievito Madre",
+                cat: "Biologisch",
+                img: "lievito_madre.jpg",
+                desc: "Fester Weizensauerteig (TA 150), sehr mild, triebstark. Klassisch für Panettone.",
+                trivia: "Wird oft in Zuckerwasser gebadet, um die Säure auszuwaschen."
+            },
+            {
+                name: "Backpulver",
+                cat: "Chemisch",
+                img: "backpulver.jpg",
+                desc: "Mix aus Natron (Gasquelle), Säure (Aktivator) und Stärke (Trennmittel). Geschmacksneutral.",
+                trivia: "Weinstein-Backpulver nutzt natürliche Weinsteinsäure statt Phosphate (schmeckt weniger stumpf)."
+            },
+            {
+                name: "Natron (Soda)",
+                cat: "Chemisch",
+                img: "natron.jpg",
+                desc: "Reines Natriumhydrogencarbonat. Braucht zwingend eine Säure im Teig (Joghurt, Buttermilch, Zitrone).",
+                trivia: "Ohne Säure entsteht Soda – das Gebäck schmeckt seifig und wird grünlich."
+            },
+            {
+                name: "Hirschhornsalz",
+                cat: "Chemisch",
+                img: "hirschhornsalz.jpg",
+                desc: "Ammoniumcarbonat. Zerfällt im Ofen komplett zu Gas (Ammoniak + CO₂). Nur für flache Gebäcke (Lebkuchen), damit das Ammoniak entweichen kann.",
+                trivia: "Macht Gebäck sehr lange haltbar und knusprig."
+            },
+            {
+                name: "Pottasche",
+                cat: "Chemisch",
+                img: "pottasche.jpg",
+                desc: "Kaliumcarbonat. Wird oft mit Hirschhornsalz kombiniert. Treibt den Teig in die Breite (Fließen).",
+                trivia: "Macht Lebkuchenteige weich und bindet Feuchtigkeit aus der Luft."
+            }
+        ];
+
+        // --- RENDER LOGIC ---
+        (function() {
+            // Navigation
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.chapter-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => { if (scrollY >= section.offsetTop - 250) current = section.getAttribute('id'); });
+                if (scrollY < 100) current = 'intro';
+                navLinks.forEach(link => { link.classList.remove('active'); if (link.getAttribute('href').includes(current)) link.classList.add('active'); });
+            });
+
+            // Cards
+            const container = document.getElementById('container-triebmittel');
+            TRIEBMITTEL_DATA.forEach(row => {
+                let imageHtml = `<div style="height:180px; background:#eee; color:#ccc; display:flex; align-items:center; justify-content:center;">Kein Bild</div>`;
+                if(row.img) {
+                    imageHtml = `<img src="${IMG_PATH}${row.img}" class="info-card-img" alt="${row.name}" onerror="this.outerHTML='<div style=\'height:180px; background:#eee; color:#ccc; display:flex; align-items:center; justify-content:center;\'>Bild nicht verfügbar</div>'">`;
+                }
+                const cardHtml = `
+                    <div class="info-card">
+                        ${imageHtml}
+                        <div class="info-card-body">
+                            <div class="info-card-cat">${row.cat}</div>
+                            <div class="info-card-title">${row.name}</div>
+                            <div class="info-card-desc">${row.desc}</div>
+                            ${row.trivia ? `<div class="trivia-box">💡 ${row.trivia}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        })();
+
+        // Lightbox
+        document.addEventListener('DOMContentLoaded', () => {
+             const modal = document.getElementById('image-modal'); 
+             const modalImg = document.getElementById('modal-img');
+             function openModal(imgSrc) { 
+                 if (!imgSrc) return; 
+                 modalImg.src = imgSrc; 
+                 modal.classList.add('show'); 
+             }
+             modal.addEventListener('click', () => { 
+                 modal.classList.remove('show'); 
+                 setTimeout(() => modalImg.src = '', 300); 
+             });
+             document.addEventListener('click', function(e) { 
+                 if (e.target.classList.contains('content-img') || e.target.classList.contains('info-card-img')) { 
+                     openModal(e.target.src); 
+                 } 
+             });
+        });
+    </script>
+</body>
+</html>

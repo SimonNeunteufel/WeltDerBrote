@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – Hart & Trocken: Konservierung</title>
+    
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <script src="../assets/js/util.js"></script>
+    
+    <style>
+        /* --- Layout & Basis --- */
+        body { background-color: #fcfbf9; color: #333; font-family: sans-serif; margin: 0; padding: 0; }
+        .page { min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* HEADER */
+        .header { 
+            padding: 20px 40px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            background: #fff;
+        }
+        .brand { font-weight: bold; font-size: 1.2em; color: #3e2723; }
+        .btn-back {
+            background-color: #4e342e;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-back:hover { background-color: #5d4037; }
+
+        .knowledge-layout { display: flex; max-width: 1200px; margin: 40px auto; gap: 40px; padding: 0 20px; align-items: flex-start; flex-grow: 1; }
+        
+        /* Navigation Sidebar */
+        .chapter-nav { width: 250px; flex-shrink: 0; background: white; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow-y: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .chapter-nav h3 { margin-top: 0; border-bottom: 2px solid #8d6e63; padding-bottom: 10px; color: #4e342e; }
+        .chapter-link { display: block; padding: 10px 0; color: #666; text-decoration: none; border-bottom: 1px solid #eee; transition: all 0.2s; }
+        .chapter-link.sub-link { padding-left: 15px; font-size: 0.95em; border-left: 2px solid transparent; }
+        .chapter-link:hover { color: #8d6e63; padding-left: 5px; }
+        .chapter-link.active { font-weight: bold; color: #4e342e; border-left: 3px solid #8d6e63; padding-left: 10px; background: #fafafa; }
+        
+        /* Content Area */
+        .content-area { flex-grow: 1; background: white; padding: 40px; border-radius: 8px; border: 1px solid #e0e0e0; line-height: 1.8; color: #333; min-width: 0; }
+        .content-section { margin-bottom: 60px; scroll-margin-top: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 40px; }
+        .content-section:last-child { border-bottom: none; }
+        
+        /* Typografie */
+        h1.page-title { font-size: 2.5em; color: #3e2723; margin-top: 0; }
+        h2 { color: #5d4037; border-left: 5px solid #8d6e63; padding-left: 15px; margin-top: 0; margin-bottom: 20px; }
+        h3 { color: #6d4c41; margin-top: 30px; font-size: 1.3em; border-bottom: 1px solid #eee; padding-bottom: 8px;}
+        p { margin-bottom: 20px; font-size: 1.05em; }
+        .lead { font-size: 1.2em; color: #555; }
+        
+        /* Bilder */
+        .content-img { width: 100%; height: auto; border-radius: 4px; margin-bottom: 10px; border: 1px solid #e0e0e0; cursor: zoom-in; transition: transform 0.2s ease; display: block; }
+        .content-img:hover { transform: scale(1.02); }
+        .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+        
+        /* Boxen & Karten */
+        .dry-box { background: #efebe9; border-left: 5px solid #8d6e63; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .dry-box h4 { margin-top: 0; color: #5d4037; }
+        
+        .history-box { background: #e3f2fd; border-left: 5px solid #2196f3; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .history-box h4 { margin-top: 0; color: #1565c0; }
+
+        /* Karten Grid */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
+        .spec-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: transform 0.2s; display: flex; flex-direction: column; }
+        .spec-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .spec-card-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid #eee; cursor: zoom-in; }
+        .spec-card-body { padding: 15px; flex-grow: 1; }
+        .spec-card-title { font-weight: bold; font-size: 1.1em; color: #3e2723; margin-bottom: 5px; }
+        .spec-card-desc { font-size: 0.9em; color: #555; }
+        .spec-badge { display: inline-block; font-size: 0.75em; background: #eee; padding: 2px 6px; border-radius: 4px; margin-bottom: 8px; color: #666; }
+
+        @media (max-width: 800px) {
+            .knowledge-layout { flex-direction: column; }
+            .chapter-nav { width: 100%; position: static; margin-bottom: 20px; max-height: none;}
+            .header { flex-direction: column; gap: 10px;}
+        }
+        
+        /* Lightbox */
+        #image-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); align-items: center; justify-content: center; cursor: zoom-out; opacity: 0; transition: opacity 0.3s ease; padding: 20px; box-sizing: border-box; }
+        #image-modal.show { display: flex; opacity: 1; }
+        #modal-img { max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 0 20px rgba(0,0,0,0.5); border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <a href="../baender.html" class="btn-back">← Zurück</a>
+            <div class="brand">Wissensbibliothek</div>
+        </div>
+
+        <div class="knowledge-layout">
+            <nav class="chapter-nav">
+                <h3>Inhalt</h3>
+                <a href="#intro" class="chapter-link active">Einleitung</a>
+                <a href="#knaecke" class="chapter-link">1. Knäckebrot</a>
+                <a href="#zwieback" class="chapter-link">2. Der Doppelback</a>
+                <a href="#hardtack" class="chapter-link">3. Schiffszwieback</a>
+                <a href="#matze" class="chapter-link">4. Matze & Religion</a>
+                <a href="#galerie" class="chapter-link">5. Galerie</a>
+            </nav>
+
+            <main class="content-area">
+                <section id="intro" class="content-section">
+                    <h1 class="page-title">Hart & Trocken: Brot für die Ewigkeit</h1>
+                    <p class="lead">Der größte Feind des Brotes ist Schimmel. Schimmel braucht Wasser. Entzieht man dem Brot das Wasser, hält es jahrelang. Diese Technik war die Basis für Seefahrt, Kriege und harte Winter.</p>
+                    <img src="../assets/image/baender/dry_header.jpg" class="content-img" alt="Verschiedene Sorten Knäckebrot und Zwieback" onerror="this.style.display='none'">
+                </section>
+
+                <section id="knaecke" class="content-section">
+                    <h2>1. Knäckebrot: Das Loch-Prinzip</h2>
+                    <p>In Skandinavien wurde Roggenbrot sehr dünn ausgerollt und kurz, aber heiß gebacken. Damit der Teig beim Backen keine großen Blasen wirft und gleichmäßig trocknet, wird er mit einer Igelwalze perforiert.</p>
+                    <div class="dry-box">
+                        <h4>Die Loch-Stange</h4>
+                        <p>Traditionelles Knäcke hat ein großes Loch in der Mitte. Warum? Damit man die runden Scheiben auf Stangen unter der Decke aufhängen konnte – sicher vor Ratten und gut belüftet.</p>
+                    </div>
+                </section>
+
+                <section id="zwieback" class="content-section">
+                    <h2>2. Zwieback: Zweimal gebacken</h2>
+                    <p>Der Name ist Programm: "Zwie-Back" (zwei mal).</p>
+                    <ol>
+                        <li><strong>Der Einback:</strong> Ein süßer Hefezopf wird ganz normal gebacken. Er ist noch weich.</li>
+                        <li><strong>Der Zwieback:</strong> Er wird in Scheiben geschnitten und nochmal langsam bei niedriger Hitze geröstet (gedarrt), bis absolut keine Feuchtigkeit mehr enthalten ist.</li>
+                    </ol>
+                    <p>Das Resultat ist extrem leicht verdaulich und lange haltbar (Krankenkost).</p>
+                </section>
+
+                <section id="hardtack" class="content-section">
+                    <h2>3. Schiffszwieback: Der Zahnbrecher</h2>
+                    <div class="history-box">
+                        <h4>Panis Nauticus (Hardtack)</h4>
+                        <p>Das Futter der Matrosen. Mehl, Wasser, Salz. Kein Triebmittel. Es wurde mehrfach gebacken, bis es so hart war wie ein Ziegelstein. Man musste es in Suppe oder Grog einweichen ("stippen"), um es überhaupt essen zu können, ohne sich die Zähne auszubeißen. Es hielt Jahre, war aber oft von Maden befallen.</p>
+                    </div>
+                </section>
+
+                <section id="matze" class="content-section">
+                    <h2>4. Matze: Das Brot der Eile</h2>
+                    <p>Beim Auszug aus Ägypten hatten die Israeliten keine Zeit, den Teig gehen zu lassen. Matze ist Mehl und Wasser, das innerhalb von exakt <strong>18 Minuten</strong> gemischt und gebacken sein muss, damit keine spontane Gärung einsetzt. Es ist das Symbol für Demut und Freiheit.</p>
+                </section>
+
+                <section id="galerie" class="content-section">
+                    <h2>5. Galerie der Dauerbackwaren (12 Varianten)</h2>
+                    <div id="container-dry" class="card-grid"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div id="image-modal"><img id="modal-img" src=""></div>
+
+    <script>
+        const IMG_PATH = '../assets/image/baender/';
+        
+        // --- DATA: 12 Varianten ---
+        const DATA = [
+            // Klassiker
+            { name: "Knäckebrot", origin: "SE", desc: "Roggenvollkorn, dünn, perforiert. In Schweden oft als riesige Räder mit Loch in der Mitte gelagert.", img: "dry_knaecke.jpg" },
+            { name: "Zwieback", origin: "DE", desc: "Milde, süßliche Scheiben. Zweimal gebacken. Leicht verdaulich, klassische Schonkost.", img: "dry_zwieback.jpg" },
+            { name: "Matze", origin: "IL", desc: "Ungesäuertes, flaches Brot. Sieht aus wie ein großer, blasser Cracker. Wird zu Pessach gegessen.", img: "dry_matze.jpg" },
+            
+            // Italienische Schule
+            { name: "Cantuccini", origin: "IT (Toskana)", desc: "Harte Mandelkekse. Werden als Laib gebacken, geschnitten und nochmal getrocknet. Zum Tunken in Vin Santo.", img: "dry_cantuccini.jpg" },
+            { name: "Schüttelbrot", origin: "IT (Südtirol)", desc: "Knuspriges Roggen-Fladenbrot mit Fenchel und Kümmel. Wird vor dem Backen auf einem Brett geschüttelt, damit es flach wird.", img: "dry_schuettel.jpg" },
+            { name: "Grissini", origin: "IT (Turin)", desc: "Bleistiftdünne Brotstangen. Werden so lange gebacken, bis sie durch und durch kross sind (keine weiche Krume mehr).", img: "dry_grissini.jpg" },
+            { name: "Taralli", origin: "IT (Apulien)", desc: "Kleine Kringel mit Olivenöl und Weißwein. Werden erst gekocht (wie Bagels), dann kross gebacken. Mürbe und salzig.", img: "dry_taralli.jpg" },
+            { name: "Friselle", origin: "IT (Apulien)", desc: "Zweimal gebackene Hartweizen-Kringel. Steinhart. Müssen kurz in Wasser getaucht werden, dann mit Tomaten & Öl belegt.", img: "dry_friselle.jpg" },
+
+            // International & Historisch
+            { name: "Schiffszwieback", origin: "Historisch", desc: "Hardtack. Extrem hart, nur Mehl und Wasser. Hielt auf Seereisen ewig, musste aber eingeweicht werden.", img: "dry_hardtack.jpg" },
+            { name: "Brotchips", origin: "Modern", desc: "Dünn geschnittenes, gewürztes und geröstetes Brot (oft Baguette oder Sauerteig). Recycling von Altbrot.", img: "dry_brotchips.jpg" },
+            { name: "Rusks", origin: "ZA (Südafrika)", desc: "Klobige, harte Klötze aus Buttermilchteig. Werden traditionell in Kaffee oder Tee getunkt ('Dunking').", img: "dry_rusks.jpg" },
+            { name: "Filo Cracker", origin: "GR / TR", desc: "Hauchdünne Lagen Filoteig, mit Öl bestrichen und gebacken, bis sie splittern wie Glas.", img: "dry_filocracker.jpg" }
+        ];
+
+        // --- RENDER LOGIC ---
+        (function() {
+            // Navigation Spy
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.chapter-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => { if (scrollY >= section.offsetTop - 250) current = section.getAttribute('id'); });
+                if (scrollY < 100) current = 'intro';
+                navLinks.forEach(link => { link.classList.remove('active'); if (link.getAttribute('href').includes(current)) link.classList.add('active'); });
+            });
+
+            // Render Cards
+            const container = document.getElementById('container-dry');
+            DATA.forEach(row => {
+                let imageHtml = `<div style="height:180px; background:#eee; color:#ccc; display:flex; align-items:center; justify-content:center;">Kein Bild</div>`;
+                if(row.img) {
+                    imageHtml = `<img src="${IMG_PATH}${row.img}" class="spec-card-img" alt="${row.name}" onerror="this.outerHTML='<div style=\'height:180px; background:#eee; color:#ccc; display:flex; align-items:center; justify-content:center;\'>Bild fehlt</div>'">`;
+                }
+                const cardHtml = `
+                    <div class="spec-card">
+                        ${imageHtml}
+                        <div class="spec-card-body">
+                            <span class="spec-badge">${row.origin}</span>
+                            <div class="spec-card-title">${row.name}</div>
+                            <div class="spec-card-desc">${row.desc}</div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        })();
+
+        // Lightbox
+        document.addEventListener('DOMContentLoaded', () => {
+             const modal = document.getElementById('image-modal'); 
+             const modalImg = document.getElementById('modal-img');
+             
+             function openModal(imgSrc) { 
+                 if (!imgSrc) return; 
+                 modalImg.src = imgSrc; 
+                 modal.classList.add('show'); 
+             }
+             
+             modal.addEventListener('click', () => { 
+                 modal.classList.remove('show'); 
+                 setTimeout(() => modalImg.src = '', 300); 
+             });
+             
+             document.addEventListener('click', function(e) { 
+                 if (e.target.classList.contains('content-img') || e.target.classList.contains('spec-card-img')) { 
+                     openModal(e.target.src); 
+                 } 
+             });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+Das ist ein sehr ambitionierter und guter Plan, der die Bibliothek von einer reinen "Lese-Sammlung" zu einem echten interaktiven Werkzeug macht. Besonders die Idee der gestaffelten Rezepte (Grundrezept -> Variante -> Gericht) ist exzellent und spiegelt wider, wie man das Kochen tatsächlich lernt.
+
+Aber: **Wir müssen priorisieren.**
+
+Ein Haus baut man nicht auf einem wackeligen Fundament. Wenn wir jetzt anfangen, komplexe neue Funktionen (Modals, gestaffelte Rezepte) einzubauen, während die Basis-Links und Bilder aufgrund der letzten Ordner-Verschiebung nicht funktionieren, werden wir im Chaos enden.
+
+Daher ist mein dringender Rat: **Erst die Pflicht (Pfad-Korrektur), dann die Kür (Konzept-Erweiterung).**
+
+Hier ist der Fahrplan, wie wir das angehen sollten, inklusive des von dir gewünschten Konzept-Blocks.
+
+---
+
+### Phase 1: Das Fundament stabilisieren (Dringend)
+
+Bevor wir *irgendetwas* Neues bauen, muss der aktuelle Stand (die neue Ordnerstruktur mit `/baender/` und `/assets/image/baender/`) zu 100% funktionieren.
+
+**Das Problem mit dem Zoom:**
+Dass der Zoom in den "Highlight-Boxen" nicht mehr funktioniert, liegt mit ziemlicher Sicherheit daran, dass die Pfade zu den Bildern (`src="..."`) in den HTML-Dateien noch falsch sind. Das JavaScript, das für den Zoom-Effekt (Lightbox) zuständig ist, sucht nach einem Bild, findet aber unter dem alten Pfad keines mehr. Sobald der Pfad korrigiert ist und das Bild wieder normal geladen wird, sollte auch der Zoom wieder gehen.
+
+**Die Aufgabe für Phase 1:**
+Du (oder wir zusammen) musst jetzt **jede einzelne HTML-Datei** im neuen Ordner `/baender/` öffnen und die Pfade anpassen.
+
+1. **CSS reparieren:** `href="./assets/css/styles.css"` ändern zu `href="../assets/css/styles.css"`
+2. **Navigation reparieren:** Links zur Startseite auf `../index.html` ändern.
+3. **Bilder reparieren (Der wichtigste Teil):**
+* Alle `src="./assets/image/..."` müssen geändert werden.
+* Wenn es ein Cover-Bild ist, das wir verschoben haben: `src="../assets/image/baender/DATEINAME.jpg"`
+* Wenn es ein allgemeines Layout-Bild ist (das nicht verschoben wurde): `src="../assets/image/DATEINAME.jpg"`
+
+
+
+*Erst wenn alle Seiten wieder perfekt aussehen und der Zoom funktioniert, starten wir Phase 2.*
+
+---
+
+### Phase 2: Das Erweiterungskonzept (Der Textblock)
+
+Hier ist das Konzept, wie wir deine Ideen umsetzen können. Ich habe deine Wünsche analysiert und einen Weg gefunden, der technisch sauber ist und für den Nutzer intuitiv bleibt.
+
+#### Konzeptpapier: Interaktive Bibliothek & Rezept-Struktur
+
+**Status Quo:** Die Bibliothek ist aktuell eine Sammlung linearer "Theorie-Kapitel".
+
+**Ziel:** Die Bibliothek soll interaktiver werden. Der Nutzer soll auf der Übersicht (`baender.html`) mehr Details erhalten, und in den Praxis-Bänden (z.B. Tortillas) eine klare Struktur vom Grundrezept zur Anwendung finden.
+
+**Strategie & Umsetzung:**
+
+**1. Die Erweiterung der Kacheln auf der Übersicht (`baender.html`)**
+
+* **Analyse deines Wunsches:** Du möchtest beim Klick auf die Kachel (nicht das Bild) eine "Zwischen-Infobox" (Modal) mit Details, bevor man zur Seite geht.
+* **Empfehlung (UX-Sicht):** Davon rate ich ab. Ein Klick auf eine Kachel sollte im Web immer direkt zum Ziel führen. Ein "Zwischenschritt" wirkt oft störend, besonders auf dem Handy ("Warum muss ich zweimal klicken?").
+* **Alternative Lösung:** Wir verbessern die Zielseiten selbst. Anstatt einer Zwischenbox bauen wir auf der jeweiligen Band-Seite (z.B. `mehle.html`) ganz oben einen prominenten "Quick-Facts"-Bereich ein, der genau diese detaillierten Erklärungen liefert, *bevor* der lange Fließtext beginnt. Das ist sauberer und direkter.
+
+**2. Die gestaffelte Rezept-Struktur (Das Herzstück)**
+
+* **Analyse deines Wunsches:** Grundrezept -> Varianten -> Gerichte. Das ist didaktisch perfekt.
+* **Technische Umsetzung (Neue Fenster vs. Einbettung):**
+* *Neue Fenster/Tabs:* Schlecht für die Nutzererfahrung. Man verliert den Kontext, auf dem Handy ist das navigieren zwischen Tabs mühsam.
+* *HTML-in-HTML (iFrames):* Technisch veraltet und oft problematisch (SEO, Darstellung auf mobilen Geräten).
+
+
+* **Die Lösung: Das "Rezept-Overlay" (Modals) auf der Hauptseite.**
+
+**Wie das "Rezept-Overlay" funktioniert (Am Beispiel "Band 9: Tortillas"):**
+
+Die Seite `tortillas.html` bleibt die "Mutterseite" mit der Theorie (Geschichte, Nixtamalisation). Aber wir strukturieren sie neu:
+
+* **Sektion A: Die Theorie** (Der bestehende Text).
+* **Sektion B: Die Grundrezepte (Master Class)**
+* Hier sind zwei prominente Kacheln oder Buttons:
+1. "Grundrezept: Echte Mais-Tortillas (Nixtamal)"
+2. "Grundrezept: Weizen-Tortillas (Sonora-Style)"
+
+
+* *Der Clou:* Ein Klick darauf öffnet keine neue Seite, sondern ein bildschirmfüllendes **Overlay (Modal)** über der aktuellen Seite. In diesem Overlay ist das Rezept Schritt für Schritt, fokussiert, ohne Ablenkung. Mit einem "X" schließt man es und ist wieder auf der Theorie-Seite.
+
+
+* **Sektion C: Die Anwendungen (Gerichte)**
+* Darunter eine Galerie von Gerichten: "Tacos al Pastor", "Quesadillas", "Enchiladas".
+* Ein Klick darauf öffnet ebenfalls ein Overlay. Dieses Rezept verweist dann auf das Grundrezept ("Nehmen Sie 4 Weizen-Tortillas (siehe Grundrezept)...") und erklärt die Füllung und Fertigstellung.
+
+
+
+**Vorteile dieses Ansatzes:**
+
+1. **Der Kontext bleibt erhalten:** Der Nutzer verlässt nie die "Tortilla-Welt".
+2. **Fokus:** Das Rezept-Overlay blendet alles andere aus – perfekt zum Kochen in der Küche.
+3. **Saubere Technik:** Es ist alles eine HTML-Seite, nur mit modernem CSS/JS für die Overlays.
+
+**Nächste Schritte für Phase 2:**
+Nachdem Phase 1 (Pfade reparieren) abgeschlossen ist, beginnen wir mit einem Pilot-Band (z.B. Tortillas) und bauen die neue Struktur mit den Overlays dort exemplarisch ein.

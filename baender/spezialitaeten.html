@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – Globale Spezialitäten</title>
+    
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <script src="../assets/js/util.js"></script>
+    
+    <style>
+        /* --- Layout & Basis --- */
+        body { background-color: #fcfbf9; color: #333; font-family: sans-serif; margin: 0; padding: 0; }
+        .page { min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* HEADER */
+        .header { 
+            padding: 20px 40px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            background: #fff;
+        }
+        .brand { font-weight: bold; font-size: 1.2em; color: #3e2723; }
+        .btn-back {
+            background-color: #4e342e;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-back:hover { background-color: #5d4037; }
+
+        .knowledge-layout { display: flex; max-width: 1200px; margin: 40px auto; gap: 40px; padding: 0 20px; align-items: flex-start; flex-grow: 1; }
+        
+        /* Navigation Sidebar */
+        .chapter-nav { width: 250px; flex-shrink: 0; background: white; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow-y: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .chapter-nav h3 { margin-top: 0; border-bottom: 2px solid #8d6e63; padding-bottom: 10px; color: #4e342e; }
+        .chapter-link { display: block; padding: 10px 0; color: #666; text-decoration: none; border-bottom: 1px solid #eee; transition: all 0.2s; }
+        .chapter-link:hover { color: #8d6e63; padding-left: 5px; }
+        .chapter-link.active { font-weight: bold; color: #4e342e; border-left: 3px solid #8d6e63; padding-left: 10px; background: #fafafa; }
+        
+        /* Content Area */
+        .content-area { flex-grow: 1; background: white; padding: 40px; border-radius: 8px; border: 1px solid #e0e0e0; line-height: 1.8; color: #333; min-width: 0; }
+        .content-section { margin-bottom: 60px; scroll-margin-top: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 40px; }
+        .content-section:last-child { border-bottom: none; }
+        
+        /* Typografie */
+        h1.page-title { font-size: 2.5em; color: #3e2723; margin-top: 0; }
+        h2 { color: #5d4037; border-left: 5px solid #8d6e63; padding-left: 15px; margin-top: 0; margin-bottom: 20px; }
+        h3 { color: #6d4c41; margin-top: 30px; font-size: 1.3em; border-bottom: 1px solid #eee; padding-bottom: 8px;}
+        p { margin-bottom: 20px; font-size: 1.05em; }
+        .lead { font-size: 1.2em; color: #555; }
+        
+        /* Bilder */
+        .content-img { width: 100%; height: auto; border-radius: 4px; margin-bottom: 10px; border: 1px solid #e0e0e0; cursor: zoom-in; transition: transform 0.2s ease; display: block; }
+        .content-img:hover { transform: scale(1.02); }
+        .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+        
+        /* Boxen & Karten */
+        .trivia-box { margin-top: 12px; padding: 10px 12px; background-color: #fff9c4; border-left: 4px solid #fbc02d; color: #5d4037; font-size: 0.9em; border-radius: 0 4px 4px 0; }
+        .tech-box { background: #e8eaf6; border-left: 5px solid #3f51b5; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .tech-box h4 { margin-top: 0; color: #303f9f; }
+
+        /* Karten Grid */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; margin-top: 30px; }
+        .spec-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: transform 0.2s; display: flex; flex-direction: column; }
+        .spec-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .spec-card-img { width: 100%; height: 160px; object-fit: cover; border-bottom: 1px solid #eee; cursor: zoom-in; }
+        .spec-card-body { padding: 15px; flex-grow: 1; }
+        .spec-card-title { font-weight: bold; font-size: 1.1em; color: #3e2723; margin-bottom: 5px; }
+        .spec-card-desc { font-size: 0.85em; color: #555; line-height: 1.5; }
+        .spec-badge { display: inline-block; font-size: 0.7em; background: #eee; padding: 2px 6px; border-radius: 4px; margin-bottom: 8px; color: #666; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;}
+
+        @media (max-width: 800px) {
+            .knowledge-layout { flex-direction: column; }
+            .chapter-nav { width: 100%; position: static; margin-bottom: 20px; max-height: none;}
+            .img-grid { grid-template-columns: 1fr; }
+            .header { flex-direction: column; gap: 10px;}
+        }
+        
+        /* Lightbox */
+        #image-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); align-items: center; justify-content: center; cursor: zoom-out; opacity: 0; transition: opacity 0.3s ease; padding: 20px; box-sizing: border-box; }
+        #image-modal.show { display: flex; opacity: 1; }
+        #modal-img { max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 0 20px rgba(0,0,0,0.5); border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <a href="../baender.html" class="btn-back">← Zurück</a>
+            <div class="brand">Wissensbibliothek</div>
+        </div>
+
+        <div class="knowledge-layout">
+            <nav class="chapter-nav">
+                <h3>Inhalt</h3>
+                <a href="#intro" class="chapter-link active">Einleitung</a>
+                <a href="#fufu" class="chapter-link">1. Afrika: Swallows & Grieß</a>
+                <a href="#indien" class="chapter-link">2. Indien: Linsen-Ferment</a>
+                <a href="#blatt" class="chapter-link">3. Amerika: Mais im Blatt</a>
+                <a href="#mochi" class="chapter-link">4. Japan: Geschlagener Reis</a>
+                <a href="#galerie" class="chapter-link">5. Die Weltkarte (Galerie)</a>
+            </nav>
+
+            <main class="content-area">
+                <section id="intro" class="content-section">
+                    <h1 class="page-title">Globale Horizonte</h1>
+                    <p class="lead">Wir verlassen den Backofen. In vielen Kulturen wird Stärke gestampft, im Blatt gedämpft, fermentiert oder zu Grieß gerieben. Ein Blick über den Tellerrand.</p>
+                    <img src="../assets/image/baender/global_intro.jpg" class="content-img" alt="Vielfalt globaler Teiggerichte" onerror="this.style.display='none'">
+                </section>
+
+                <section id="fufu" class="content-section">
+                    <h2>1. Afrika & Maghreb: Stampfen & Dämpfen</h2>
+                    <p>Zwei riesige Regionen mit völlig unterschiedlichen Techniken.</p>
+                    
+                    <h3>West- & Zentralafrika: "Swallows"</h3>
+                    <p>Hier wird gekochte Stärke (Maniok, Yamswurzel, Kochbanane) in riesigen Mörsern zu einer zähen, elastischen Masse gestampft. Man formt Kugeln und schluckt sie ("Swallow") mit Suppe, ohne zu kauen.</p>
+                    
+                    <h3>Nordafrika: Couscous</h3>
+                    <p>Couscous ist keine Beilage wie Reis, sondern eine Kunstform. Hartweizengrieß wird mit Wasser zu winzigen Kügelchen gerieben ("gerollt") und dann – ganz wichtig – <strong>mehrfach über Brühe gedämpft</strong>. So bleibt er locker und aromatisch.</p>
+                </section>
+
+                <section id="indien" class="content-section">
+                    <h2>2. Südindien: Die Linsen-Revolution</h2>
+                    <p>In Europa nutzen wir Hefe oder Sauerteig für Getreide. In Südindien fermentiert man <strong>Hülsenfrüchte</strong>.</p>
+                    <div class="tech-box">
+                        <h4>Idli & Dosa</h4>
+                        <p>Reis und Urad-Dal (schwarze Linsen) werden eingeweicht und nass gemahlen. Wilde Hefen in der Luft lassen den Brei gären.
+                        <br><strong>Idli:</strong> Der Teig wird in Formen gedämpft -> weiche, weiße Küchlein.
+                        <br><strong>Dosa:</strong> Der Teig wird hauchdünn gebraten -> knusprige Riesen-Crêpes.</p>
+                    </div>
+                </section>
+
+                <section id="blatt" class="content-section">
+                    <h2>3. Lateinamerika: Garen im Blatt</h2>
+                    <p>Vor der Erfindung von Töpfen nutzte man das natürlichste Kochgeschirr: Blätter. Sie schützen den Teig vor Wasser und geben Aroma ab.</p>
+                    <ul>
+                        <li><strong>Maisblatt (Tamales):</strong> Eher neutraler Geschmack, lässt Dampf gut durch.</li>
+                        <li><strong>Bananenblatt (Hallacas/Suman):</strong> Gibt ein tee-artiges, wachsiges Aroma an den Teig ab und glänzt.</li>
+                    </ul>
+                </section>
+
+                <section id="mochi" class="content-section">
+                    <h2>4. Japan: Mochi & die "Q"-Textur</h2>
+                    <p>In Asien liebt man eine Textur, für die wir im Deutschen kein Wort haben: "Q" oder "Chewy" – elastisch, gummibärchen-artig, bissfest.</p>
+                    <p><strong>Mochi</strong> ist das Extrembeispiel. Spezieller Klebreis wird gedämpft und dann in einem hölzernen Mörser (Usu) mit schweren Hämmern so lange geschlagen, bis die Reiskörner ihre Struktur verlieren und zu einer einzigen, extrem zähen Masse verschmelzen.</p>
+                </section>
+
+                <section id="galerie" class="content-section">
+                    <h2>5. Die Weltkarte der Spezialitäten (15 Varianten)</h2>
+                    <div id="container-global" class="card-grid"></div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <div id="image-modal"><img id="modal-img" src=""></div>
+
+    <script>
+        const IMG_PATH = '../assets/image/baender/';
+
+        // --- DATA: 15 Varianten ---
+        const GLOBAL_STYLES = [
+            // Afrika
+            { name: "Fufu", region: "Westafrika", desc: "Gestampfter Maniok und Kochbanane. Zäh, neutral, der perfekte Begleiter für scharfe Erdnusssuppen. Wird nicht gekaut!", img: "global_fufu.jpg" },
+            { name: "Couscous", region: "Maghreb", desc: "Handgerollter Hartweizengrieß. Wird in einer 'Couscoussier' über Dampf gegart. Locker und duftend.", img: "global_couscous.jpg" },
+            { name: "Injera", region: "Äthiopien", desc: "Fermentierter Teff-Teig. Weich, säuerlich, voller Löcher. Dient als essbarer Teller für Wats (Eintöpfe).", img: "fladen_injera.jpg" }, // Reuse image
+            { name: "Mandazi", region: "Ostafrika", desc: "Afrikanischer Donut. Ein frittiertes Hefegebäck mit Kardamom und Kokosmilch. Weniger süß als Donuts.", img: "global_mandazi.jpg" },
+
+            // Indien
+            { name: "Idli", region: "Südindien", desc: "Gedämpfte Linsen-Reis-Küchlein. Durch Fermentation locker und leicht säuerlich. Das gesündeste Frühstück Indiens.", img: "global_idli.jpg" },
+            { name: "Dosa", region: "Südindien", desc: "Hauchdünner, fermentierter Pfannkuchen aus Reis und Linsen. Riesig groß und knusprig.", img: "global_dosa.jpg" },
+            { name: "Puri", region: "Indien", desc: "Ungesäuertes Weizenbrot, das im heißen Öl frittiert wird und sich ballonartig aufbläht.", img: "global_puri.jpg" },
+
+            // Lateinamerika
+            { name: "Tamales", region: "Mexiko", desc: "Gefüllter Maisteig (Masa), im Maisblatt gedämpft. Ein uraltes Streetfood der Azteken.", img: "global_tamales.jpg" },
+            { name: "Arepas", region: "Venezuela/Kolumbien", desc: "Maisfladen, außen knusprig, innen weich. Aufgeschnitten und gefüllt (z.B. mit Fleisch, Bohnen, Käse).", img: "global_arepas.jpg" },
+            { name: "Pão de Queijo", region: "Brasilien", desc: "Käsebällchen aus Maniokstärke. Glutenfrei und innen herrlich zäh ('chewy').", img: "spec_pao_de_queijo.jpg" },
+            { name: "Tapioka", region: "Brasilien", desc: "Weißer, körniger Fladen aus hydrierter Maniokstärke. Wird in der Pfanne ohne Fett gebacken und klappt zusammen wie ein Crêpe.", img: "global_tapioka.jpg" },
+
+            // Asien & Rest
+            { name: "Mochi", region: "Japan", desc: "Geschlagener Klebreis. Süß gefüllt (Daifuku) oder herzhaft gegrillt. Warnung: Sehr zäh!", img: "global_mochi.jpg" },
+            { name: "Zongzi", region: "China", desc: "Klebreis-Pyramiden, gefüllt mit Fleisch oder süßen Bohnen, fest in Bambusblätter gewickelt und stundenlang gekocht.", img: "global_zongzi.jpg" },
+            { name: "Suman", region: "Philippinen", desc: "Klebreisriegel, in Bananenblättern gedämpft. Oft mit Kokosmilch und Zucker gekocht. Ein süßer Snack.", img: "global_suman.jpg" },
+            { name: "Socca / Farinata", region: "Frankreich/Italien", desc: "Pfannkuchen aus Kichererbsenmehl. Natürlich glutenfrei, nussig und knusprig. Wird im Holzofen gebacken.", img: "global_socca.jpg" },
+            { name: "Bannock", region: "Nordamerika (Indigen)", desc: "Frittiertes Fladenbrot der First Nations. Einfach, nahrhaft, wärmend. Symbol der indigenen Küche.", img: "global_bannock.jpg" }
+        ];
+
+        // --- RENDER LOGIC ---
+        (function() {
+            // Navigation Spy
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.chapter-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => { if (scrollY >= section.offsetTop - 250) current = section.getAttribute('id'); });
+                if (scrollY < 100) current = 'intro';
+                navLinks.forEach(link => { link.classList.remove('active'); if (link.getAttribute('href').includes(current)) link.classList.add('active'); });
+            });
+
+            // Render Cards
+            const container = document.getElementById('container-global');
+            GLOBAL_STYLES.forEach(row => {
+                let imageHtml = `<div style="height:160px; background:#f5f5f5; color:#ccc; display:flex; align-items:center; justify-content:center; font-size:0.8em;">Kein Bild</div>`;
+                if(row.img) {
+                    imageHtml = `<img src="${IMG_PATH}${row.img}" class="spec-card-img" alt="${row.name}" onerror="this.outerHTML='<div style=\'height:160px; background:#eee; color:#ccc; display:flex; align-items:center; justify-content:center;\'>Bild fehlt</div>'">`;
+                }
+                const cardHtml = `
+                    <div class="spec-card">
+                        ${imageHtml}
+                        <div class="spec-card-body">
+                            <span class="spec-badge">${row.region}</span>
+                            <div class="spec-card-title">${row.name}</div>
+                            <div class="spec-card-desc">${row.desc}</div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        })();
+
+        // Lightbox
+        document.addEventListener('DOMContentLoaded', () => {
+             const modal = document.getElementById('image-modal'); 
+             const modalImg = document.getElementById('modal-img');
+             
+             function openModal(imgSrc) { 
+                 if (!imgSrc) return; 
+                 modalImg.src = imgSrc; 
+                 modal.classList.add('show'); 
+             }
+             
+             modal.addEventListener('click', () => { 
+                 modal.classList.remove('show'); 
+                 setTimeout(() => modalImg.src = '', 300); 
+             });
+             
+             document.addEventListener('click', function(e) { 
+                 if (e.target.classList.contains('content-img') || e.target.classList.contains('spec-card-img')) { 
+                     openModal(e.target.src); 
+                 } 
+             });
+        });
+    </script>
+</body>
+</html>

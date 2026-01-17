@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – Pfannkuchen & Omeletten: Die Kunst der Pfanne</title>
+    
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <script src="../assets/js/util.js"></script>
+    
+    <style>
+        /* --- Layout & Basis --- */
+        body { background-color: #fcfbf9; color: #333; font-family: sans-serif; margin: 0; padding: 0; }
+        .page { min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* HEADER */
+        .header { 
+            padding: 20px 40px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            background: #fff;
+        }
+        .brand { font-weight: bold; font-size: 1.2em; color: #3e2723; }
+        .btn-back {
+            background-color: #4e342e;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-back:hover { background-color: #5d4037; }
+
+        .knowledge-layout { display: flex; max-width: 1200px; margin: 40px auto; gap: 40px; padding: 0 20px; align-items: flex-start; flex-grow: 1; }
+        
+        /* Navigation Sidebar */
+        .chapter-nav { width: 250px; flex-shrink: 0; background: white; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow-y: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .chapter-nav h3 { margin-top: 0; border-bottom: 2px solid #8d6e63; padding-bottom: 10px; color: #4e342e; }
+        .chapter-link { display: block; padding: 10px 0; color: #666; text-decoration: none; border-bottom: 1px solid #eee; transition: all 0.2s; }
+        .chapter-link.sub-link { padding-left: 15px; font-size: 0.95em; border-left: 2px solid transparent; }
+        .chapter-link:hover { color: #8d6e63; padding-left: 5px; }
+        .chapter-link.active { font-weight: bold; color: #4e342e; border-left: 3px solid #8d6e63; padding-left: 10px; background: #fafafa; }
+        
+        /* Content Area */
+        .content-area { flex-grow: 1; background: white; padding: 40px; border-radius: 8px; border: 1px solid #e0e0e0; line-height: 1.8; color: #333; min-width: 0; }
+        .content-section { margin-bottom: 60px; scroll-margin-top: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 40px; }
+        .content-section:last-child { border-bottom: none; }
+        
+        /* Typografie */
+        h1.page-title { font-size: 2.5em; color: #3e2723; margin-top: 0; }
+        h2 { color: #5d4037; border-left: 5px solid #8d6e63; padding-left: 15px; margin-top: 0; margin-bottom: 20px; }
+        h3 { color: #6d4c41; margin-top: 30px; font-size: 1.3em; border-bottom: 1px solid #eee; padding-bottom: 8px;}
+        p { margin-bottom: 20px; font-size: 1.05em; }
+        .lead { font-size: 1.2em; color: #555; }
+        
+        /* Bilder */
+        .content-img { width: 100%; height: auto; border-radius: 4px; margin-bottom: 10px; border: 1px solid #e0e0e0; cursor: zoom-in; transition: transform 0.2s ease; display: block; }
+        .content-img:hover { transform: scale(1.02); }
+        .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+        
+        /* Boxen & Karten */
+        .chem-box { background: #e3f2fd; border-left: 5px solid #2196f3; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .chem-box h4 { margin-top: 0; color: #1565c0; }
+        
+        .phys-box { background: #fff3e0; border-left: 5px solid #ff9800; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .phys-box h4 { margin-top: 0; color: #e65100; }
+
+        /* Karten Grid */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
+        .pan-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column; transition: transform 0.2s;}
+        .pan-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .pan-card-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid #eee; cursor: zoom-in; }
+        .pan-card-body { padding: 15px; flex-grow: 1; }
+        .pan-card-title { font-weight: bold; font-size: 1.1em; color: #3e2723; margin-bottom: 5px; }
+        .pan-card-desc { font-size: 0.9em; color: #555; }
+        .pan-badge { display: inline-block; font-size: 0.7em; background: #eee; padding: 2px 6px; border-radius: 4px; margin-bottom: 8px; color: #666; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;}
+
+        @media (max-width: 800px) { 
+            .knowledge-layout { flex-direction: column; } 
+            .chapter-nav { width: 100%; position: static; margin-bottom: 20px;} 
+            .card-grid { grid-template-columns: 1fr; } 
+            .header { flex-direction: column; gap: 10px;}
+        }
+        
+        /* Lightbox */
+        #image-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); align-items: center; justify-content: center; cursor: zoom-out; opacity: 0; transition: opacity 0.3s ease; padding: 20px; box-sizing: border-box; }
+        #image-modal.show { display: flex; opacity: 1; }
+        #modal-img { max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 0 20px rgba(0,0,0,0.5); border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <a href="../baender.html" class="btn-back">← Zurück</a>
+            <div class="brand">Wissensbibliothek</div>
+        </div>
+
+        <div class="knowledge-layout">
+            <nav class="chapter-nav">
+                <h3>Inhalt</h3>
+                <a href="#intro" class="chapter-link active">Einleitung</a>
+                <a href="#chemie" class="chapter-link">1. Die Chemie der Ruhe</a>
+                <a href="#hitze" class="chapter-link">2. Eisen vs. Teflon</a>
+                <a href="#arten" class="chapter-link">3. Dick vs. Dünn</a>
+                <a href="#galerie" class="chapter-link">4. Galerie</a>
+            </nav>
+
+            <main class="content-area">
+                <section id="intro" class="content-section">
+                    <h1 class="page-title">Pfannkuchen & Omeletten</h1>
+                    <p class="lead">Ob Mehl und Milch (Pfannkuchen) oder nur Ei (Omelett): Das Prinzip ist gleich. Eine Flüssigkeit stockt in einer heißen Pfanne. Die Kunst liegt in der Temperaturkontrolle und der Physik des Teigs.</p>
+                    <img src="../assets/image/baender/pfannkuchen_header.jpg" class="content-img" alt="Stapel fluffiger Pancakes mit Sirup" onerror="this.style.display='none'">
+                </section>
+
+                <section id="chemie" class="content-section">
+                    <h2>1. Die Chemie der Ruhe (Quellung)</h2>
+                    <p>Warum steht in jedem Crêpes-Rezept: "Teig 30 Min. ruhen lassen"? Es ist kein Mythos, sondern physikalische Notwendigkeit.</p>
+                    <div class="chem-box">
+                        <h4>Stärke & Gluten</h4>
+                        <ol>
+                            <li><strong>Stärke-Quellung:</strong> Das Mehl braucht Zeit, um die Flüssigkeit vollständig aufzusaugen (Hydratation).  Der Teig wird dicker und bindet besser, ohne dass man mehr Mehl braucht.</li>
+                            <li><strong>Gluten-Entspannung:</strong> Beim Rühren bildet sich Kleber (Gluten). Wäre er jetzt noch "gestresst" (elastisch), würde sich der Crêpe in der Pfanne zusammenziehen wie Gummi. Nach der Ruhe ist das Gluten entspannt – der Teig fließt zart.</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <section id="hitze" class="content-section">
+                    <h2>2. Eisen vs. Teflon: Die Maillard-Reaktion</h2>
+                    <p>Das Werkzeug bestimmt den Geschmack. Profis schwören auf Eisen.</p>
+                    <ul>
+                        <li><strong>Eisen / Gusseisen:</strong> Speichert Hitze extrem gut. Erlaubt hohe Temperaturen für eine starke <strong>Maillard-Reaktion</strong> (das typische braune, karamellisierte Muster). Perfekt für Crêpes und Omeletten.</li>
+                        <li><strong>Beschichtet (Teflon):</strong> Backt schonender. Ideal für dicke Pancakes, die innen durchgaren müssen, bevor sie außen verbrennen.</li>
+                    </ul>
+                </section>
+
+                <section id="arten" class="content-section">
+                    <h2>3. Dick vs. Dünn: Die Triebmittel</h2>
+                    <p>Wie kommt die Luft in den Teig? Es gibt drei Wege.</p>
+                    <div class="phys-box">
+                        <ul>
+                            <li><strong>Dampfdruck (Crêpes):</strong> Kein Triebmittel. Nur das Wasser im Teig verdampft. Ziel: Flach und rollbar.</li>
+                            <li><strong>Chemisch (Pancakes):</strong> Backpulver oder Natron reagieren in der Pfanne und bilden CO₂-Blasen. Das macht den Teig "kuchig" (cakey).</li>
+                            <li><strong>Physikalisch (Soufflé/Kaiserschmarrn):</strong> Eischnee. Luft wird mechanisch in Eiweiß geschlagen. Dehnt sich bei Hitze aus. Ergebnis: Wattig und leicht.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="galerie" class="content-section">
+                    <h2>4. Galerie der Pfanne (14 Varianten)</h2>
+                    <div id="container-pan" class="card-grid"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div id="image-modal"><img id="modal-img" src=""></div>
+
+    <script>
+        const IMG_PATH = '../assets/image/baender/';
+        
+        const DATA = [
+            // ALTE DATEINAMEN (Existierend)
+            { name: "Crêpes", origin: "FR", desc: "Hauchdünn, fast durchsichtig. Hoher Flüssigkeitsanteil. Wird mit dem Rechen (Rateau) verteilt. Klassiker: Crêpe Suzette.", img: "pancake_crepe.jpg" },
+            { name: "Palatschinken / Omelette", origin: "AT / CH", desc: "Etwas dicker als Crêpes, weich und elastisch. Klassisch gefüllt mit Marillenmarmelade und gerollt.", img: "pancake_swiss.jpg" },
+            { name: "Galette Bretonne", origin: "FR", desc: "Aus Buchweizenmehl (Sarrasin). Herzhaft, nussig, glutenfrei. Füllung 'Complète': Schinken, Käse, Spiegelei.", img: "pancake_galette.jpg" },
+            { name: "Flädle / Frittaten", origin: "DE / AT", desc: "Kalte, in Streifen geschnittene Pfannkuchen (ohne Zucker). Die perfekte Suppeneinlage.", img: "pancake_flaedle.jpg" },
+            { name: "American Pancake", origin: "USA", desc: "Klein, dick (ca. 1cm) durch Backpulver. Wird im Stapel (Stack) mit Ahornsirup und Butter serviert.", img: "pancake_american.jpg" },
+            { name: "Kaiserschmarrn", origin: "AT", desc: "Dicker Teig mit Eischnee, der in der Pfanne zerrupft und karamellisiert wird. Dazu: Zwetschgenröster.", img: "pancake_kaiserschmarrn.jpg" },
+            { name: "Blini", origin: "RU", desc: "Kleine Hefepfannkuchen aus Buchweizen- oder Weizenmehl. Klassisch mit saurer Sahne und Kaviar oder Lachs.", img: "pancake_blini.jpg" },
+            
+            // NEUE DATEINAMEN (Erweiterung)
+            { name: "Japanese Soufflé", origin: "JP", desc: "Extrem hoch und wackelig ('jiggly'). Besteht fast nur aus Eischnee, der sehr vorsichtig bei niedriger Hitze gegart wird.", img: "pan_souffle.jpg" },
+            { name: "Omelett (Klassisch)", origin: "FR", desc: "Nur Ei und Butter. Außen hellgelb (keine Bräunung!), innen cremig ('baveuse'). Wird zur Zigarre gerollt.", img: "pan_omelett.jpg" },
+            { name: "Tortilla Española", origin: "ES", desc: "Kartoffel-Omelett. In Öl confierte Kartoffelscheiben und Eier, zu einem dicken 'Kuchen' gebacken. Wird in Stücke geschnitten.", img: "pan_tortilla.jpg" },
+            { name: "Dutch Baby", origin: "DE / USA", desc: "Ofenpfannkuchen. Flüssiger Teig kommt in eine heiße Gusseisenpfanne und dann in den Ofen. Er 'poppt' an den Rändern hoch.", img: "pan_dutchbaby.jpg" },
+            { name: "Okonomiyaki", origin: "JP", desc: "Herzhafter Kohl-Pfannkuchen. Der Teig bindet geraspelten Kohl, Fleisch/Meeresfrüchte. Topping: Mayo & Katsuobushi.", img: "pan_okonomiyaki.jpg" },
+            { name: "Dosa", origin: "Indien", desc: "Hauchdünner, knuspriger Fladen aus fermentiertem Reis- und Linsenteig. Riesig groß.", img: "pan_dosa.jpg" },
+            { name: "Poffertjes", origin: "NL", desc: "Mini-Pfannkuchen aus Hefeteig und Buchweizen, in spezieller Muldenpfanne gebacken. Viel Butter & Puderzucker.", img: "pan_poffertjes.jpg" }
+        ];
+
+        // --- RENDER LOGIC ---
+        (function() {
+            // Navigation
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.chapter-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => { if (scrollY >= section.offsetTop - 250) current = section.getAttribute('id'); });
+                if (scrollY < 100) current = 'intro';
+                navLinks.forEach(link => { link.classList.remove('active'); if (link.getAttribute('href').includes(current)) link.classList.add('active'); });
+            });
+
+            // Grid
+            const container = document.getElementById('container-pan');
+            DATA.forEach(row => {
+                let imageHtml = `<div style="height:180px; background:#eee; color:#ccc; display:flex; align-items:center; justify-content:center;">Kein Bild</div>`;
+                if(row.img) {
+                    imageHtml = `<img src="${IMG_PATH}${row.img}" class="pan-card-img" alt="${row.name}" onerror="this.outerHTML='<div style=\'height:180px; background:#eee; color:#ccc; display:flex; align-items:center; justify-content:center;\'>Bild fehlt</div>'">`;
+                }
+                const cardHtml = `
+                    <div class="pan-card">
+                        ${imageHtml}
+                        <div class="pan-card-body">
+                            <span class="pan-badge">${row.origin}</span>
+                            <div class="pan-card-title">${row.name}</div>
+                            <div class="pan-card-desc">${row.desc}</div>
+                        </div>
+                    </div>`;
+                container.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        })();
+
+        // Lightbox
+        document.addEventListener('DOMContentLoaded', () => {
+             const modal = document.getElementById('image-modal'); 
+             const modalImg = document.getElementById('modal-img');
+             
+             function openModal(imgSrc) { 
+                 if (!imgSrc) return; 
+                 modalImg.src = imgSrc; 
+                 modal.classList.add('show'); 
+             }
+             
+             modal.addEventListener('click', () => { 
+                 modal.classList.remove('show'); 
+                 setTimeout(() => modalImg.src = '', 300); 
+             });
+             
+             document.addEventListener('click', function(e) { 
+                 if (e.target.classList.contains('content-img') || e.target.classList.contains('pan-card-img')) { 
+                     openModal(e.target.src); 
+                 } 
+             });
+        });
+    </script>
+</body>
+</html>

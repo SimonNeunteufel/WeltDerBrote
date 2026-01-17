@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – Die Technik: Handwerk & Rheologie</title>
+    
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <script src="../assets/js/util.js"></script>
+    
+    <style>
+        /* --- Layout & Basis --- */
+        body { background-color: #fcfbf9; color: #333; font-family: sans-serif; margin: 0; padding: 0; }
+        .page { min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* HEADER */
+        .header { 
+            padding: 20px 40px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            background: #fff;
+        }
+        .brand { font-weight: bold; font-size: 1.2em; color: #3e2723; }
+        .btn-back {
+            background-color: #4e342e;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-back:hover { background-color: #5d4037; }
+
+        .knowledge-layout { display: flex; max-width: 1200px; margin: 40px auto; gap: 40px; padding: 0 20px; align-items: flex-start; flex-grow: 1; }
+        
+        /* Navigation Sidebar */
+        .chapter-nav { width: 250px; flex-shrink: 0; background: white; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow-y: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .chapter-nav h3 { margin-top: 0; border-bottom: 2px solid #8d6e63; padding-bottom: 10px; color: #4e342e; }
+        .chapter-link { display: block; padding: 10px 0; color: #666; text-decoration: none; border-bottom: 1px solid #eee; transition: all 0.2s; }
+        .chapter-link.sub-link { padding-left: 15px; font-size: 0.95em; border-left: 2px solid transparent; }
+        .chapter-link:hover { color: #8d6e63; padding-left: 5px; }
+        .chapter-link.active { font-weight: bold; color: #4e342e; border-left: 3px solid #8d6e63; padding-left: 10px; background: #fafafa; }
+        
+        /* Content Area */
+        .content-area { flex-grow: 1; background: white; padding: 40px; border-radius: 8px; border: 1px solid #e0e0e0; line-height: 1.8; color: #333; min-width: 0; }
+        .content-section { margin-bottom: 60px; scroll-margin-top: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 40px; }
+        .content-section:last-child { border-bottom: none; }
+        
+        /* Typografie */
+        h1.page-title { font-size: 2.5em; color: #3e2723; margin-top: 0; }
+        h2 { color: #5d4037; border-left: 5px solid #8d6e63; padding-left: 15px; margin-top: 0; margin-bottom: 20px; }
+        h3 { color: #6d4c41; margin-top: 30px; font-size: 1.3em; border-bottom: 1px solid #eee; padding-bottom: 8px;}
+        p { margin-bottom: 20px; font-size: 1.05em; }
+        .lead { font-size: 1.2em; color: #555; }
+        
+        /* Bilder */
+        .content-img { width: 100%; height: auto; border-radius: 4px; margin-bottom: 10px; border: 1px solid #e0e0e0; cursor: zoom-in; transition: transform 0.2s ease; display: block; }
+        .content-img:hover { transform: scale(1.02); }
+        .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+        
+        /* Boxen & Karten */
+        .skill-box { background: #e8eaf6; border-left: 5px solid #3f51b5; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .skill-box h4 { margin-top: 0; color: #1a237e; }
+        
+        .phys-box { background: #e0f7fa; border-left: 5px solid #006064; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .phys-box h4 { margin-top: 0; color: #006064; }
+
+        /* Karten Grid */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
+        .tech-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column; transition: transform 0.2s;}
+        .tech-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .tech-card-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid #eee; cursor: zoom-in; }
+        .tech-card-body { padding: 15px; flex-grow: 1; }
+        .tech-title { font-weight: bold; font-size: 1.1em; color: #3e2723; margin-bottom: 5px; }
+        .tech-desc { font-size: 0.9em; color: #555; }
+        
+        @media (max-width: 800px) { 
+            .knowledge-layout { flex-direction: column; } 
+            .chapter-nav { width: 100%; position: static; margin-bottom: 20px;} 
+            .card-grid { grid-template-columns: 1fr; } 
+            .header { flex-direction: column; gap: 10px;}
+        }
+        
+        /* Lightbox */
+        #image-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); align-items: center; justify-content: center; cursor: zoom-out; opacity: 0; transition: opacity 0.3s ease; padding: 20px; box-sizing: border-box; }
+        #image-modal.show { display: flex; opacity: 1; }
+        #modal-img { max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 0 20px rgba(0,0,0,0.5); border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <a href="../baender.html" class="btn-back">← Zurück</a>
+            <div class="brand">Wissensbibliothek</div>
+        </div>
+
+        <div class="knowledge-layout">
+            <nav class="chapter-nav">
+                <h3>Inhalt</h3>
+                <a href="#intro" class="chapter-link active">Einleitung</a>
+                <a href="#fenster" class="chapter-link">1. Der Fenstertest</a>
+                <a href="#falten" class="chapter-link">2. Dehnen & Falten</a>
+                <a href="#wirken" class="chapter-link">3. Wirken (Oberflächenspannung)</a>
+                <a href="#druckprobe" class="chapter-link">4. Die Druckprobe</a>
+                <a href="#scoring" class="chapter-link">5. Scoring (Das Ohr)</a>
+                <a href="#galerie" class="chapter-link">6. Technik-Galerie</a>
+            </nav>
+
+            <main class="content-area">
+                <section id="intro" class="content-section">
+                    <h1 class="page-title">Die Technik: Handwerk & Rheologie</h1>
+                    <p class="lead">Backen ist Physik und Mechanik. Ein Teig muss nicht nur gemischt, sondern strukturiert werden. Die Hände des Bäckers steuern die Gluten-Matrix.</p>
+                    <img src="../assets/image/baender/tech_header.jpg" class="content-img" alt="Bäckerhände beim Formen von Teig auf Holztisch" onerror="this.style.display='none'">
+                </section>
+
+                <section id="fenster" class="content-section">
+                    <h2>1. Der Fenstertest (Gluten-Check)</h2>
+                    <p>Wann ist der Teig fertig geknetet? Nicht nach Zeit, sondern nach Struktur.</p>
+                    <div class="skill-box">
+                        <h4>Die Elastizität prüfen</h4>
+                        <p>Nehmen Sie ein Stück Teig und ziehen Sie es mit nassen Fingern langsam auseinander.
+                        <br><strong>Ziel:</strong> Es muss so dünn werden, dass Licht hindurchscheint (wie ein Kirchenfenster), ohne dass es reißt. Reißt es sofort ("kurzer" Teig), ist das Klebergerüst noch nicht entwickelt.</p>
+                    </div>
+                </section>
+
+                <section id="falten" class="content-section">
+                    <h2>2. Dehnen & Falten (Stretch & Fold)</h2>
+                    <p>Warum knetet man Teig <em>während</em> der Ruhezeit?</p>
+                    <div class="phys-box">
+                        <h4>Struktur-Management</h4>
+                        <p>Teig entspannt sich mit der Zeit. Durch das "Dehnen und Falten" alle 30 Minuten passieren zwei Dinge:
+                        <br>1. <strong>Ausrichtung:</strong> Die Glutenstränge werden wieder parallel ausgerichtet (Stärkung).
+                        <br>2. <strong>Entgasung:</strong> Zu große CO₂-Blasen werden unterteilt, die Poren werden gleichmäßiger.</p>
+                    </div>
+                </section>
+
+                <section id="wirken" class="content-section">
+                    <h2>3. Wirken (Oberflächenspannung)</h2>
+                    <p>Ein Teigling ist wie ein Ballon. Damit er die Luft hält und im Ofen nach oben (statt in die Breite) geht, muss man die Außenhaut straffen.</p>
+                    <ul>
+                        <li><strong>Rundwirken:</strong> Den Teig immer wieder zur Mitte falten.</li>
+                        <li><strong>Schleifen:</strong> Den Ball auf der Arbeitsfläche mit der hohlen Hand rotieren lassen. Die Reibung unten strafft die Haut oben.</li>
+                    </ul>
+                </section>
+
+                <section id="druckprobe" class="content-section">
+                    <h2>4. Die Druckprobe (Finger Test)</h2>
+                    <p>Wann muss das Brot in den Ofen? Drücken Sie mit dem Finger sanft 1cm tief in den Teigling.</p>
+                    <ul>
+                        <li><strong>Delle springt sofort zurück:</strong> Untergare. Der Teig hat zu viel Spannung (Elastizität). Warten.</li>
+                        <li><strong>Delle kommt langsam zur Hälfte zurück:</strong> Volle Gare. Ab in den Ofen!</li>
+                        <li><strong>Delle bleibt tief, Teig seufzt:</strong> Übergare. Struktur ist zu schwach. Sofort backen (wird aber flach).</li>
+                    </ul>
+                </section>
+
+                <section id="scoring" class="content-section">
+                    <h2>5. Scoring (Der Schnitt)</h2>
+                    <p>Der Schnitt ist eine <strong>Sollbruchstelle</strong>. Ohne Schnitt reißt das Brot dort auf, wo die Haut am schwächsten ist (oft unschön an der Seite). Ein Schnitt im 30-45° Winkel erzeugt das begehrte "Ear" (Ohr).</p>
+                </section>
+
+                <section id="galerie" class="content-section">
+                    <h2>6. Technik-Galerie</h2>
+                    <div id="container-tech" class="card-grid"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div id="image-modal"><img id="modal-img" src=""></div>
+
+    <script>
+        const IMG_PATH = '../assets/image/baender/';
+        
+        // --- DATA: 8 Techniken ---
+        const DATA = [
+            { name: "Der Fenstertest", desc: "Perfekt ausgekneteter Teig lässt sich hauchdünn ziehen. Das Glutengerüst ist stabil und vernetzt.", img: "tech_fenster.jpg" },
+            { name: "Stretch & Fold", desc: "Das Dehnen des Teigs während der Stockgare. Es stärkt das Gerüst, ohne die Luft herauszudrücken.", img: "tech_fold.jpg" },
+            { name: "Rundwirken", desc: "Handhaltung beim Schleifen. Die hohle Hand und der kleine Finger erzeugen Spannung auf der Teighaut.", img: "tech_rundwirken.jpg" },
+            { name: "Druckprobe", desc: "Der Finger-Test zur Bestimmung der Gare. Hier sieht man eine Delle, die langsam zurückkommt (perfekt).", img: "tech_poke.jpg" },
+            { name: "Scoring (Lame)", desc: "Einschneiden mit der Rasierklinge (Lame). Der Winkel ist entscheidend für den Ausbund.", img: "tech_scoring.jpg" },
+            { name: "Das 'Ohr' (Ear)", desc: "Das Qualitätsmerkmal eines Baguettes oder Sauerteigbrots. Eine knusprig hochstehende Kruste am Schnitt.", img: "tech_ear.jpg" },
+            { name: "Autolyse", desc: "Ruhephase von Mehl und Wasser VOR dem Kneten. Enzyme beginnen, Stärke und Protein aufzuschließen.", img: "tech_autolyse.jpg" },
+            { name: "Laminieren (Teig)", desc: "Nicht wie bei Croissants, sondern bei Sauerteig: Den Teig extrem dünn auf dem Tisch ausziehen (Stretching).", img: "tech_laminieren.jpg" }
+        ];
+
+        // --- RENDER LOGIC ---
+        (function() {
+            // Navigation
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.chapter-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => { if (scrollY >= section.offsetTop - 250) current = section.getAttribute('id'); });
+                if (scrollY < 100) current = 'intro';
+                navLinks.forEach(link => { link.classList.remove('active'); if (link.getAttribute('href').includes(current)) link.classList.add('active'); });
+            });
+
+            // Cards
+            const container = document.getElementById('container-tech');
+            DATA.forEach(row => {
+                let imageHtml = `<div style="height:180px; background:#eee; color:#ccc; display:flex; align-items:center; justify-content:center;">Kein Bild</div>`;
+                if(row.img) {
+                    imageHtml = `<img src="${IMG_PATH}${row.img}" class="tech-card-img" alt="${row.name}" onerror="this.outerHTML='<div style=\'height:180px; background:#eee; color:#ccc; display:flex; align-items:center; justify-content:center;\'>Bild fehlt</div>'">`;
+                }
+                const cardHtml = `
+                    <div class="tech-card">
+                        ${imageHtml}
+                        <div class="tech-card-body">
+                            <div class="tech-title">${row.name}</div>
+                            <div class="tech-desc">${row.desc}</div>
+                        </div>
+                    </div>`;
+                container.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        })();
+
+        // Lightbox
+        document.addEventListener('DOMContentLoaded', () => {
+             const modal = document.getElementById('image-modal'); 
+             const modalImg = document.getElementById('modal-img');
+             
+             function openModal(imgSrc) { 
+                 if (!imgSrc) return; 
+                 modalImg.src = imgSrc; 
+                 modal.classList.add('show'); 
+             }
+             
+             modal.addEventListener('click', () => { 
+                 modal.classList.remove('show'); 
+                 setTimeout(() => modalImg.src = '', 300); 
+             });
+             
+             document.addEventListener('click', function(e) { 
+                 if (e.target.classList.contains('content-img') || e.target.classList.contains('tech-card-img')) { 
+                     openModal(e.target.src); 
+                 } 
+             });
+        });
+    </script>
+</body>
+</html>

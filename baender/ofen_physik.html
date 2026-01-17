@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – Feuer, Stein & Dampf: Ofenphysik</title>
+    
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <script src="../assets/js/util.js"></script>
+    
+    <style>
+        /* --- Layout & Basis --- */
+        body { background-color: #fcfbf9; color: #333; font-family: sans-serif; margin: 0; padding: 0; }
+        .page { min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* HEADER */
+        .header { 
+            padding: 20px 40px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            background: #fff;
+        }
+        .brand { font-weight: bold; font-size: 1.2em; color: #3e2723; }
+        .btn-back {
+            background-color: #4e342e;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-back:hover { background-color: #5d4037; }
+
+        .knowledge-layout { display: flex; max-width: 1200px; margin: 40px auto; gap: 40px; padding: 0 20px; align-items: flex-start; flex-grow: 1; }
+        
+        /* Navigation Sidebar */
+        .chapter-nav { width: 250px; flex-shrink: 0; background: white; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow-y: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .chapter-nav h3 { margin-top: 0; border-bottom: 2px solid #8d6e63; padding-bottom: 10px; color: #4e342e; }
+        .chapter-link { display: block; padding: 10px 0; color: #666; text-decoration: none; border-bottom: 1px solid #eee; transition: all 0.2s; }
+        .chapter-link.sub-link { padding-left: 15px; font-size: 0.95em; border-left: 2px solid transparent; }
+        .chapter-link:hover { color: #8d6e63; padding-left: 5px; }
+        .chapter-link.active { font-weight: bold; color: #4e342e; border-left: 3px solid #8d6e63; padding-left: 10px; background: #fafafa; }
+        
+        /* Content Area */
+        .content-area { flex-grow: 1; background: white; padding: 40px; border-radius: 8px; border: 1px solid #e0e0e0; line-height: 1.8; color: #333; min-width: 0; }
+        .content-section { margin-bottom: 60px; scroll-margin-top: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 40px; }
+        .content-section:last-child { border-bottom: none; }
+        
+        /* Typografie */
+        h1.page-title { font-size: 2.5em; color: #3e2723; margin-top: 0; }
+        h2 { color: #5d4037; border-left: 5px solid #8d6e63; padding-left: 15px; margin-top: 0; margin-bottom: 20px; }
+        h3 { color: #6d4c41; margin-top: 30px; font-size: 1.3em; border-bottom: 1px solid #eee; padding-bottom: 8px;}
+        p { margin-bottom: 20px; font-size: 1.05em; }
+        .lead { font-size: 1.2em; color: #555; }
+        
+        /* Bilder */
+        .content-img { width: 100%; height: auto; border-radius: 4px; margin-bottom: 10px; border: 1px solid #e0e0e0; cursor: zoom-in; transition: transform 0.2s ease; display: block; }
+        .content-img:hover { transform: scale(1.02); }
+        .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+        
+        /* Boxen & Karten */
+        .heat-box { background: #fbe9e7; border-left: 5px solid #ff5722; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .heat-box h4 { margin-top: 0; color: #d84315; }
+        
+        .phys-box { background: #eceff1; border-left: 5px solid #455a64; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .phys-box h4 { margin-top: 0; color: #263238; }
+
+        /* Karten Grid */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
+        .oven-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column; transition: transform 0.2s;}
+        .oven-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .oven-card-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid #eee; cursor: zoom-in; }
+        .oven-card-body { padding: 15px; flex-grow: 1; }
+        .oven-title { font-weight: bold; font-size: 1.1em; color: #3e2723; margin-bottom: 5px; }
+        .oven-desc { font-size: 0.9em; color: #555; }
+        .oven-badge { display: inline-block; font-size: 0.7em; background: #eee; padding: 2px 6px; border-radius: 4px; margin-bottom: 8px; color: #666; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;}
+
+        @media (max-width: 800px) { 
+            .knowledge-layout { flex-direction: column; } 
+            .chapter-nav { width: 100%; position: static; margin-bottom: 20px;} 
+            .card-grid { grid-template-columns: 1fr; } 
+            .header { flex-direction: column; gap: 10px;}
+        }
+        
+        /* Lightbox */
+        #image-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); align-items: center; justify-content: center; cursor: zoom-out; opacity: 0; transition: opacity 0.3s ease; padding: 20px; box-sizing: border-box; }
+        #image-modal.show { display: flex; opacity: 1; }
+        #modal-img { max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 0 20px rgba(0,0,0,0.5); border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <a href="../baender.html" class="btn-back">← Zurück</a>
+            <div class="brand">Wissensbibliothek</div>
+        </div>
+
+        <div class="knowledge-layout">
+            <nav class="chapter-nav">
+                <h3>Inhalt</h3>
+                <a href="#intro" class="chapter-link active">Einleitung</a>
+                <a href="#thermo" class="chapter-link">1. Thermodynamik</a>
+                <a href="#dampf" class="chapter-link">2. Enthalpie des Dampfes</a>
+                <a href="#material" class="chapter-link">3. Stein vs. Stahl</a>
+                <a href="#galerie" class="chapter-link">4. Werkzeuge</a>
+            </nav>
+
+            <main class="content-area">
+                <section id="intro" class="content-section">
+                    <h1 class="page-title">Feuer, Stein & Dampf</h1>
+                    <p class="lead">Der Ofen ist kein passives Werkzeug, sondern ein physikalischer Reaktor. Wir manipulieren Energieübertragung, Phasenübergänge (Wasser zu Dampf) und biochemische Reaktionen (Maillard).</p>
+                    <img src="../assets/image/baender/ofen_header.jpg" class="content-img" alt="Blick in einen brennenden Holzofen mit Glut" onerror="this.style.display='none'">
+                </section>
+
+                <section id="thermo" class="content-section">
+                    <h2>1. Die drei Arten der Hitze</h2>
+                    <p>Ein guter Ofen nutzt alle drei Wege der Energieübertragung:</p>
+                    <ul>
+                        <li><strong>Strahlung (Infrarot):</strong> Die heißen Wände/Steine strahlen Energie ab. Dringt tief in den Teig ein (wie Sonne).</li>
+                        <li><strong>Konduktion (Kontakt):</strong> Direkter Kontakt von Teig und heißem Stein/Stahl. Entscheidend für den "Ofentrieb" von unten.</li>
+                        <li><strong>Konvektion (Luft):</strong> Heiße Luftmoleküle treffen auf den Teig. Effizient, trocknet aber die Oberfläche schnell aus (schlecht für den Ofentrieb, gut für die End-Kruste).</li>
+                    </ul>
+                </section>
+
+                <section id="dampf" class="content-section">
+                    <h2>2. Die Macht des Dampfes (Enthalpie)</h2>
+                    <p>Warum schwaden wir? Es geht nicht nur um Feuchtigkeit.</p>
+                    <div class="heat-box">
+                        <h4>Latente Kondensationswärme</h4>
+                        <p>Wenn 100°C heißer Dampf auf den 25°C kühlen Teigling trifft, kondensiert er zu Wasser.
+                        <br><strong>Der Kick:</strong> Beim Phasenübergang (Gas zu Flüssig) wird extrem viel Energie frei. Diese Energie wird direkt auf die Teighaut übertragen. Der Teig erhitzt sich an der Oberfläche schneller als durch heiße Luft allein! Gleichzeitig hält der Wasserfilm die Haut dehnbar für den Ofentrieb.</p>
+                    </div>
+                </section>
+
+                <section id="material" class="content-section">
+                    <h2>3. Materialphysik: Stein vs. Stahl</h2>
+                    <p>Worauf backen wir am besten? Es kommt auf die Leitfähigkeit an.</p>
+                    <div class="phys-box">
+                        <ul>
+                            <li><strong>Schamottstein:</strong> Speichert viel Hitze, gibt sie aber langsam ab. Gut für Brot, das lange backt (damit der Boden nicht verbrennt).</li>
+                            <li><strong>Backstahl:</strong> Leitet Hitze 18x schneller als Stein. Gibt einen massiven "Thermal Shock" an den Teig ab. Perfekt für Pizza (kurze Backzeit, extremer Trieb). Für Brot oft zu aggressiv (Boden wird schwarz).</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="galerie" class="content-section">
+                    <h2>4. Galerie der Werkzeuge (8 Varianten)</h2>
+                    <div id="container-oven" class="card-grid"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div id="image-modal"><img id="modal-img" src=""></div>
+
+    <script>
+        const IMG_PATH = '../assets/image/baender/';
+        
+        const DATA = [
+            { name: "Holzbackofen", type: "Strahlungshitze", desc: "Der Urvater. Speicherhitze durch Schamottsteine. Das Holzfeuer gibt zusätzlich Aroma.", img: "ofen_holz.jpg" },
+            { name: "Etagenofen", type: "Profi-Standard", desc: "Elektrisch beheizte Steinplatten. Jeder 'Herd' ist einzeln steuerbar. Massive Strahlungshitze.", img: "ofen_etagen.jpg" },
+            { name: "Konvektomat (Umluft)", type: "Effizienz", desc: "Ein Ventilator wirbelt die Hitze. Backt sehr gleichmäßig, trocknet aber aus. Braucht starke Beschwadung.", img: "ofen_konvektion.jpg" },
+            { name: "Dutch Oven (Gusseisen)", type: "Heim-Trick", desc: "Simuliert einen Profiofen. Der Deckel hält den Eigendampf des Brotes am Teigling. Perfekte Kruste zu Hause.", img: "ofen_dutch.jpg" },
+            { name: "Backstahl", type: "Leitfähigkeit", desc: "6-10mm Stahlplatte. Gibt Hitze extrem schnell ab. Unverzichtbar für Pizza und Baguette.", img: "ofen_stahl.jpg" },
+            { name: "Schamottstein", type: "Speicher", desc: "Poröser Stein. Saugt Feuchtigkeit vom Boden auf und gibt sanfte, stetige Hitze ab.", img: "ofen_stein.jpg" },
+            { name: "Schwadomat", type: "Dampf-Erzeuger", desc: "Ein Behälter mit Stahlkugeln/Steinen im Ofen, auf den Wasser gespritzt wird, um schlagartig Dampf zu erzeugen.", img: "ofen_schwaden.jpg" },
+            { name: "Römertopf", type: "Ton", desc: "Gewässerter Ton. Gibt während des Backens Feuchtigkeit ab. Sanftes Garen, weniger Kruste als Gusseisen.", img: "ofen_roemer.jpg" }
+        ];
+
+        // --- RENDER LOGIC ---
+        (function() {
+            // Navigation
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.chapter-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => { if (scrollY >= section.offsetTop - 250) current = section.getAttribute('id'); });
+                if (scrollY < 100) current = 'intro';
+                navLinks.forEach(link => { link.classList.remove('active'); if (link.getAttribute('href').includes(current)) link.classList.add('active'); });
+            });
+
+            // Cards
+            const container = document.getElementById('container-oven');
+            DATA.forEach(row => {
+                let imageHtml = `<div style="height:180px; background:#eee; color:#ccc; display:flex; align-items:center; justify-content:center;">Kein Bild</div>`;
+                if(row.img) {
+                    imageHtml = `<img src="${IMG_PATH}${row.img}" class="oven-card-img" alt="${row.name}" onerror="this.outerHTML='<div style=\'height:180px; background:#eee; color:#ccc; display:flex; align-items:center; justify-content:center;\'>Bild fehlt</div>'">`;
+                }
+                const cardHtml = `
+                    <div class="oven-card">
+                        ${imageHtml}
+                        <div class="oven-card-body">
+                            <span class="oven-badge">${row.type}</span>
+                            <div class="oven-title">${row.name}</div>
+                            <div class="oven-desc">${row.desc}</div>
+                        </div>
+                    </div>`;
+                container.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        })();
+
+        // Lightbox
+        document.addEventListener('DOMContentLoaded', () => {
+             const modal = document.getElementById('image-modal'); 
+             const modalImg = document.getElementById('modal-img');
+             
+             function openModal(imgSrc) { 
+                 if (!imgSrc) return; 
+                 modalImg.src = imgSrc; 
+                 modal.classList.add('show'); 
+             }
+             
+             modal.addEventListener('click', () => { 
+                 modal.classList.remove('show'); 
+                 setTimeout(() => modalImg.src = '', 300); 
+             });
+             
+             document.addEventListener('click', function(e) { 
+                 if (e.target.classList.contains('content-img') || e.target.classList.contains('oven-card-img')) { 
+                     openModal(e.target.src); 
+                 } 
+             });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – Knödel & Dumplings: Die Weltkugel</title>
+    
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <script src="../assets/js/util.js"></script>
+    
+    <style>
+        /* --- Layout & Basis --- */
+        body { background-color: #fcfbf9; color: #333; font-family: sans-serif; margin: 0; padding: 0; }
+        .page { min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* HEADER */
+        .header { 
+            padding: 20px 40px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            background: #fff;
+        }
+        .brand { font-weight: bold; font-size: 1.2em; color: #3e2723; }
+        .btn-back {
+            background-color: #4e342e;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-back:hover { background-color: #5d4037; }
+
+        .knowledge-layout { display: flex; max-width: 1200px; margin: 40px auto; gap: 40px; padding: 0 20px; align-items: flex-start; flex-grow: 1; }
+        
+        /* Navigation Sidebar */
+        .chapter-nav { width: 250px; flex-shrink: 0; background: white; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow-y: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .chapter-nav h3 { margin-top: 0; border-bottom: 2px solid #8d6e63; padding-bottom: 10px; color: #4e342e; }
+        .chapter-link { display: block; padding: 10px 0; color: #666; text-decoration: none; border-bottom: 1px solid #eee; transition: all 0.2s; }
+        .chapter-link:hover { color: #8d6e63; padding-left: 5px; }
+        .chapter-link.active { font-weight: bold; color: #4e342e; border-left: 3px solid #8d6e63; padding-left: 10px; background: #fafafa; }
+        
+        /* Content Area */
+        .content-area { flex-grow: 1; background: white; padding: 40px; border-radius: 8px; border: 1px solid #e0e0e0; line-height: 1.8; color: #333; min-width: 0; }
+        .content-section { margin-bottom: 60px; scroll-margin-top: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 40px; }
+        .content-section:last-child { border-bottom: none; }
+        
+        /* Typografie */
+        h1.page-title { font-size: 2.5em; color: #3e2723; margin-top: 0; }
+        h2 { color: #5d4037; border-left: 5px solid #8d6e63; padding-left: 15px; margin-top: 0; margin-bottom: 20px; }
+        h3 { color: #6d4c41; margin-top: 30px; font-size: 1.3em; border-bottom: 1px solid #eee; padding-bottom: 8px;}
+        p { margin-bottom: 20px; font-size: 1.05em; }
+        .lead { font-size: 1.2em; color: #555; }
+        
+        /* Bilder */
+        .content-img { width: 100%; height: auto; border-radius: 4px; margin-bottom: 10px; border: 1px solid #e0e0e0; cursor: zoom-in; transition: transform 0.2s ease; display: block; }
+        .content-img:hover { transform: scale(1.02); }
+        
+        /* Karten Grid */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; margin-top: 30px; }
+        .spec-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: transform 0.2s; display: flex; flex-direction: column; }
+        .spec-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .spec-card-img { width: 100%; height: 160px; object-fit: cover; border-bottom: 1px solid #eee; cursor: zoom-in; }
+        .spec-card-body { padding: 15px; flex-grow: 1; }
+        .spec-card-title { font-weight: bold; font-size: 1.1em; color: #3e2723; margin-bottom: 5px; }
+        .spec-card-desc { font-size: 0.85em; color: #555; line-height: 1.5; }
+        .spec-badge { display: inline-block; font-size: 0.7em; background: #eee; padding: 2px 6px; border-radius: 4px; margin-bottom: 8px; color: #666; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;}
+
+        /* Boxen */
+        .tech-box { background: #e0f2f1; border-left: 5px solid #009688; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .tech-box h4 { margin-top: 0; color: #00695c; }
+        
+        .heat-box { background: #fff3e0; border-left: 5px solid #ff9800; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .heat-box h4 { margin-top: 0; color: #e65100; }
+
+        @media (max-width: 800px) {
+            .knowledge-layout { flex-direction: column; }
+            .chapter-nav { width: 100%; position: static; margin-bottom: 20px; max-height: none;}
+            .header { flex-direction: column; gap: 10px;}
+        }
+        
+        /* Lightbox */
+        #image-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); align-items: center; justify-content: center; cursor: zoom-out; opacity: 0; transition: opacity 0.3s ease; padding: 20px; box-sizing: border-box; }
+        #image-modal.show { display: flex; opacity: 1; }
+        #modal-img { max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 0 20px rgba(0,0,0,0.5); border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <a href="../baender.html" class="btn-back">← Zurück</a>
+            <div class="brand">Wissensbibliothek</div>
+        </div>
+
+        <div class="knowledge-layout">
+            <nav class="chapter-nav">
+                <h3>Inhalt</h3>
+                <a href="#intro" class="chapter-link active">Einleitung</a>
+                <a href="#recycling" class="chapter-link">1. Brot-Recycling</a>
+                <a href="#kartoffel" class="chapter-link">2. Die Kartoffel-Chemie</a>
+                <a href="#asien" class="chapter-link">3. Asien: Die Transparenz</a>
+                <a href="#galerie" class="chapter-link">4. Galerie der Bällchen</a>
+            </nav>
+
+            <main class="content-area">
+                <section id="intro" class="content-section">
+                    <h1 class="page-title">Knödel & Dumplings</h1>
+                    <p class="lead">Jede Kultur hat sie: Teigbällchen, die im Wasser oder Dampf garen. Sie sind Seelentröster, Resteverwerter und Hightech-Produkt zugleich.</p>
+                    <img src="../assets/image/baender/knoedel_header.jpg" class="content-img" alt="Bayerische Semmelknödel" onerror="this.style.display='none'">
+                </section>
+
+                <section id="recycling" class="content-section">
+                    <h2>1. Das Wunder des alten Brotes</h2>
+                    <p>Der Semmelknödel ist geniales Upcycling. Altes, hartes Brot kann Flüssigkeit aufsaugen wie ein Schwamm, zerfällt aber nicht, wenn es mit Ei und Milch gebunden wird.</p>
+                    <div class="heat-box">
+                        <h4>Sieden, nicht Kochen!</h4>
+                        <p>Knödel dürfen niemals sprudelnd kochen. Die Bewegung des Wassers würde sie zerreißen. Sie müssen knapp unter dem Siedepunkt (ca. 90-95°C) "ziehen" (garpochieren), bis sie an der Oberfläche schwimmen.</p>
+                    </div>
+                </section>
+
+                <section id="kartoffel" class="content-section">
+                    <h2>2. Kartoffelknödel: Rohe vs. Gekochte Stärke</h2>
+                    <p>Hier wird es chemisch. Kartoffelstärke bindet extrem stark, aber nur, wenn man sie richtig behandelt.</p>
+                    <ul>
+                        <li><strong>Thüringer Art:</strong> Rohe geriebene Kartoffeln werden ausgepresst (die Stärke sinkt ab!). Dann wird alles mit gekochtem Kartoffelbrei gemischt. Die rohe Stärke verkleistert beim Kochen und bindet die Masse.</li>
+                        <li><strong>Gnocchi (Italien):</strong> Gekochte Kartoffeln + Mehl. Hier ist das Ziel Lockerheit. Zu viel Mehl oder zu langes Kneten macht sie zu Gummibällen.</li>
+                    </ul>
+                </section>
+                
+                 <section id="asien" class="content-section">
+                    <h2>3. Asien: Transparenz & Suppe</h2>
+                    <p>Während Europa auf Sättigung setzt, spielt Asien mit Texturen.</p>
+                    <div class="tech-box">
+                        <h4>Wie kommt die Suppe in den Dumpling?</h4>
+                        <p>Bei <strong>Xiao Long Bao</strong> beißt man hinein und heiße Suppe läuft heraus. Wie geht das? </p>
+                        <p><strong>Der Trick:</strong> Man kocht eine kräftige Fleischbrühe mit viel Kollagen (Schweineschwarte/Hühnerfüße). Beim Abkühlen wird die Brühe zu festem <strong>Gelee</strong> (Sülze). Dieses Gelee wird gewürfelt, unter das Hackfleisch gemischt und in den Teig gefüllt. Beim Dämpfen schmilzt das Gelee wieder zu Suppe. Genial!</p>
+                    </div>
+                </section>
+
+                <section id="galerie" class="content-section">
+                    <h2>4. Globale Galerie (19 Varianten)</h2>
+                    <div id="container-taschen" class="card-grid"></div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <div id="image-modal"><img id="modal-img" src=""></div>
+
+    <script>
+        const IMG_PATH = '../assets/image/baender/';
+        
+        // --- DATA: 19 Varianten ---
+        const DATA = [
+            // DACH & Herzhaft
+            { name: "Semmelknödel", origin: "DE/AT", desc: "Altbackene Brötchen, Milch, Ei, Petersilie. Der Klassiker zum Braten.", img: "knoedel_semmel.jpg" },
+            { name: "Thüringer Klöße", origin: "DE", desc: "Die Königsklasse. Mischung aus rohen und gekochten Kartoffeln. Im Inneren oft geröstete Weißbrotwürfel (Croutons).", img: "knoedel_thueringer.jpg" },
+            { name: "Serviettenknödel", origin: "AT/CZ", desc: "Semmelknödelteig, der als Rolle in einem Tuch (Serviette) im Wasserdampf gegart und dann in Scheiben geschnitten wird.", img: "knoedel_servietten.jpg" },
+            { name: "Leberknödel", origin: "DE/AT", desc: "Herzhaft! Semmelteig gemischt mit durchgedrehter Rinderleber. Klassisch als Suppeneinlage.", img: "knoedel_leber.jpg" },
+            { name: "Maultaschen", origin: "DE", desc: "'Herrgottsbscheißerle'. Nudelteig gefüllt mit Brät und Spinat. Können in der Brühe schwimmen oder 'geschmälzt' (gebraten) werden.", img: "knoedel_maultaschen.jpg" },
+            
+            // Osteuropa / Slawisch
+            { name: "Pierogi", origin: "PL", desc: "Halbmondförmige Teigtaschen. Füllung: Kartoffeln & Quark (Ruskie), Fleisch oder Sauerkraut/Pilze. Oft mit geschmorten Zwiebeln.", img: "knoedel_pierogi.jpg" },
+            { name: "Pelmeni", origin: "RU", desc: "Kleine, fleischgefüllte Taschen aus Sibirien. Werden mit Butter, Schmand und etwas Essig serviert.", img: "knoedel_pelmeni.jpg" },
+            { name: "Khinkali", origin: "GE (Georgien)", desc: "Große Teigsäcke mit einem 'Griff' oben. Enthalten Fleisch und Brühe. Man beißt ein Loch hinein, trinkt die Suppe und isst den Rest.", img: "knoedel_khinkali.jpg" },
+            
+            // Süßes
+            { name: "Germknödel", origin: "AT", desc: "Ein riesiger, fluffiger Hefekloß, gefüllt mit Pflaumenmus (Powidl), gedämpft und mit Mohnbutter übergossen.", img: "knoedel_germ.jpg" },
+            { name: "Marillenknödel", origin: "AT", desc: "Quarkteig (Topfenteig), der um eine ganze Aprikose (Marille) geformt wird. Serviert mit gerösteten Semmelbröseln.", img: "knoedel_marillen.jpg" },
+            { name: "Dampfnudel", origin: "DE", desc: "Hefeteig, der in einer Pfanne mit Deckel gleichzeitig gebraten (Boden) und gedämpft (Oben) wird. Hat eine salzige Kruste unten.", img: "knoedel_dampfnudel.jpg" },
+
+            // Asien
+            { name: "Har Gow", origin: "CN", desc: "Kristall-Dumplings. Der Teig aus Weizenstärke wird beim Dämpfen transparent und gibt den Blick auf die Garnele frei.", img: "knoedel_hargow.jpg" },
+            { name: "Xiao Long Bao", origin: "CN", desc: "Soup Dumplings. Enthalten Fleisch und geschmolzene Gelee-Brühe. Vorsicht heiß!", img: "knoedel_xiaolongbao.jpg" },
+            { name: "Wonton / Wan Tan", origin: "CN", desc: "Hauchdünner Teig, oft mit Schwein und Garnele. Schwimmen meist in einer klaren Suppe.", img: "knoedel_wonton.jpg" },
+            { name: "Gyoza", origin: "JP", desc: "Japanische Teigtaschen. Werden oft erst in der Pfanne angebraten und dann mit etwas Wasser gedämpft ('Potstickers').", img: "knoedel_gyoza.jpg" },
+            { name: "Momos", origin: "NP/Tibet", desc: "Gedämpfte Teigtaschen aus dem Himalaya. Dickerer Teig, würzige Füllung, serviert mit sehr scharfer Chilisauce.", img: "knoedel_momo.jpg" },
+
+            // Rest der Welt
+            { name: "Gnocchi", origin: "IT", desc: "Kleine Nocken aus Kartoffeln und Mehl. Werden über ein Rillenbrett gerollt, damit Soße haftet.", img: "knoedel_gnocchi.jpg" },
+            { name: "Matzah Balls", origin: "Jüdisch", desc: "Knödel aus Matzenmehl (ungesäuertes Brot), Ei und Fett (Schmaltz). Klassiker zur Pessach-Suppe.", img: "knoedel_matzah.jpg" },
+            { name: "Tamales", origin: "CO (Kolumbien)", desc: "Mais-Teig gefüllt mit Fleisch & Gemüse, in Bananenblättern gedämpft. 'Gefüllter Knödel' in natürlicher Hülle.", img: "knoedel_tamales.jpg" },
+        ];
+
+        // --- RENDER LOGIC ---
+        (function() {
+            // Navigation Spy
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.chapter-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => { if (scrollY >= section.offsetTop - 250) current = section.getAttribute('id'); });
+                if (scrollY < 100) current = 'intro';
+                navLinks.forEach(link => { link.classList.remove('active'); if (link.getAttribute('href').includes(current)) link.classList.add('active'); });
+            });
+
+            // Render Cards
+            const container = document.getElementById('container-taschen');
+            DATA.forEach(row => {
+                let imageHtml = `<div style="height:160px; background:#f5f5f5; color:#ccc; display:flex; align-items:center; justify-content:center; font-size:0.8em;">Kein Bild</div>`;
+                if(row.img) {
+                    imageHtml = `<img src="${IMG_PATH}${row.img}" class="spec-card-img" alt="${row.name}" onerror="this.outerHTML='<div style=\'height:160px; background:#eee; color:#ccc; display:flex; align-items:center; justify-content:center;\'>Bild fehlt</div>'">`;
+                }
+                const cardHtml = `
+                    <div class="spec-card">
+                        ${imageHtml}
+                        <div class="spec-card-body">
+                            <span class="spec-badge">${row.origin}</span>
+                            <div class="spec-card-title">${row.name}</div>
+                            <div class="spec-card-desc">${row.desc}</div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        })();
+
+        // Lightbox
+        document.addEventListener('DOMContentLoaded', () => {
+             const modal = document.getElementById('image-modal'); 
+             const modalImg = document.getElementById('modal-img');
+             
+             function openModal(imgSrc) { 
+                 if (!imgSrc) return; 
+                 modalImg.src = imgSrc; 
+                 modal.classList.add('show'); 
+             }
+             
+             modal.addEventListener('click', () => { 
+                 modal.classList.remove('show'); 
+                 setTimeout(() => modalImg.src = '', 300); 
+             });
+             
+             document.addEventListener('click', function(e) { 
+                 if (e.target.classList.contains('content-img') || e.target.classList.contains('spec-card-img')) { 
+                     openModal(e.target.src); 
+                 } 
+             });
+        });
+    </script>
+</body>
+</html>

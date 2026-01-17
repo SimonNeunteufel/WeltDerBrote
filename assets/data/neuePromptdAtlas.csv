@@ -1,0 +1,472 @@
+Dateiname;Prompt für Bildgenerator;Verwendung / OrDateiname;Thema;Prompt
+reset bildgenerator und nochmals:
+
+
+
+Dateiname;Thema;Prompt
+empanadas_header.jpg;Header Bild (Seite oben);A rustic wooden table filled with a variety of freshly baked and fried empanadas from different latin american countries, flour dusting, ingredients like eggs and herbs in background, cinematic lighting, food photography, 8k, wide angle --ar 16:9
+empanada_argentina.jpg;Argentinien (Tucumana);Traditional Argentine empanada tucumana, golden baked dough with blistered crust, distinct rope edge twisting, rustic wooden background, warm lighting, close up, high detail, food photography
+empanada_chile.jpg;Chile (Pino);Chilean Empanada de Pino, large baked pastry, rectangular shape with thick folded edges, golden brown glaze, rustic setting, glass of red wine in background blurred, food photography
+empanada_colombia.jpg;Kolumbien (Mais/Frittiert);Colombian Empanada, fried yellow corn dough, very crispy texture, golden yellow color, half-moon shape, served with a lime wedge and a small bowl of green Aji sauce, street food style, high resolution
+empanada_venezuela.jpg;Venezuela (Mais/Süßlich);Venezuelan Empanada, fried corn flour dough, golden crispy bubbling crust, half-moon shape, served on a colorful tropical napkin, soft daylight, appetizing
+empanada_saltena.jpg;Bolivien (Salteña);Bolivian Salteña, upright standing baked empanada, football shape with braided seam on top, golden orange glossy crust (achiote), rustic plate, steam rising, food photography
+empanada_gallega.jpg;Spanien (Gallega);Empanada Gallega slice, a piece of a large flat galician pie, square cut showing tuna and red pepper filling, flaky yeast dough layers, rustic kitchen table, authentic spanish tapas style
+empanada_peru.jpg;Peru (Peruana);Peruvian Empanada, baked golden pastry, lightly dusted with powdered sugar on top, served with a lime wedge on the side, elegant plating, shallow depth of field
+empanada_brasil.jpg;Brasilien (Pastel);Brazilian Pastel, large rectangular fried pastry, thin bubbly crispy dough, light golden color, street market setting, fresh sugarcane juice in background, bright lighting
+empanada_ecuador.jpg;Ecuador (De Viento);Ecuadorian Empanada de Viento, large fried fluffy pastry, sprinkled with granulated sugar, airy texture, served on a white plate, coffee cup in background
+global_pasty.jpg;Cornish Pasty (UK);Traditional Cornish Pasty, D-shaped baked pastry with a thick crimped edge on the side, golden brown crust, rustic wooden board, english pub atmosphere
+global_samosa.jpg;Samosa (Indien);Indian Samosas, triangular fried pastry, bubbly crust, golden brown, served with mint chutney and tamarind sauce, spices in background, vibrant colors
+global_gyoza.jpg;Gyoza (Japan);Japanese Gyoza dumplings, pan-fried bottom, steamed top, pleated edges, arranged in a row on a ceramic plate, soy sauce dip, chopsticks, moody lighting
+global_pierogi.jpg;Pierogi (Polen);Polish Pierogi dumplings, boiled dough, half-moon shape, topped with caramelized onions and butter, served in a rustic bowl, comfort food style
+global_borek.jpg;Börek (Türkei);Turkish Sigara Börek, rolled filo pastry cigars, golden fried, stacked on a plate, parsley garnish, turkish tea glass in background, crisp texture
+
+Dateiname;Thema;Prompt
+fry_header.jpg;Header: Siedegebäck Mix;A panoramic shot of a rustic bakery table filled with various golden fried pastries like donuts, berliner, churros, and fritters, dusted with powdered sugar, soft morning sunlight, cinematic food photography, 8k, wide angle --ar 16:9
+fry_berliner.jpg;Berliner / Krapfen (DE);Classic German Berliner Pfannkuchen, round golden fried dough, sugar coated, a hint of red raspberry jam peeking out, bakery paper background, soft focus, macro details of sugar crystals
+fry_chueechli.jpg;Fasnachtschüechli (CH);Swiss Fasnachtschueechli, extremely thin and fragile fried pastry, knee-shaped, covered in white powdered sugar, crispy bubbles texture, rustic wooden table, high contrast
+fry_schenkeli.jpg;Schenkeli (CH);Swiss Schenkeli pastry, small oblong fried dough logs, golden brown with the characteristic crack in the middle, lemon zest texture, vintage plate, cozy atmosphere
+fry_quark.jpg;Quarkbällchen (DE);German Quarkbaellchen, small irregular round fried curd cheese balls, golden brown crust, rolled in granulated sugar, soft and fluffy inside, served in a ceramic bowl
+sied_spritzkuchen.jpg;Spritzkuchen (DE);Eberswalder Spritzkuchen, fried choux pastry rings, glazed with white sugar icing, airy texture, distinct ridges from the star nozzle, bakery setting
+fry_mutzen.jpg;Mutzenmandeln (DE/CH);Mutzenmandeln, small almond-shaped fried cookies, golden brown, served in a paper cone at a christmas market, warm bokeh lights in background
+sied_krapfen.jpg;Krapfen (AT);Viennese Krapfen, fluffy round doughnut, distinct white ring (collar) around the middle showing perfect proofing, dusted with powdered sugar, apricot jam filling, elegant marble table
+fry_donut.jpg;Donut Yeast (USA);Classic American glazed yeast donut, golden fried ring, shiny honey glaze, resting on a wire cooling rack, diner atmosphere, sunlight hitting the glaze
+sied_cronut.jpg;Cronut (USA);Cronut pastry, hybrid of croissant and donut, visible laminated dough layers, golden fried, sugar glaze, cross-section showing flaky interior, high definition food photography
+fry_beignet.jpg;Beignets (FR/USA);New Orleans style Beignets, square puffy fried dough pillows, buried under a mountain of powdered sugar, Cafe du Monde style, white plate, cup of coffee on side
+fry_funnel.jpg;Funnel Cake (USA);American Funnel Cake, a chaotic nest of fried batter strands, golden crispy, sprinkled heavily with powdered sugar, served on a paper plate, carnival fairground background blurred
+fry_churros.jpg;Churros (ES);Spanish Churros, star-shaped fried dough strips, coated in cinnamon sugar, dipping into a thick cup of hot chocolate, steam rising, moody lighting
+sied_oliebollen.jpg;Oliebollen (NL);Dutch Oliebollen, rustic irregular fried dough balls, raisins visible in the crust, dusted with powdered sugar, winter holiday vibe, festive napkin
+fry_loukoumades.jpg;Loukoumades (GR);Greek Loukoumades, small round yeast dough balls, drenched in golden honey syrup, sprinkled with crushed walnuts and cinnamon, mediterranean sunlight, blue and white napkin
+fry_zeppole.jpg;Zeppole (IT);Italian Zeppole di San Giuseppe, fried choux pastry ring, topped with a swirl of yellow vanilla pastry cream and a single black amarena cherry, rich detail
+fry_cannoli.jpg;Cannoli (IT);Sicilian Cannoli shell, fried bubbly pastry tube, filled with white ricotta cream, pistachio nuts on the ends, rustic italian kitchen background, flour dusting
+fry_koeksister.jpg;Koeksisters (ZA);South African Koeksisters, braided fried dough, extremely glossy and sticky syrup coating, golden amber color, bright sunlight highlighting the syrup shine
+fry_youtiao.jpg;Youtiao (CN);Chinese Youtiao, long golden brown fried dough sticks, paired together, airy and crispy texture, served next to a bowl of rice congee, bamboo mat background
+fry_sopaipilla.jpg;Sopaipillas (CL);Chilean Sopaipillas, round flat fried discs, orange tint from pumpkin dough, needle holes in center, rustic cloth, served with a bowl of Pebre salsa
+fry_langos.jpg;Langos (HU);Hungarian Langos, large flat fried yeast dough, topped with white sour cream and shredded cheese, glistening with garlic oil, street food style, handheld
+
+Dateiname;Thema;Prompt
+pizza_header.jpg;Header: Pizza Ofen;Traditional wood fired pizza oven with a fresh pizza napoletana inside, flames visible in the back, pizzaiolo shovel, rustic stone surrounding, warm glow, 8k, cinematic, wide angle --ar 16:9
+pizza_napoletana.jpg;Pizza Napoletana;Authentic Pizza Napoletana Margherita, leopard spotted puffy cornicione (crust), fresh mozzarella balls, san marzano tomato sauce, fresh basil leaves, wet center, rustic wooden board, soft lighting
+pizza_romana.jpg;Pizza Romana Tonda;Pizza Romana Tonda, extremely thin and crispy crust, almost no edge, topped with prosciutto and arugula, crackling texture visible, served on a round plate, high contrast
+pizza_pinsa.jpg;Pinsa Romana;Pinsa Romana, oval shaped flatbread pizza, airy and cloudy crust structure, topped with mortadella pistachio and burrata, rustic wooden board, artisan style
+pizza_teglia.jpg;Pizza al Taglio;Roman Pizza al Taglio, rectangular slice on a tray, thick but very airy porous dough (alveoli), topped with potato and rosemary, cross section showing air bubbles
+pizza_fritta.jpg;Pizza Fritta;Neapolitan Pizza Fritta, deep fried calzone shape, golden puffy bubbly crust, grease paper, street food style, steam rising
+pizza_ny.jpg;NY Style Pizza;New York Style Pizza slice, large foldable triangle, thin crust with cheese bubbling and slightly browned, pepperoni slices, paper plate, street background
+pizza_chicago.jpg;Chicago Deep Dish;Chicago Deep Dish Pizza, thick pie-like structure in a steel pan, chunky tomato sauce on top of the cheese, lifting a slice with cheese pull
+pizza_detroit.jpg;Detroit Style Pizza;Detroit Style Pizza, rectangular steel pan, thick fluffy crust, cheese caramelized at the edges (frico) creating a dark lace, racing stripes of red sauce on top
+pizza_calzone.jpg;Calzone;Baked Calzone, folded pizza turnover, golden brown crust, steam escaping from a slit, side of marinara sauce, rustic setting
+focaccia_genovese.jpg;Focaccia Genovese;Classic Focaccia Genovese, golden surface with distinct finger dimples filled with olive oil and coarse salt, glistening texture, fresh rosemary sprigs, top down view
+focaccia_recco.jpg;Focaccia di Recco;Focaccia di Recco, very thin unleavened dough layers, melted stracchino cheese oozing out, crispy blistered surface, no yeast fluffiness, copper pan background
+focaccia_barese.jpg;Focaccia Barese;Focaccia Barese, thick dough with cherry tomatoes and black olives pressed deep into the surface, golden semolina crust, oregano sprinkle, southern italian vibe
+focaccia_schiacciata.jpg;Schiacciata Toscana;Tuscan Schiacciata, rustic flatbread, slightly harder crust, sliced open and filled with italian salami and cheese, crumbs on table
+flat_flammkuchen.jpg;Flammkuchen (Elsass);Traditional Tarte Flambee (Flammkuchen), extremely thin crispy dough, rectangular shape on wooden peel, spread with creme fraiche onions and bacon lardons, charred edges
+flat_pide.jpg;Pide (Türkei);Turkish Pide, boat shaped flatbread with folded edges, filled with minced meat and melted cheese, golden brown crust, sesame seeds on rim
+flat_lahmacun.jpg;Lahmacun;Turkish Lahmacun, very thin round dough topped with a thin layer of red minced meat and herb paste, served with lemon wedges and parsley, rolled up
+flat_manakish.jpg;Manakish;Levantine Manakish, round flatbread topped with green zaatar oil paste, sesame seeds, baked texture, served with fresh mint and cucumber slices
+
+Dateiname;Thema;Prompt
+fladenbrot_header.jpg;Header: Fladenbrote;A rustic woven basket filled with various types of flatbreads like naan, pita, and tortillas, warm sunlight, flour dusting on wooden table, cinematic food photography, 8k, wide angle --ar 16:9
+fladen_naan.jpg;Naan (Indien);Indian Naan bread, teardrop shape, blistered brown spots from tandoor oven, brushed with melted ghee and sprinkled with cilantro, garlic pieces, rustic slate background
+fladen_chapati.jpg;Chapati (Indien);Stack of Indian Chapati breads, round whole wheat flatbreads, soft brown spots, sitting on a metal thali plate, simple home cooking style
+fladen_paratha.jpg;Paratha (Indien);Flaky Indian Paratha, layered flatbread, golden brown crispy swirl pattern, glistening with ghee, torn piece showing the layers
+fladen_pita.jpg;Pita (Naher Osten);Freshly baked Pita breads stacked, one cut open to show the large hollow pocket (steam pocket) inside, steam rising, soft floury texture, bakery background
+fladen_yufka.jpg;Yufka (Türkei);Turkish Yufka dough sheets, extremely large and paper thin, stacked on a wooden rolling board (sofra), rolling pin (oklava) on the side, flour dusting
+fladen_lavash.jpg;Lavash (Armenien);Armenian Lavash, huge thin flatbread sheet hanging or draped over a basket, blistered surface from clay oven, rustic texture
+fladen_bazlama.jpg;Bazlama (Türkei);Turkish Bazlama, thick soft round flatbread, golden brown spots from the pan, fluffy texture visible at the edges, breakfast setting with olives
+fladen_simit.jpg;Simit (Türkei);Turkish Simit, sesame crusted bread ring, deep golden brown color, twisted dough rope structure, piled on a street vendor cart
+fladen_injera.jpg;Injera (Äthiopien);Ethiopian Injera, large round spongy sourdough crepe, distinct porous surface with many small holes (eyes), rolled up on the side, greyish-brown teff color
+fladen_batbout.jpg;Batbout (Marokko);Moroccan Batbout, small round pan-baked breads, puffed up slightly, semolina texture on the surface, served in a tagine lid
+fladen_tortilla_maiz.jpg;Tortilla Mais (Mexiko);Stack of yellow corn tortillas, rustic handmade look, kept warm in a colorful cloth napkin, steam rising, authentic mexican style
+fladen_tortilla_harina.jpg;Tortilla Weizen (Mexiko);Flour Tortillas, soft white flatbreads with light brown toasted spots, flexible texture, stacked on a wooden board
+fladen_arepa.jpg;Arepa (Südamerika);Venezuelan Arepa, thick round cornmeal patty, golden crispy crust, sliced open and stuffed with cheese and meat, grill marks visible
+fladen_piadina.jpg;Piadina (Italien);Italian Piadina Romagnola, folded flatbread filled with prosciutto di parma and arugula, grill marks on the white dough, rustic italian table
+
+Dateiname;Thema;Prompt
+knoedel_header.jpg;Header: Knödel;A rustic table setting featuring a variety of dumplings: German potato dumplings, Asian bamboo steamers with dim sum, and polish pierogi, steam rising, warm lighting, cinematic 8k --ar 16:9
+knoedel_semmel.jpg;Semmelknödel;German Bread Dumplings (Semmelknoedel), round sphere with visible parsley and bread chunks, sitting in a dark gravy sauce, rustic plate, soft focus
+knoedel_thueringer.jpg;Thüringer Klöße;Thuringian Potato Dumplings, shiny smooth surface, slightly greyish-white potato color, served with roast duck leg and red cabbage, steam rising
+knoedel_servietten.jpg;Serviettenknödel;Sliced Bread Dumpling Log (Serviettenknoedel), slices showing the bread texture and herbs, served with creamy mushroom sauce, elegant plating
+knoedel_leber.jpg;Leberknödel;Liver Dumpling Soup, a large brownish round dumpling floating in clear beef broth with chives rings, white soup bowl, traditional austrian style
+knoedel_maultaschen.jpg;Maultaschen;Swabian Maultaschen, large square pasta pockets filled with meat and spinach, floating in broth with onions, top down view
+knoedel_pierogi.jpg;Pierogi;Polish Pierogi dumplings, half-moon shape, boiled and topped with caramelized onions and butter, rustic wooden table, fork on side
+knoedel_pelmeni.jpg;Pelmeni;Russian Pelmeni, small ear-shaped meat dumplings, piled in a bowl, dollop of smetana (sour cream) and dill on top, cozy winter vibe
+knoedel_khinkali.jpg;Khinkali;Georgian Khinkali, large dumplings with twisted dough handle (knob) on top, pleated folds, steaming hot, black pepper sprinkled, eaten by hand
+knoedel_germ.jpg;Germknödel;Austrian Germknoedel, large fluffy yeast dumpling, covered in black poppy seeds and powdered sugar, swimming in vanilla sauce, ski hut atmosphere
+knoedel_marillen.jpg;Marillenknödel;Apricot Dumplings (Marillenknoedel), cut open revealing the orange apricot inside, coated in golden buttery breadcrumbs, powdered sugar dusting
+knoedel_dampfnudel.jpg;Dampfnudel;Bavarian Dampfnudel, large yeast dumpling with a golden crispy caramelized bottom crust, soft white top, sitting in a cast iron pan
+knoedel_hargow.jpg;Har Gow;Dim Sum Har Gow, crystal shrimp dumplings, translucent pleated dough skin showing pink shrimp inside, served in a bamboo steamer, macro shot
+knoedel_xiaolongbao.jpg;Xiao Long Bao;Xiao Long Bao soup dumplings, delicate skin, sitting on a spoon, one punctured showing soup broth flowing out, chopsticks holding it
+knoedel_wonton.jpg;Wonton;Chinese Wonton soup, thin yellow dough wrappers with pork filling, floating in clear broth with bok choy and chili oil droplets
+knoedel_gyoza.jpg;Gyoza;Japanese Gyoza, pan-fried bottom (crispy brown), steamed top, arranged in a row, soy sauce dip on side, chopsticks
+knoedel_momo.jpg;Momos;Tibetan Momos, round steamed dumplings with thick dough, served with bright red spicy chutney, rustic presentation
+knoedel_gnocchi.jpg;Gnocchi;Italian Potato Gnocchi, small ridged dumplings, tossed in sage butter sauce, parmesan cheese shavings, macro detail of ridges
+knoedel_matzah.jpg;Matzah Balls;Matzah Ball Soup, large fluffy balls floating in golden chicken soup with carrots and celery, jewish holiday tradition, comfort food
+knoedel_tamales.jpg;Tamales (Kolumbien);Colombian Tamal, wrapped in green banana leaves, steamed, one open showing the yellow corn dough and filling of chicken and carrots, rustic wooden table
+
+Dateiname;Thema;Prompt
+spaetzle_header.jpg;Header: Spätzle;A rustic wooden kitchen board filled with freshly made yellow egg spaetzle, flour dusting, raw eggs and a wooden spoon in background, warm alpine light, cinematic 8k --ar 16:9
+spaetzle_schaben.jpg;Action: Schaben;Close up action shot of a hand scraping spaetzle dough from a wooden board into boiling water, steam rising, traditional technique, dynamic motion
+spaetzle_schwaebisch.jpg;Schwäbische Spätzle;Plate of classic Swabian Spaetzle, irregular long noodles, glistening with butter, served next to a roast beef slice with gravy
+spaetzle_knoepfle.jpg;Knöpfle;Swiss Knoepfli, small round button-shaped egg pasta, golden yellow, piled in a bowl, macro shot of texture
+spaetzle_kaesspaetzle.jpg;Kässpätzle;Vorarlberger Kaesspaetzle, cheesy noodles pulled high with strings of melted mountain cheese (kaesefaden), topped with crispy fried onions, served in a wooden bowl
+spaetzle_spinat.jpg;Spinatspätzle;Green Spinach Spaetzle, vibrant green color, served with a creamy ham sauce, white plate, fresh spinach leaf garnish
+spaetzle_leber.jpg;Leberspätzle;Liver Spaetzle Soup, brownish irregular noodles floating in clear beef broth with chives, traditional soup bowl
+spaetzle_kraeuter.jpg;Kräuterspätzle;Herb Spaetzle, speckles of green herbs visible in the dough, served as a side dish, fresh and light look
+spaetzle_schupfnudeln.jpg;Schupfnudeln;Schupfnudeln (Finger Noodles), golden brown pan-fried potato noodles mixed with sauerkraut and bacon bits, rustic pan
+spaetzle_galuska.jpg;Galuska;Hungarian Galuska dumplings, simple irregular flour dumplings, served with chicken paprikash sauce, rustic style
+spaetzle_halusky.jpg;Halusky;Slovak Bryndzove Halusky, small potato dumplings covered in white sheep cheese sauce and topped with crispy bacon bits
+spaetzle_tarhonya.jpg;Tarhonya;Hungarian Tarhonya, small dried egg barley pasta grains, raw in a wooden scoop and cooked in a bowl, rustic texture
+
+Dateiname;Thema;Prompt
+pasta_header.jpg;Header: Pasta Making;Artisan making fresh pasta on a wooden table, flour dusting, eggs, rolling pin, sheets of yellow dough, cinematic lighting, warm tones, 8k --ar 16:9
+pasta_spaghetti.jpg;Spaghetti;Fork twirling spaghetti with simple tomato basil sauce, steam rising, parmesan sprinkle, dark background, macro shot
+pasta_rigatoni.jpg;Rigatoni;Bowl of Rigatoni pasta with chunky meat ragu sauce, sauce caught inside the tubes, fresh basil leaf on top, rustic style
+pasta_fusilli.jpg;Fusilli;Fusilli pasta coated in green pesto genovese, pine nuts scattered, bright natural light, top down view
+pasta_orecchiette.jpg;Orecchiette;Orecchiette pasta with broccoli rabe and sausage crumbles, olive oil glistening in the small ear-shaped hollows, southern italian style
+pasta_tagliatelle.jpg;Tagliatelle;Nest of fresh raw tagliatelle egg pasta, dusted with flour, yellow rich color, texture visible, wooden board background
+pasta_ravioli.jpg;Ravioli;Homemade Ravioli with serrated edges, filled with ricotta and spinach, served with sage butter sauce, golden brown sear marks
+pasta_tortellini.jpg;Tortellini;Small Tortellini in clear golden broth (brodo), floating with some fat droplets, elegant spoon lifting one up, traditional bologna style
+pasta_lasagne.jpg;Lasagne;Slice of Lasagne al Forno on a plate, showing distinct layers of pasta ragu and bechamel, crispy burnt cheese edges, rich and hearty
+pasta_rotolo.jpg;Rotolo (Gerollt);Rotolo di Spinaci pasta, slice showing the spiral roll of pasta sheet spinach and ricotta, baked in tomato sauce with melted mozzarella on top, cross section view
+pasta_cannelloni.jpg;Cannelloni;Baked Cannelloni tubes filled with ricotta, covered in tomato sauce and bubbling cheese, fresh from the oven, ceramic dish
+
+Dateiname;Thema;Prompt
+pasta_header.jpg;Header: Pasta World;A chaotic artistic arrangement of raw pasta shapes: spaghetti, penne, farfalle, and asian noodles, scattered flour, italian rolling pin, cinematic lighting, 8k --ar 16:9
+pasta_spaghetti.jpg;Spaghetti;Fork twirling spaghetti with tomato basil sauce, steam rising, close up, shallow depth of field
+pasta_linguine.jpg;Linguine;Plate of Linguine pasta with pesto genovese, flat noodle shape visible, pine nuts garnish, overhead shot
+pasta_tagliatelle.jpg;Tagliatelle;Fresh egg Tagliatelle nests, raw on a wooden board, golden yellow color, flour dusting, porous texture
+pasta_pappardelle.jpg;Pappardelle;Wide Pappardelle ribbons with wild boar ragu, rustic brown sauce coating the broad noodles, hearty presentation
+pasta_bucatini.jpg;Bucatini;Bucatini Amatriciana, thick spaghetti with hollow center visible at the cut ends, red tomato sauce with guanciale
+pasta_capellini.jpg;Capellini;Angel Hair pasta Capellini, extremely thin noodles swirled in a light butter lemon sauce, delicate texture
+pasta_mafaldine.jpg;Mafaldine;Mafaldine pasta, ribbon shape with wavy ruffled edges, served with creamy mushroom sauce, distinct texture
+pasta_penne.jpg;Penne Rigate;Raw Penne Rigate scattered, close up showing the ridges on the tube surface and the angled cut
+pasta_fusilli.jpg;Fusilli;Fusilli spirals coated in red tomato sauce, the sauce trapped in the screw threads, macro food photography
+pasta_rigatoni.jpg;Rigatoni;Rigatoni tubes standing up in a baking dish, covered in melted mozzarella and tomato sauce, golden baked edges
+pasta_farfalle.jpg;Farfalle;Farfalle bowtie pasta salad, with cherry tomatoes and mozzarella balls, bright colors, distinct butterfly shape
+pasta_orecchiette.jpg;Orecchiette;Handmade Orecchiette pasta, ear shape with rough surface, tossed with broccoli rabe and chili, rustic puglia style
+pasta_trofie.jpg;Trofie;Trofie pasta, short twisted tapered shape, coated in bright green pesto, macro shot showing the twist
+pasta_paccheri.jpg;Paccheri;Giant Paccheri tubes served with seafood sauce, collapsed slightly under the weight of the sauce, neapolitan style
+pasta_conchiglie.jpg;Conchiglie;Large Conchiglie shells stuffed with spinach and ricotta, baked in tomato sauce, shell shape clearly visible
+pasta_ravioli.jpg;Ravioli;Fresh square Ravioli with zig-zag edges, filled with pumpkin, sage butter sauce, overhead view
+pasta_tortellini.jpg;Tortellini;Handmade Tortellini, small ring shape, served in clear broth (en brodo), elegant spoon
+pasta_cannelloni.jpg;Cannelloni;Baked Cannelloni tubes, golden cheese crust on top, tomato sauce bubbling at the edges, fresh basil
+pasta_lasagne.jpg;Lasagne;Slice of Lasagne Bolognese, showing distinct layers of pasta sheets, meat sauce and bechamel, cheese pull
+pasta_garganelli.jpg;Garganelli;Garganelli pasta, rolled tubes with ridges across the surface (comb marks), yellow egg dough, raw on a board
+asia_ramen.jpg;Ramen Nudeln;Bowl of Ramen noodles lifted by chopsticks, yellow crinkly noodles, steaming pork broth, egg and chashu in background
+asia_udon.jpg;Udon Nudeln;Thick white Udon noodles in a wooden bowl, simple dashi broth, scallions, smooth chunky texture
+asia_soba.jpg;Soba Nudeln;Cold Soba noodles made of buckwheat, greyish-brown color, served on a bamboo zaru tray with dipping sauce
+asia_rice.jpg;Reisnudeln;Pad Thai dish with flat rice noodles, bean sprouts, crushed peanuts, lime wedge, vibrant street food colors
+asia_glass.jpg;Glasnudeln;Glass noodle salad (Yum Woon Sen), transparent thin noodles, mixed with minced pork and chili, crystal clear texture
+asia_mie.jpg;Mie Nudeln;Wok stir fry with Mie noodles, egg noodles, vegetables, soy sauce glaze, steam rising, wok hei style
+asia_somen.jpg;Somen Nudeln;Somen noodles flowing in cold water (Nagashi Somen) or on ice, extremely thin white strands, refreshing summer look
+
+Dateiname;Thema;Prompt
+asia_header.jpg;Header: Asia Bakery;Close up of a fluffy Japanese milk bread being pulled apart, showing the cotton-like shreds and soft texture, bright airy lighting, white background, high detail --ar 16:9
+asia_shokupan.jpg;Shokupan;Loaf of square Japanese Shokupan milk bread, pure white crumb, golden thin crust, sliced, soft sunlight, minimalist style
+asia_melonpan.jpg;Melon Pan;Japanese Melon Pan, round bun with a grid-patterned cookie crust on top, sugar crystals sparkling, pastel background
+asia_anpan.jpg;Anpan;Japanese Anpan bun, golden brown, topped with black sesame seeds, cut open to show the dark red bean paste filling
+asia_currypan.jpg;Curry Pan;Fried Curry Pan, oval shape with crispy panko breadcrumbs, broken open revealing thick brown curry filling, steam rising
+asia_castella.jpg;Castella Cake;Slice of Nagasaki Castella sponge cake, golden brown top and bottom, moist yellow crumb, served on a wooden plate with tea
+asia_pineapple.jpg;Pineapple Bun;Hong Kong Pineapple Bun (Bolo Bao), golden crusted top resembling pineapple skin, a thick slab of cold butter wedged in the middle
+asia_eggtart.jpg;Egg Tart;Macau style Egg Tarts, flaky puff pastry shell, creamy yellow custard filling with caramelized brown spots, baking tray background
+asia_charsiu.jpg;Char Siu Bao;Steamed Char Siu Bao, fluffy white dough cracked open at the top, revealing bbq pork filling, in a bamboo steamer
+asia_mantou.jpg;Mantou;Plain steamed Mantou buns, smooth white skin, piled high in a steamer basket, soft and pillow-like
+asia_mooncake.jpg;Mooncake;Traditional Cantonese Mooncake, golden brown skin with intricate molded floral patterns, cut wedge showing lotus paste and salted egg yolk
+asia_pandan.jpg;Pandan Cake;Slice of green Pandan Chiffon Cake, very airy porous texture, vibrant natural green color, coconut flakes nearby
+asia_garlicbread.jpg;Korean Garlic Bread;Korean Cream Cheese Garlic Bread, round bun cut into six wedges, soaked in garlic butter, filled with cream cheese, parsley sprinkles
+
+Dateiname;Thema;Prompt
+global_intro.jpg;Header: Global Food;Collage of international starch dishes: African fufu pounding, steaming bamboo baskets, mexican tamales, cinematic lighting, diverse textures --ar 16:9
+global_fufu.jpg;Fufu;Ball of white Fufu dough in a bowl of red spicy soup, smooth shiny texture, hand dipping into the bowl, west african style
+global_couscous.jpg;Couscous;Fluffy Couscous grains piled high in a terracotta bowl, topped with roasted vegetables and chickpeas, steam rising
+global_mandazi.jpg;Mandazi;Golden brown fried triangular donuts (Mandazi), stacked on a plate, dusted with powdered sugar, coconut milk in background
+global_idli.jpg;Idli;White steamed Idli cakes stacked, soft fluffy texture, served on banana leaf with coconut chutney and sambar
+global_dosa.jpg;Dosa;Giant golden crispy Dosa crepe rolled up, served on a metal thali tray with various colorful chutneys
+global_puri.jpg;Puri;Puffed up golden fried Puri bread, round balloon shape, served with potato curry (bhaji), indian breakfast
+global_tamales.jpg;Tamales;Mexican Tamales wrapped in corn husks, one open showing the masa dough and red chili meat filling, rustic wooden table
+global_arepas.jpg;Arepas;Grilled corn Arepa sliced open and stuffed with shredded beef and cheese, grill marks on the surface, venezuelan street food
+spec_pao_de_queijo.jpg;Pao de Queijo;Basket of Brazilian cheese breads (Pao de Queijo), small golden balls, one torn open showing the chewy stretchy interior
+global_tapioka.jpg;Tapioka;Brazilian Tapioca crepe, white granular texture, folded over with cheese and coconut filling, frying pan background
+global_mochi.jpg;Mochi;Soft round white Mochi cakes, dusted with starch, arranged on a lacquer plate, one pulled to show elasticity
+global_zongzi.jpg;Zongzi;Chinese Sticky Rice Dumpling (Zongzi), pyramid shape wrapped in dark green bamboo leaves, tied with string
+global_suman.jpg;Suman;Filipino Suman, sticky rice roll wrapped in banana leaf, unwrapped to show the glistening rice cooked in coconut milk
+global_socca.jpg;Socca;Socca chickpea pancake, golden brown charred surface, baked in a cast iron pan, sprinkled with black pepper, sliced
+global_bannock.jpg;Bannock;Fried Bannock bread, golden brown bubbly crust, rustic outdoor setting, camping fire background
+
+Dateiname;Thema;Prompt
+brot_origin.jpg;Urzeit Fladenbrot;Prehistoric flatbread baking on a hot stone in the sun, primitive setting, grain stalks in background, cinematic warm lighting, detailed texture of cracked grain
+egypt_bread.jpg;Ägypten Bäckerei;Ancient Egyptian bakery scene, wall painting style brought to life, people kneading dough in large clay pots, dome ovens in background, sand colors, historical accuracy
+brot_modern_artisan.jpg;Modern Artisan Bread;Close up of a rustic sourdough bread loaf, dark caramelized crust with flour dusting, deep scoring ear, sitting on a wooden table, moody lighting
+
+Dateiname;Thema;Prompt
+hefe_sauerteig.jpg;Header: Hefe und Sauerteig;Split composition showing fresh yeast cube crumbling on left and bubbly sourdough starter in a jar on right, floury wooden table, cinematic lighting --ar 16:9
+hefe_frisch.jpg;Frische Hefe;Cube of fresh bakers yeast (42g), beige color, crumbling slightly, macro shot, isolated on white paper
+hefe_trocken.jpg;Trockenhefe;Pile of dry yeast granules (instant yeast), small beige spheres, macro shot showing texture
+sauerteig_roggen.jpg;Roggen Sauerteig;Active rye sourdough starter in a Weck glass jar, huge bubbles visible on the side, rising high, rustic background
+lievito_madre.jpg;Lievito Madre;Solid italian sourdough (Lievito Madre), cross cut showing the internal spiderweb structure of gluten, white flour dusting
+backpulver.jpg;Backpulver;White baking powder on a silver spoon, chemical purity look, soft studio lighting
+natron.jpg;Natron;Baking Soda powder, very fine white powder, next to a lemon wedge (to imply acid reaction), bright lighting
+hirschhornsalz.jpg;Hirschhornsalz;Hirschhornsalz crystals (Ammonium carbonate), slightly coarser than baking powder, in a small vintage spice bowl
+pottasche.jpg;Pottasche;Potash (Potassium carbonate) white powder, in a small glass dish, labelled, baking setting
+fermentation_bubbles.jpg;Gärung Makro;Extreme macro shot of dough surface showing gas bubbles trapped under the gluten skin, tension, scientific food photography
+chemie_reaction.jpg;Chemische Reaktion;Baking soda reacting with vinegar in a glass, fizzy eruption, bubbles rising fast, dynamic shot
+
+Dateiname;Thema;Prompt
+brot_laib_header.jpg;Header: Brotregal;A rustic bakery shelf filled with various artisan bread loaves (sourdough, rye, baguette), warm morning light, flour dusting, cinematic 8k --ar 16:9
+brot_scoring.jpg;Scoring Action;Close up macro shot of a razor blade scoring raw bread dough, the dough splitting open slightly, tension before baking, flour on surface
+brot_roggenmisch.jpg;Roggenmischbrot;German Rye-Wheat Bread loaf (Roggenmischbrot), oval shape, floured crust with cracks, sliced open to show dense greyish crumb, rustic table
+brot_baguette.jpg;Baguette;Traditional French Baguettes, long thin shape, golden crisp crust with pointed ends, large air holes visible in cut section, wrapped in paper
+brot_pumpernickel.jpg;Pumpernickel;Block of Westphalian Pumpernickel, extremely dark black-brown color, dense texture without holes, sliced thin, moist look
+brot_campagne.jpg;Pain de Campagne;French Country Bread (Pain de Campagne), large round loaf (Boule), thick flour-dusted crust, rustic score pattern, sourdough texture
+brot_ruchbrot.jpg;Ruchbrot;Swiss Ruchbrot, rustic dark wheat bread, elongated shape, rough crispy crust, airy but slightly darker crumb
+brot_sourdough.jpg;San Francisco Sourdough;San Francisco style Sourdough, very dark blistered crust (almost burnt), huge open wild crumb structure, white interior
+brot_ciabatta.jpg;Ciabatta;Italian Ciabatta loaf, flat slipper shape, dusted with flour, cut open revealing massive irregular air pockets, olive oil bottle nearby
+brot_altamura.jpg;Pane di Altamura;Pane di Altamura DOP, distinct high shape (folded), very yellow crumb from durum wheat, thick crunchy crust
+brot_borodinsky.jpg;Borodinsky;Russian Borodinsky bread, dark rye tin loaf, sprinkled with whole coriander seeds on top, dense texture
+brot_challah.jpg;Challah;Braided Challah bread, golden shiny egg-wash glaze, soft fluffy texture, sesame seeds, jewish holiday setting
+brot_tiger.jpg;Tiger Bread;Dutch Tiger Bread (Tijgerbrood), distinctive cracked crust pattern looking like giraffe/tiger skin, white bread interior
+brot_brioche.jpg;Brioche;French Brioche Nanterre, golden yellow rich crumb, high butter content, soft and pull-apart texture, shiny crust
+brot_sodabread.jpg;Irish Soda Bread;Traditional Irish Soda Bread, round loaf with a deep cross cut on top, dense crumb with raisins, rustic wooden board
+
+Dateiname;Thema;Prompt
+kleinbrot_header.jpg;Header: Brötchenkorb;A woven bread basket overflowing with diverse bread rolls: german kaiser rolls, dark rye rolls, pretzels, and croissants, morning sunlight, bakery setting --ar 16:9
+roll_kaiser.jpg;Kaisersemmel;Austrian Kaisersemmel, golden crispy crust with the distinct 5-star fold pattern, flour dusting, rustic wood background
+roll_schrippe.jpg;Schrippe;German Schnittbroetchen (Schrippe), oval shape with a deep burst opening along the top, crispy surface, plain background
+roll_lauge.jpg;Laugengebäck;Lye Roll (Laugenweckle), deep chestnut brown shiny color, coarse salt grains on top, slashed cross, white soft interior visible at the cuts
+roll_roeggelchen.jpg;Röggelchen;Cologne Roeggelchen, pair of dark rye rolls baked together, rustic floury crust, hearty texture
+roll_vinschgauer.jpg;Vinschgauer;South Tyrolean Vinschgauer, flat rustic rye breads paired together, fennel seeds visible on surface, alpine style
+roll_weggli.jpg;Weggli;Swiss Weggli, soft round milk bun with a deep central furrow, golden egg-wash shine, no flour, clean look
+roll_mohnflesserl.jpg;Mohnflesserl;Austrian Mohnflesserl, braided bun with poppy seeds covering the top, golden baked, complex knot shape
+roll_franzbroetchen.jpg;Franzbrötchen;Hamburg Franzbroetchen, flattened cinnamon pastry, caramelized sugar layers, flaky texture, sweet bakery vibe
+roll_bagel.jpg;Bagel;New York style Bagel with sesame seeds, boiled and baked, dense chewy texture, side view showing the height
+roll_croissant.jpg;Croissant;French Butter Croissant, perfect honeycomb structure visible at the tip, golden flaky layers, crumbs on table
+roll_scones.jpg;Scones;English Scones, round shape with a natural break in the middle, served with clotted cream and strawberry jam
+roll_englishmuffin.jpg;English Muffin;English Muffin, round flat bread, fork-split open showing the nooks and crannies, toasted
+roll_burgerbun.jpg;Burger Bun;Brioche Burger Bun, shiny golden dome, sesame seeds, soft and fluffy appearance, isolated
+roll_paodequeijo.jpg;Pao de Queijo;Brazilian Cheese Breads (Pao de Queijo), small golden balls, slightly irregular shape, cheesy texture
+
+Dateiname;Thema;Prompt
+soft_header.jpg;Header: Zopf und Buns;A golden brown Swiss braided bread (Zopf) next to soft shiny burger buns, on a wooden board, warm morning sunlight, high quality food photography --ar 16:9
+soft_briochebun.jpg;Brioche Bun;Single Brioche Burger Bun, shiny golden egg-wash glaze, sesame seeds, soft fluffy look, isolated on white
+soft_potatoroll.jpg;Potato Roll;Potato Roll / Martin's Potato Roll style, slightly yellow crumb, very soft and squishy texture, plain top, studio light
+soft_hotdog.jpg;Hot Dog Bun;New England style Hot Dog Bun, split top, side view showing the soft white interior, ready to be filled
+soft_milch.jpg;Milchbrötchen;Swiss Weggli, round soft milk bun with deep central furrow, golden shine, plain background
+soft_zopf.jpg;Schweizer Zopf;Traditional Swiss Sunday Zopf bread, 2-strand braid, glossy golden crust, sliced end showing fluffy crumb
+soft_challah.jpg;Challah;Jewish Challah bread, 6-strand braid, poppy seeds on top, golden brown, festive setting with candles blurred in background
+soft_hefezopf.jpg;Hefezopf;German sweet Hefezopf, topped with pearl sugar (Hagelzucker) and sliced almonds, easter decoration
+soft_cinnamonroll.jpg;Cinnamon Roll;American Cinnamon Roll with white cream cheese frosting dripping down, spiral shape, gooey center
+soft_babka.jpg;Babka;Chocolate Babka loaf, sliced to show the intricate swirls of dark chocolate layers inside the dough, rustic knife
+soft_panettone.jpg;Panettone;Italian Panettone, tall dome shape, raisins and candied fruit visible, paper mold, festive christmas vibe
+soft_stutenkerl.jpg;Stutenkerl;Stutenkerl / Grittibaenz dough figure, raisins for eyes, holding a white clay pipe, golden baked
+soft_buchteln.jpg;Buchteln;Tray of baked Buchteln (Rohrnudeln), pulled apart to show the soft texture, dusted with powdered sugar
+
+Dateiname;Thema;Prompt
+laminated_header.jpg;Header: Layers;Cross section of a perfect honeycomb croissant structure, backlit by warm sun, golden flaky crust crumbs, macro photography --ar 16:9
+lam_croissant.jpg;Croissant;Single classic French Croissant on a marble table, golden brown, distinct layers visible at the cut end
+lam_painauchoc.jpg;Pain au Chocolat;Pain au Chocolat, rectangular puffy pastry, two dark chocolate batons visible in the cross section, flaky top
+lam_franzbroetchen.jpg;Franzbrötchen;Hamburg Franzbroetchen, pressed flat cinnamon pastry, caramelized sugar crust, spiral layers visible
+lam_danish.jpg;Danish Pastry;Danish Spandauer pastry, flaky laminated dough rim, vanilla custard center with a glaze, icing sugar
+lam_kouignamann.jpg;Kouign Amann;Kouign-Amann pastry, round shape, extremely shiny caramelized sugar coating (glass-like), buttery layers
+lam_cronut.jpg;Cronut;Cronut pastry, tall laminated dough ring, fried golden, sugar coated, creamy filling visible in layers
+lam_millefeuille.jpg;Mille Feuille;Slice of Mille-feuille, three layers of flat puff pastry, two layers of vanilla cream, fondant icing with chocolate pattern on top
+lam_pastelnata.jpg;Pastel de Nata;Portuguese Pastel de Nata, flaky tart shell, blistered caramelized custard top (black spots), rustic look
+lam_palmier.jpg;Palmier;Palmier cookie (Elephant ear), heart shape, tightly rolled layers, caramelized sugar coating, crisp texture
+lam_volauvent.jpg;Vol-au-vent;Vol-au-vent pastry case, empty, tall puff pastry tower with a lid, ready to be filled
+lam_apfelstrudel.jpg;Apfelstrudel;Slice of Viennese Apple Strudel, extremely thin dough layers visible, apple raisin filling, vanilla sauce on side
+lam_baklava.jpg;Baklava;Piece of Baklava, many thin filo layers, chopped pistachios in the middle, glistening with syrup, diamond shape
+lam_sfogliatella.jpg;Sfogliatella;Neapolitan Sfogliatella Riccia, shell shape with hundreds of thin crispy ridges (lobster tail), dusted with sugar
+
+Dateiname;Thema;Prompt
+pfannkuchen_header.jpg;Header: Pancakes;A stack of fluffy golden american pancakes with maple syrup dripping down and a pat of butter, blueberries, morning light, high key photography --ar 16:9
+pancake_crepe.jpg;Crêpes;Thin French Crepes folded into triangles on a plate, dusted with powdered sugar, lemon wedges on side, delicate texture
+pancake_swiss.jpg;Schweizer Omelette;Rolled Palatschinken filled with apricot jam, arranged on an oval plate, dusted with sugar, austrian style
+pancake_galette.jpg;Galette Bretonne;Buckwheat Galette Bretonne, folded edges into a square, center showing ham cheese and a sunny side up egg, rustic cider cider in background
+pancake_flaedle.jpg;Flädle;Flädlesuppe (Pancake soup), strips of pancake floating in clear beef broth with chives, spoon lifting some
+pancake_american.jpg;American Pancake;Short stack of 3 thick fluffy pancakes, golden brown, syrup pool on plate, fork cutting a piece
+pancake_kaiserschmarrn.jpg;Kaiserschmarrn;Kaiserschmarrn in a rustic iron pan, torn pancake pieces, caramelized, raisins, dusted with icing sugar, plum compote (Zwetschgenroester) on side
+pancake_blini.jpg;Blini;Small Russian Blini pancakes, topped with sour cream and red caviar, dill garnish, elegant appetizer setting
+pan_souffle.jpg;Japanese Souffle;Japanese Souffle Pancakes, extremely tall and thick, jiggly texture, whipped cream and strawberries on top, pastel background
+pan_omelett.jpg;Omelett;Classic French Omelette, pale yellow color without browning, rolled into a perfect cigar shape, shiny surface, herbs on top
+pan_tortilla.jpg;Tortilla Española;Spanish Tortilla de Patatas, thick potato egg omelette cake, slice cut out showing layers of potato, rustic style
+pan_dutchbaby.jpg;Dutch Baby;Dutch Baby pancake in a cast iron skillet, puffed up high at the edges, collapsed center with lemon and powdered sugar
+pan_okonomiyaki.jpg;Okonomiyaki;Japanese Okonomiyaki savory pancake, topped with criss-cross mayonnaise, brown sauce, and dancing bonito flakes (katsuobushi), on a teppan grill
+pan_dosa.jpg;Dosa;South Indian Masala Dosa, huge paper-thin golden crepe rolled into a cylinder, served on banana leaf with chutney bowls
+pan_poffertjes.jpg;Poffertjes;Dutch Poffertjes, pile of tiny puffy mini-pancakes, melting butter knob on top, heavily dusted with powdered sugar, cardboard boat
+
+Dateiname;Thema;Prompt
+viennoiserie_header.jpg;Header: Viennoiserie;A cooling rack filled with golden brown croissants and pains au chocolat, morning sunlight hitting the flaky crust, bakery atmosphere --ar 16:9
+vien_croissant.jpg;Croissant;Single perfect Croissant, straight shape, distinct layers visible at the cut end, golden sheen, marble table
+vien_chocolat.jpg;Pain au Chocolat;Pain au Chocolat, rectangular puffy pastry, two dark chocolate batons visible in the cross section, flaky top
+vien_franz.jpg;Franzbrötchen;Hamburg Franzbroetchen, pressed flat cinnamon pastry, caramelized sugar crust, spiral layers visible, rustic look
+vien_brioche.jpg;Brioche;Classic French Brioche a tete, golden brown shiny crust, soft fluffy yellow crumb, high butter content visual
+vien_danish.jpg;Spandauer Danish;Danish Spandauer pastry, flaky laminated dough rim, vanilla custard center with a glaze, icing sugar
+vien_nata.jpg;Pastel de Nata;Portuguese Pastel de Nata, flaky tart shell, blistered caramelized custard top (black spots), rustic look
+vien_kouign.jpg;Kouign Amann;Kouign-Amann pastry, round shape, extremely shiny caramelized sugar coating (glass-like), buttery layers
+vien_escargot.jpg;Pain aux Raisins;Pain aux Raisins (Escargot), spiral pastry with vanilla custard and raisins, glazed, top down view
+vien_cruffin.jpg;Cruffin;Cruffin pastry, tall laminated dough muffin shape, dusted with powdered sugar, creamy filling visible
+vien_palmier.jpg;Palmier;Palmier cookie (Elephant ear), heart shape, tightly rolled layers, caramelized sugar coating, crisp texture
+vien_nuss.jpg;Nussschnecke;German Hazelnut Snail (Nussschnecke), spiral yeast dough with nut filling, white fondant stripes on top
+
+Dateiname;Thema;Prompt
+lauge_header.jpg;Header: Lauge;A rustic wooden board with freshly baked german pretzels (brezel) and sesame bagels, coarse salt grains scattered, dark moody lighting --ar 16:9
+lauge_brezel.jpg;Laugenbrezel;German Pretzel (Brezel), classic knot shape, deep chestnut brown shiny lye crust, coarse salt, soft thick belly, thin crispy arms
+lauge_bagel.jpg;New York Bagel;New York Bagel with Everything Seasoning (poppy, sesame, garlic), sliced open, dense chewy crumb structure, plain background
+lauge_silserli.jpg;Silserli;Swiss Silserli lye roll, round shape, brown shiny crust, sandwich cut, simple clean look
+lauge_croissant.jpg;Laugen Croissant;Lye Croissant (Laugencroissant), flaky croissant shape but dark brown lye color, sprinkled with sesame, buttery layers visible
+lauge_stangen.jpg;Salzstangen;Pretzel Sticks (Salzstangen), thin crispy sticks piled up, salt crystals, snack food photography
+lauge_konfekt.jpg;Laugenkonfekt;Bowl of Lye Bites (Laugenkonfekt), small chestnut-brown dough balls topped with poppy seeds, sesame and cheese
+lauge_montreal.jpg;Montreal Bagel;Montreal Style Bagel, larger hole, thinner ring, boiled in honey water, wood fired oven char marks, sesame seeds
+lauge_simit.jpg;Simit;Turkish Simit bread ring, covered entirely in sesame seeds, golden brown (not lye brown), twisted dough rope look
+lauge_obwarzanek.jpg;Obwarzanek;Polish Obwarzanek Krakowski, large braided dough ring, boiled and baked, sprinkled with poppy seeds, street food style
+
+Dateiname;Thema;Prompt
+dry_header.jpg;Header: Knäckebrot;Rustic wooden table with stacks of swedish crispbread (knäckebröd) and italian cantuccini, dry wheat stalks, warm lighting --ar 16:9
+dry_knaecke.jpg;Knäckebrot;Round Swedish crispbread (Knäckebröd) with a hole in the center, rough rye texture, seeds on top
+dry_zwieback.jpg;Zwieback;German Zwieback (Rusk), golden brown toasted slices, airy texture, piled up
+dry_cantuccini.jpg;Cantuccini;Italian Cantuccini almond biscuits, diagonal cut showing whole almonds inside, hard crunchy texture
+dry_matze.jpg;Matze;Matzah bread sheets, square, pale bubbly surface with brown toasted spots, unleavened
+dry_schuettel.jpg;Schüttelbrot;South Tyrolean Schüttelbrot, thin hard rye flatbread, rough surface with fennel seeds
+dry_grissini.jpg;Grissini;Tall glass filled with long thin Grissini breadsticks, golden baked, sesame seeds
+dry_taralli.jpg;Taralli;Italian Taralli, small ring shaped crackers, shiny surface from boiling, golden baked
+dry_friselle.jpg;Friselle;Friselle pugliesi, dry hard ring bread, rough porous texture (stone-like), ready to be soaked
+dry_hardtack.jpg;Schiffszwieback;Historical Hardtack biscuit, square, very dense, pale, holes docked into surface, on rough wood
+dry_brotchips.jpg;Brotchips;Bowl of Bread Chips (roasted baguette slices), seasoned with herbs, very crispy look
+dry_rusks.jpg;Rusks;South African Ouma Rusks, chunky rectangular buttermilk biscuits, rough texture for dipping
+dry_filocracker.jpg;Filo Cracker;Shard of baked Filo pastry, extremely thin layers shattering, glistening with oil and sea salt
+
+Dateiname;Thema;Prompt
+tech_header.jpg;Header: Technik;Close up of baker's hands kneading dough on a floured wooden work surface, dynamic motion blur, artisan atmosphere --ar 16:9
+tech_fenster.jpg;Fenstertest;Windowpane test (Fenstertest) baking, hands stretching dough very thin against a light source, translucent membrane visible without tearing
+tech_fold.jpg;Stretch and Fold;Baker performing stretch and fold technique in a dough tub, lifting the dough high to stretch gluten strands
+tech_rundwirken.jpg;Rundwirken;Baker shaping a round loaf (Boule) on the bench, cupped hands creating surface tension, motion
+tech_poke.jpg;Druckprobe;Finger poke test on raw sourdough bread dough, close up of a finger indent that is slowly springing back halfway
+tech_scoring.jpg;Scoring;Scoring a bread loaf with a lame (razor blade), holding the blade at a 45 degree angle, shallow cut
+tech_ear.jpg;Bread Ear;Close up macro of a baked sourdough bread ear (Ausbund), dark caramelized crust lifting up, revealing the interior
+tech_autolyse.jpg;Autolyse;Shaggy dough mass of just flour and water in a bowl, rough texture, no smooth surface yet
+tech_laminieren.jpg;Laminieren Sourdough;Laminating sourdough technique, dough stretched extremely thin over a large table surface like a tablecloth
+
+Dateiname;Thema;Prompt
+zeitreise_header.jpg;Header: Zeitreise;Split image: Left side old dark bark bread on rough wood table, Right side futuristic green algae bread on sleek laboratory metal surface --ar 16:9
+zeit_pompeji.jpg;Pompeji Brot;Carbonized loaf of bread from Pompeii (Panis Quadratus), black, round shape divided into 8 segments, museum lighting
+zeit_rinde.jpg;Rindenbrot;Finnish Bark Bread (Pettuleipä), dark flatbread made with pine bark flour, rustic texture, pine needles in background
+zeit_kommiss.jpg;Kommissbrot;Historical German military bread (Kommissbrot), dense dark rye tin loaf, wrapped in wax paper, vintage style
+zeit_kartoffel.jpg;Kartoffelbrot;Potato Bread loaf, cut open showing moist yellowish crumb, raw potatoes nearby, rustic
+zeit_trench.jpg;Trench Cake;World War 1 Trench Cake, dense fruit cake in a tin, historical setting, simple ingredients
+zeit_nasa.jpg;NASA Tortilla;NASA Space Tortilla floating in microgravity (simulated), vacuum packed food, ISS background window
+zeit_insekten.jpg;Insektenbrot;Cricket Flour Bread, sliced loaf looking slightly darker, dried crickets as decoration nearby, sustainable food concept
+zeit_algen.jpg;Algenbrot;Spirulina Algae Bread, vibrant green crumb color, sliced on clean white plate, futuristic food
+zeit_3dprint.jpg;3D Printed Bread;3D printed bread dough structure, intricate geometric lattice pattern, laser cooking process visible, macro shot
+zeit_vertical.jpg;Vertical Farming;Wheat growing indoors under purple LED lights in a vertical farm, high tech agriculture, clean lab environment
+
+Dateiname;Thema;Prompt
+rich_header.jpg;Header: Festtage;A festive table with a sliced Panettone and a German Stollen, dusted with powdered sugar, warm candlelight, christmas atmosphere --ar 16:9
+rich_panettone.jpg;Panettone;Italian Panettone, tall cylindrical shape, brown domed crust, cut open to show huge yellow airy crumb structure and candied fruits
+rich_pandoro.jpg;Pandoro;Pandoro cake, star-shaped section, golden yellow inside, dusted heavily with vanilla icing sugar, plain background
+rich_colomba.jpg;Colomba;Colomba Pasquale, dove-shaped Easter bread, topped with pearl sugar and whole almonds, glazed surface
+rich_stollen.jpg;Christstollen;Dresden Stollen, oblong shape with a thick white coating of powdered sugar, cut slice showing marzipan core and raisins
+rich_gugelhupf.jpg;Gugelhupf;Marble Gugelhupf cake in a bundt pan shape, swirled chocolate and vanilla dough, dusted with sugar
+rich_berliner.jpg;Berliner Krapfen;Berliner doughnut (Krapfen), fried golden ball, sugar coated, injected with red jam, one with a bite taken out
+rich_brioche.jpg;Brioche Nanterre;Brioche Nanterre loaf, made of joined dough balls, shiny golden egg wash crust, extremely soft yellow texture
+rich_babka.jpg;Babka;Chocolate Babka, braided loaf cake, swirls of dark chocolate ganache visible in the dough layers, sliced
+rich_kulitsch.jpg;Kulitsch;Russian Kulich, tall cylindrical easter bread, topped with white fondant icing and colorful sprinkles, cyrillic letters XB
+rich_pinze.jpg;Osterpinze;Austrian Osterpinze, round sweet bread with three deep cuts forming a three-leaf clover shape, shiny brown crust
+
+Dateiname;Thema;Prompt
+glutenfrei_header.jpg;Header: Glutenfrei;A rustic loaf of gluten-free seed bread, sliced, showing many visible sunflower and pumpkin seeds, clean bright setting --ar 16:9
+free_buchweizen.jpg;Buchweizenbrot;Buckwheat bread loaf, dark greyish-brown crumb, rustic crust, slices on wooden board
+free_reismais.jpg;Reis Mais Brot;Gluten free white bread loaf (Rice/Corn mix), slightly pale crust, tighter crumb structure than wheat bread
+free_saaten.jpg;Saatenbrot Wunderbrot;Seed bread (Wunderbrot), extremely dense texture made only of seeds and oats, no flour visible, moist slice
+free_teff.jpg;Teff Injera;Injera flatbread, rolled up, spongy texture with many small eyes, dark teff flour color
+free_eiweiss.jpg;Eiweißbrot;Protein Bread (Eiweissbrot), dark brown, wet look, visible linseeds and soy grits, dense rectangular slice
+free_cloud.jpg;Cloud Bread;Cloud bread, round fluffy golden discs, very airy and light, piled on a plate, egg-based texture
+free_essener.jpg;Essener Brot;Essenes Bread (Sprouted Grain), very dense, moist, flat rectangular shape, rustic raw food look
+
+Dateiname;Thema;Prompt
+glutenfrei_header.jpg;Header: Glutenfrei;A rustic loaf of gluten-free seed bread, sliced, showing many visible sunflower and pumpkin seeds, clean bright setting, scientific vibe --ar 16:9
+free_buchweizen.jpg;Buchweizenbrot;Buckwheat bread loaf, dark greyish-brown crumb, rustic crust, slices on wooden board
+free_psyllium.jpg;Psyllium Brot;Gluten free white bread with Psyllium, very open airy crumb (large holes), light color, sliced
+free_saaten.jpg;Saatenbrot Wunderbrot;Seed bread (Wunderbrot), extremely dense texture made only of seeds and oats, no flour visible, moist slice
+free_teff.jpg;Teff Injera;Injera flatbread, rolled up, spongy texture with many small eyes, dark teff flour color
+free_eiweiss.jpg;Eiweißbrot;Protein Bread (Eiweissbrot), dark brown, wet look, visible linseeds and soy grits, dense rectangular slice
+free_cloud.jpg;Cloud Bread;Cloud bread, round fluffy golden discs, very airy and light, piled on a plate, egg-based texture
+free_essener.jpg;Essener Brot;Essenes Bread (Sprouted Grain), very dense, moist, flat rectangular shape, rustic raw food look
+free_lupine.jpg;Lupinenbrot;Lupin flour bread, slightly yellow crumb color, sandwich loaf shape, healthy look
+
+Dateiname;Thema;Prompt
+roggen_header.jpg;Header: Roggen;A sliced loaf of dark german rye bread on a wooden board, dense crumb texture, flour dusting, rustic mood --ar 16:9
+roggen_vollkorn.jpg;Roggenvollkorn;German Whole Rye Bread (Roggenvollkornbrot), dense greyish crumb, thick crust, sliced
+roggen_pumpernickel.jpg;Pumpernickel;Block of Westphalian Pumpernickel, extremely dark black-brown color, dense texture without holes, sliced thin, moist look
+roggen_vinschgauer.jpg;Vinschgauer;South Tyrolean Vinschgauer bread pairs, flat rustic shape, fennel seeds visible on surface
+roggen_walliser.jpg;Walliser Roggenbrot;Swiss Walliser Roggenbrot AOP, round compact loaf with distinct cracked earth pattern on crust, dark flour
+roggen_schuettel.jpg;Schüttelbrot;South Tyrolean Schüttelbrot, very thin hard crispbread, rough surface with caraway seeds
+roggen_borodinsky.jpg;Borodinsky;Russian Borodinsky bread, dark brown rectangular tin loaf, coriander seeds on top crust, sliced
+roggen_rugbrod.jpg;Rugbrod;Danish Rugbrod, rectangular tin loaf packed with sunflower and pumpkin seeds, moist dark crumb
+roggen_finnisch.jpg;Finnisches Lochbrot;Finnish Ruisleipä, flat rye bread round with a hole in the center, rustic dry texture
+
+Dateiname;Thema;Prompt
+gesundheit_header.jpg;Header: Gesundheit;A beautiful arrangement of healthy baking ingredients: sourdough starter in a jar, whole grain flour, seeds, and fresh ears of wheat, natural light --ar 16:9
+health_sourdough.jpg;Sauerteig Vollkorn;Whole grain sourdough bread sliced, dense nutritious crumb, dark crust, rustic healthy look
+health_sprouted.jpg;Gekeimtes Brot;Sprouted grain bread (Essenes), very moist and dense, visible sprouts in texture, rustic slice
+health_hafer.jpg;Haferbrot;Oat bread loaf in a tin shape, topped with rolled oats, light brown soft crumb
+health_pumpernickel.jpg;Pumpernickel;Slice of black Pumpernickel bread, shiny moist surface, coarse texture, healthy food
+health_dinkel.jpg;Dinkelbrot;Spelt bread (Dinkel), golden crust, slightly yellowish crumb, dusted with flour, oval shape
+health_porridge.jpg;Porridge Brot;Porridge bread slice, very moist and soft texture, oats visible inside, fresh and clean look
+health_seeds.jpg;Chia Hanf Brot;Superfood bread with chia seeds and hemp seeds, dark nutrient-rich crumb, slice details
+health_focaccia.jpg;Focaccia;Italian Focaccia bread, dimpled surface with rosemary and olive oil, golden baked, large air bubbles (digestible)
+
+Dateiname;Thema;Prompt
+ofen_header.jpg;Header: Ofenfeuer;Inside view of a wood fired brick oven with glowing embers and flames in the back, rustic stone texture, cinematic lighting --ar 16:9
+ofen_holz.jpg;Holzbackofen;Traditional outdoor wood fired pizza oven, stone arch, fire inside, bread baking on the floor
+ofen_etagen.jpg;Etagenofen;Professional deck oven in a bakery, multiple levels with glass doors, showing bread rising inside
+ofen_konvektion.jpg;Konvektomat;Convection oven interior, fan visible in the back, baking tray with croissants
+ofen_dutch.jpg;Dutch Oven;Cast iron Dutch Oven pot with lid off, revealing a freshly baked sourdough boule inside, steam rising
+ofen_stahl.jpg;Backstahl;Heavy baking steel plate on an oven rack, a pizza baking on top with bubbling cheese
+ofen_stein.jpg;Backstein;Rectangular chamotte baking stone (pizza stone) in an oven, porous texture close up
+ofen_schwaden.jpg;Schwadomat;Steam generation in oven, water being poured onto hot lava stones or steel balls, bursting steam cloud
+ofen_roemer.jpg;Römertopf;Clay baker (Römertopf) with lid next to it, oval shape, rustic terracotta look
+
+Dateiname;Thema;Prompt
+fail_header.jpg;Header: Fehleranalyse;A baker inspecting the crumb of a sliced bread loaf, looking critical, rustic bakery background --ar 16:9
+fail_soup.jpg;Teigsuppe;Sticky wet dough sticking excessively to hands and table, shiny surface, looking unmanageable, messy
+fail_seam.jpg;Offener Schluss;Bottom of a proofing basket (Banneton) showing the dough seam opening up, flour visible preventing closure
+fail_skin.jpg;Gerissene Haut;Close up of a raw dough ball surface tearing apart during shaping, revealing rough structure underneath
+fail_uebergare.jpg;Übergare;Flat sourdough loaf (Frisbee), pale crust, cuts did not open, dense structure at the bottom
+fail_untergare.jpg;Untergare;Sourdough bread exploded at the side (blowout), very round shape, huge caverns inside dense crumb
+fail_flyingtop.jpg;Flying Top;Bread slice where the top crust has separated from the crumb leaving a large gap (Flying top), mushroom shape
+fail_klitsch.jpg;Klitsch;Slice of rye bread with a dense wet streak (water ring) at the bottom, gummy texture
+fail_boden.jpg;Verbrannter Boden;Bottom of a bread loaf turned over, showing black burnt char, rest of the loaf is fine
+fail_salz.jpg;Salz vergessen;Pale bread loaf, risen too much, looks dry and tasteless, lack of crust color
+fail_elefant.jpg;Elefantenhaut;Close up of bread crust looking like elephant skin, wrinkled and leathery, greyish shine
+fail_volumen.jpg;Kleines Volumen;Small dense bread brick, did not rise, very tight crumb, heavy look
+
+Dateiname;Thema;Prompt
+urkorn_header.jpg;Header: Urkorn;A moody shot of ancient grain ears (Emmer, Einkorn) in a field, golden hour light, rustic feel --ar 16:9
+urkorn_einkorn.jpg;Einkorn Mehl;A bowl of yellow Einkorn flour next to grains, warm yellow tint, rustic wood
+urkorn_emmer.jpg;Emmer Korn;Close up of Emmer grains, darker and harder look, in a linen sack
+urkorn_kamut.jpg;Kamut Brot;Slices of Kamut bread, large pores, yellowish crumb, very appetizing
+urkorn_dinkel.jpg;Dinkel Ähre;Spelt wheat ears (Dinkel) close up, long and elegant shape
+urkorn_rotkorn.jpg;Rotkornweizen;Purple wheat bread (Rotkornweizen), sliced showing purple streaks in the crumb
+urkorn_roggen.jpg;Champagnerroggen;Light rye bread loaf (Champagnerroggen), dusted with flour, on a stone surface
+reste_header.jpg;Header: Reste;Composition of leftover bread, bread crumbs in a jar, and croutons, sustainable cooking concept --ar 16:9
+reste_bruehstueck.jpg;Brühstück;A bowl with a brown soaking mush (scald/Brühstück) made from old bread, steam rising
+reste_broesel.jpg;Semmelbrösel;Fine breadcrumbs (Semmelbrösel) in a wooden scoop, golden color
+reste_knoedel.jpg;Semmelknödel;Bavarian Bread Dumplings (Semmelknoedel) on a plate with mushroom sauce
+reste_panzanella.jpg;Panzanella;Bowl of Panzanella salad, chunks of soaked bread mixed with red tomatoes and basil, olive oil glistening
+reste_ritter.jpg;Armer Ritter;French Toast (Armer Ritter), golden brown, dusted with powdered sugar and cinnamon
+reste_chips.jpg;Brotchips;Crispy bread chips in a bowl, seasoned with herbs
+reste_suppe.jpg;Brotsuppe;Rustic brown bread soup in a ceramic bowl, garnished with chives
+
+Dateiname;Thema;Prompt
+kuchen_header.jpg;Header: Rührteig;A marble bundt cake (Gugelhupf) dusted with sugar next to a whisk and eggs, warm kitchen light --ar 16:9
+cake_gugelhupf.jpg;Gugelhupf;Marble Bundt Cake slice, showing the swirl of chocolate and vanilla, moist texture
+cake_muffin.jpg;Muffins;Blueberry muffin cut open, showing coarse crumb and berries, rustic paper liner
+cake_cupcake.jpg;Cupcakes;Vanilla cupcake with a swirl of pink buttercream frosting, fine texture, delicate
+cake_brownie.jpg;Brownies;Stack of fudgy chocolate brownies, shiny crackly top crust, dense moist interior
+cake_madeleine.jpg;Madeleines;Classic French Madeleines, shell shape with the characteristic hump on top, golden baked
+cake_pound.jpg;Pound Cake;Slices of pound cake (Quatre Quarts), dense yellow crumb, simple loaf shape
+cake_banana.jpg;Banana Bread;Banana bread loaf sliced, moist dark crumb, walnuts inside, banana on the side
+
+Dateiname;Thema;Prompt
+fail_header.jpg;Header: Fehleranalyse;A baker inspecting the crumb of a sliced bread loaf, looking critical, rustic bakery background --ar 16:9
+fail_soup.jpg;Teigsuppe;Sticky wet dough sticking excessively to hands and table, shiny surface, looking unmanageable, messy
+fail_seam.jpg;Offener Schluss;Bottom of a proofing basket (Banneton) showing the dough seam opening up, flour visible preventing closure
+fail_skin.jpg;Gerissene Haut;Close up of a raw dough ball surface tearing apart during shaping, revealing rough structure underneath

@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – Die Pannenhilfe: Analyse & Rettung</title>
+    
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <script src="../assets/js/util.js"></script>
+    
+    <style>
+        /* --- Layout & Basis --- */
+        body { background-color: #fcfbf9; color: #333; font-family: sans-serif; margin: 0; padding: 0; }
+        .page { min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* HEADER */
+        .header { 
+            padding: 20px 40px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            background: #fff;
+        }
+        .brand { font-weight: bold; font-size: 1.2em; color: #3e2723; }
+        .btn-back {
+            background-color: #4e342e;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-back:hover { background-color: #5d4037; }
+
+        .knowledge-layout { display: flex; max-width: 1200px; margin: 40px auto; gap: 40px; padding: 0 20px; align-items: flex-start; flex-grow: 1; }
+        
+        /* Navigation Sidebar */
+        .chapter-nav { width: 250px; flex-shrink: 0; background: white; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow-y: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .chapter-nav h3 { margin-top: 0; border-bottom: 2px solid #8d6e63; padding-bottom: 10px; color: #4e342e; }
+        .chapter-link { display: block; padding: 10px 0; color: #666; text-decoration: none; border-bottom: 1px solid #eee; transition: all 0.2s; }
+        .chapter-link.sub-link { padding-left: 15px; font-size: 0.95em; border-left: 2px solid transparent; }
+        .chapter-link:hover { color: #8d6e63; padding-left: 5px; }
+        .chapter-link.active { font-weight: bold; color: #4e342e; border-left: 3px solid #8d6e63; padding-left: 10px; background: #fafafa; }
+        .nav-section-title { font-size: 0.85em; text-transform: uppercase; color: #999; margin-top: 15px; margin-bottom: 5px; font-weight: bold; letter-spacing: 1px; }
+
+        /* Content Area */
+        .content-area { flex-grow: 1; background: white; padding: 40px; border-radius: 8px; border: 1px solid #e0e0e0; line-height: 1.8; color: #333; min-width: 0; }
+        .content-section { margin-bottom: 60px; scroll-margin-top: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 40px; }
+        .content-section:last-child { border-bottom: none; }
+        
+        /* Typografie */
+        h1.page-title { font-size: 2.5em; color: #3e2723; margin-top: 0; }
+        h2 { color: #5d4037; border-left: 5px solid #8d6e63; padding-left: 15px; margin-top: 0; margin-bottom: 20px; }
+        h3 { color: #6d4c41; margin-top: 30px; font-size: 1.3em; border-bottom: 1px solid #eee; padding-bottom: 8px;}
+        p { margin-bottom: 20px; font-size: 1.05em; }
+        .lead { font-size: 1.2em; color: #555; }
+        
+        /* Bilder */
+        .content-img { width: 100%; height: auto; border-radius: 4px; margin-bottom: 10px; border: 1px solid #e0e0e0; cursor: zoom-in; transition: transform 0.2s ease; display: block; }
+        .content-img:hover { transform: scale(1.02); }
+        .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+        
+        /* Boxen & Karten */
+        .fail-box { background: #ffebee; border-left: 5px solid #d32f2f; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .fail-box h4 { margin-top: 0; color: #b71c1c; }
+        
+        .fix-box { background: #e8f5e9; border-left: 5px solid #2e7d32; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .fix-box h4 { margin-top: 0; color: #1b5e20; }
+        
+        .sos-box { background: #fff3e0; border-left: 5px solid #ff9800; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .sos-box h4 { margin-top: 0; color: #e65100; }
+
+        /* Karten Grid */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
+        .error-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column; transition: transform 0.2s;}
+        .error-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .error-card-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid #eee; cursor: zoom-in; }
+        .error-card-body { padding: 15px; flex-grow: 1; }
+        .error-title { font-weight: bold; font-size: 1.1em; color: #d32f2f; margin-bottom: 5px; }
+        .error-desc { font-size: 0.9em; color: #555; }
+        .error-badge { display: inline-block; font-size: 0.7em; background: #eee; padding: 2px 6px; border-radius: 4px; margin-bottom: 8px; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;}
+        .error-badge.phase-1 { background: #fff3e0; color: #e65100; }
+        .error-badge.phase-2 { background: #ffebee; color: #c62828; }
+
+        @media (max-width: 800px) { 
+            .knowledge-layout { flex-direction: column; } 
+            .chapter-nav { width: 100%; position: static; margin-bottom: 20px;} 
+            .card-grid { grid-template-columns: 1fr; } 
+            .header { flex-direction: column; gap: 10px;}
+        }
+        
+        /* Lightbox */
+        #image-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); align-items: center; justify-content: center; cursor: zoom-out; opacity: 0; transition: opacity 0.3s ease; padding: 20px; box-sizing: border-box; }
+        #image-modal.show { display: flex; opacity: 1; }
+        #modal-img { max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 0 20px rgba(0,0,0,0.5); border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <a href="../baender.html" class="btn-back">← Zurück</a>
+            <div class="brand">Wissensbibliothek</div>
+        </div>
+
+        <div class="knowledge-layout">
+            <nav class="chapter-nav">
+                <h3>Inhalt</h3>
+                <a href="#intro" class="chapter-link active">Einleitung</a>
+                
+                <div class="nav-section-title">Phase 1: Im Teig</div>
+                <a href="#suppen" class="chapter-link">1. Teig ist Suppe</a>
+                <a href="#schluss" class="chapter-link">2. Schluss schließt nicht</a>
+                <a href="#risshaut" class="chapter-link">3. Haut reißt beim Formen</a>
+                
+                <div class="nav-section-title">Phase 2: Nach dem Backen</div>
+                <a href="#uebergare" class="chapter-link">4. Brot läuft breit</a>
+                <a href="#untergare" class="chapter-link">5. Brot reißt wild</a>
+                <a href="#krume" class="chapter-link">6. Krume zu dicht</a>
+                
+                <div class="nav-section-title">Galerie</div>
+                <a href="#galerie" class="chapter-link">7. Fehler-Galerie</a>
+            </nav>
+
+            <main class="content-area">
+                <section id="intro" class="content-section">
+                    <h1 class="page-title">Die Pannenhilfe: Analyse & Rettung</h1>
+                    <p class="lead">Fehler passieren nicht nur im Ofen. Meistens passieren sie schon vorher. Die Kunst ist nicht, keine Fehler zu machen, sondern sie zu erkennen, bevor es zu spät ist.</p>
+                    <img src="../assets/image/baender/fail_header.jpg" class="content-img" alt="Bäcker prüft kritisch die Krume eines Brotes" onerror="this.style.display='none'">
+                </section>
+
+                <section id="suppen" class="content-section">
+                    <h2>1. Der Teig ist eine Suppe (Zu weich/Klebrig)</h2>
+                    <p>Du willst wirken, aber der Teig klebt überall und fließt weg.</p>
+                    <div class="fail-box">
+                        <h4>Mögliche Ursachen</h4>
+                        <ul>
+                            <li><strong>Zu viel Wasser:</strong> Rezept nicht angepasst an das Mehl (Saugfähigkeit).</li>
+                            <li><strong>Überknetet (Overmixed):</strong> Das Glutengerüst wurde mechanisch wieder zerstört (Zusammenbruch). Der Teig wird glänzend und klebrig.</li>
+                            <li><strong>Enzym-Abbau:</strong> Bei langer Gare ist das Gluten "verdaut" (Proteolyse).</li>
+                        </ul>
+                    </div>
+                    <div class="sos-box">
+                        <h4>SOS-Rettung</h4>
+                        <p>Nicht noch mehr Mehl einkneten (das verändert die Rezeptur zu stark)!
+                        <br><strong>Lösung 1:</strong> Ab in die <strong>Kastenform</strong>. Die Form stützt den weichen Teig.
+                        <br><strong>Lösung 2:</strong> Mache <strong>Focaccia</strong> daraus. Auf ein Blech kippen, Olivenöl drüber, Löcher drücken, backen.</p>
+                    </div>
+                </section>
+
+                <section id="schluss" class="content-section">
+                    <h2>2. Der Boden (Schluss) schließt nicht</h2>
+                    <p>Du versuchst, das Brot rundzuwirken, aber unten geht die Naht immer wieder auf.</p>
+                    <div class="fail-box">
+                        <h4>Ursache: Mehl-Barriere</h4>
+                        <p>Du hast zu viel Mehl auf der Arbeitsfläche verwendet. Wenn Mehl zwischen die Teigschichten kommt, verlieren sie ihre Klebkraft (Adhäsion). Sie können sich nicht mehr verbinden.</p>
+                    </div>
+                    <div class="fix-box">
+                        <h4>Der Trick</h4>
+                        <p>Pinsel das überschüssige Mehl ab oder sprühe einen <strong>Hauch Wasser</strong> auf die Stelle. Drücke sie dann fest zusammen. Arbeite beim nächsten Mal mit weniger Mehl (oder nur an den Händen).</p>
+                    </div>
+                </section>
+
+                <section id="risshaut" class="content-section">
+                    <h2>3. Haut reißt beim Formen</h2>
+                    <p>Du straffst den Teigling (Schleifen), aber plötzlich reißt die Oberfläche ein.</p>
+                    <ul>
+                        <li><strong>Zu viel Spannung:</strong> Du hast zu stark/lange gewirkt.</li>
+                        <li><strong>Trockene Haut:</strong> Der Teig lag vorher unbedeckt da und hat eine "Elefantenhaut" bekommen. Diese ist nicht mehr dehnbar.</li>
+                        <li><strong>Abgebautes Gluten:</strong> Der Teig ist überreif. Das Gerüst ist morsch.</li>
+                    </ul>
+                    <p><strong>Lösung:</strong> Sofort aufhören zu wirken. Den Teigling entspannen lassen (10 Min unter einem Tuch), dann vorsichtig formen.</p>
+                </section>
+
+                <section id="uebergare" class="content-section">
+                    <h2>4. Das Brot läuft breit (Übergare)</h2>
+                    <p>Das Brot kommt flach wie eine Flunder aus dem Ofen. Die Schnitte sind nicht aufgegangen.</p>
+                    <div class="fail-box">
+                        <h4>Ursache: Overproofing</h4>
+                        <p>Der Teig stand zu lange. Das Glutennetzwerk wurde von Säure und Enzymen geschwächt. Es kann das Gas nicht mehr halten. Die Hefe hat ihr Pulver verschossen.</p>
+                    </div>
+                </section>
+
+                <section id="untergare" class="content-section">
+                    <h2>5. Brot reißt unkontrolliert (Untergare)</h2>
+                    <p>Das Brot ist im Ofen explodiert. Es ist kugelig rund, aber an der Seite hässlich aufgerissen.</p>
+                    <div class="fail-box">
+                        <h4>Ursache: Underproofing</h4>
+                        <p>Der Teig kam zu früh in den Ofen. Die Hefe hatte noch extrem viel Kraft ("Ofentrieb"). Da das Glutennetzwerk noch sehr straff war, hat der Druck sich den Weg des geringsten Widerstands gesucht.</p>
+                    </div>
+                </section>
+
+                <section id="krume" class="content-section">
+                    <h2>6. Krume zu dicht (Klitschig)</h2>
+                    <p>Das Brot ist schwer, innen nass und klebrig. Es lässt sich kaum schneiden.</p>
+                    <ul>
+                        <li><strong>Zu wenig Backzeit:</strong> Kerntemperatur < 98°C.</li>
+                        <li><strong>Anschneiden zu früh:</strong> Brot muss auskühlen, damit die Stärke sich stabilisiert.</li>
+                    </ul>
+                </section>
+
+                <section id="galerie" class="content-section">
+                    <h2>7. Fehler-Galerie (10 typische Probleme)</h2>
+                    <div id="container-error" class="card-grid"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div id="image-modal"><img id="modal-img" src=""></div>
+
+    <script>
+        const IMG_PATH = '../assets/image/baender/';
+        
+        // --- DATA: 10 Fehlerbilder (Erweitert) ---
+        const DATA = [
+            // Phase 1: Teig-Probleme
+            { name: "Teig-Suppe", error: "Zu viel Wasser / Überknetet", desc: "Teig fließt vom Tisch, lässt sich nicht formen. Klebrig, glänzend, keine Struktur.", img: "fail_soup.jpg", phase: "phase-1" },
+            { name: "Offener Schluss", error: "Mehl-Barriere", desc: "Der Boden des Brotes geht immer wieder auf. Zu viel Mehl beim Wirken verwendet.", img: "fail_seam.jpg", phase: "phase-1" },
+            { name: "Gerissene Haut", error: "Zu viel Spannung", desc: "Oberfläche reißt beim Schleifen ein. Teig war zu trocken oder wurde überstrapaziert.", img: "fail_skin.jpg", phase: "phase-1" },
+            
+            // Phase 2: Back-Probleme
+            { name: "Übergare (Fladen)", error: "Overproofed", desc: "Teig ist kollabiert. Flach, Schnitte nicht aufgegangen, blasse Kruste.", img: "fail_uebergare.jpg", phase: "phase-2" },
+            { name: "Untergare (Explosion)", error: "Underproofed", desc: "Brot ist fast rund, seitlich aufgerissen. Dichte Krume mit wenigen riesigen Löchern.", img: "fail_untergare.jpg", phase: "phase-2" },
+            { name: "Flying Top", error: "Formfehler", desc: "Die Kruste hebt sich wie ein Deckel ab. Ursache: Zu viel Mehl beim Wirken oder Haut angetrocknet.", img: "fail_flyingtop.jpg", phase: "phase-2" },
+            { name: "Wasserring (Klitsch)", error: "Backfehler", desc: "Dichter, nasser Streifen am Boden. Ursache: Brot zu früh angeschnitten.", img: "fail_klitsch.jpg", phase: "phase-2" },
+            { name: "Verbrannter Boden", error: "Hitze", desc: "Schwarz unten. Ursache: Backstein zu heiß oder zu weit unten im Ofen.", img: "fail_boden.jpg", phase: "phase-2" },
+            { name: "Fader Geschmack", error: "Salzmangel", desc: "Brot geht extrem schnell auf, schmeckt nach Pappe. Salz vergessen.", img: "fail_salz.jpg", phase: "phase-2" },
+            { name: "Elefantenhaut", error: "Hautfehler", desc: "Kruste ist rissig und ledrig. Ursache: Übergare im Kühlschrank oder zu viel Feuchtigkeit.", img: "fail_elefant.jpg", phase: "phase-2" }
+        ];
+
+        // --- RENDER LOGIC ---
+        (function() {
+            // Navigation
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.chapter-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => { if (scrollY >= section.offsetTop - 250) current = section.getAttribute('id'); });
+                if (scrollY < 100) current = 'intro';
+                navLinks.forEach(link => { link.classList.remove('active'); if (link.getAttribute('href').includes(current)) link.classList.add('active'); });
+            });
+
+            // Cards
+            const container = document.getElementById('container-error');
+            DATA.forEach(row => {
+                let imageHtml = `<div style="height:180px; background:#eee; color:#ccc; display:flex; align-items:center; justify-content:center;">Kein Bild</div>`;
+                if(row.img) {
+                    imageHtml = `<img src="${IMG_PATH}${row.img}" class="error-card-img" alt="${row.name}" onerror="this.outerHTML='<div style=\'height:180px; background:#eee; color:#ccc; display:flex; align-items:center; justify-content:center;\'>Bild fehlt</div>'">`;
+                }
+                
+                // Badge Logik
+                let badgeClass = row.phase === "phase-1" ? "phase-1" : "phase-2";
+                let badgeText = row.phase === "phase-1" ? "Im Teig (Phase 1)" : "Nach Backen (Phase 2)";
+
+                const cardHtml = `
+                    <div class="error-card">
+                        ${imageHtml}
+                        <div class="error-card-body">
+                            <span class="error-badge ${badgeClass}">${badgeText}</span>
+                            <div class="error-title">${row.name}</div>
+                            <div class="error-desc">${row.desc}</div>
+                        </div>
+                    </div>`;
+                container.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        })();
+
+        // Lightbox
+        document.addEventListener('DOMContentLoaded', () => {
+             const modal = document.getElementById('image-modal'); 
+             const modalImg = document.getElementById('modal-img');
+             
+             function openModal(imgSrc) { 
+                 if (!imgSrc) return; 
+                 modalImg.src = imgSrc; 
+                 modal.classList.add('show'); 
+             }
+             
+             modal.addEventListener('click', () => { 
+                 modal.classList.remove('show'); 
+                 setTimeout(() => modalImg.src = '', 300); 
+             });
+             
+             document.addEventListener('click', function(e) { 
+                 if (e.target.classList.contains('content-img') || e.target.classList.contains('error-card-img')) { 
+                     openModal(e.target.src); 
+                 } 
+             });
+        });
+    </script>
+</body>
+</html>

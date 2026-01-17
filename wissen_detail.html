@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – Wissen & Details</title>
+    <link rel="stylesheet" href="./assets/css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    
+    <style>
+        /* --- Lokales Styling für die Wissens-Seite --- */
+        body { 
+            background: #f4f7f6; 
+            color: #333; 
+            font-family: 'Segoe UI', sans-serif; 
+            margin: 0;
+            padding-bottom: 50px;
+        }
+
+        /* Container */
+        .wiki-container { 
+            max-width: 1100px; 
+            margin: 20px auto; 
+            background: white; 
+            padding: 50px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
+        }
+
+        /* Layout Grid */
+        .wiki-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 340px; 
+            gap: 60px; 
+            margin-top: 30px;
+        }
+
+        /* Header Bereich */
+        .header-section { border-bottom: 1px solid #eee; padding-bottom: 20px; margin-bottom: 20px; }
+        .badge-cat { 
+            display: inline-block; padding: 5px 12px; background: #e0e0e0; color: #555; 
+            border-radius: 4px; font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;
+            margin-bottom: 10px;
+        }
+        h1 { margin: 5px 0 5px 0; color: #4e342e; font-size: 2.5em; line-height: 1.1; }
+        .subtitle { color: #7f8c8d; font-size: 1.2em; font-weight: 300; margin-top: 5px;}
+
+        /* Buttons */
+        .btn { 
+            padding: 8px 16px; background: #4e342e; color: white; border: none; border-radius: 4px; 
+            cursor: pointer; text-decoration: none; display: inline-block; font-size: 0.9rem;
+        }
+        .btn:hover { background: #6d4c41; }
+        .btn-guide {
+            background: #2e7d32; /* Grün für Anleitung */
+            margin-top: 15px;
+            font-weight: bold;
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 20px;
+            box-shadow: 0 4px 10px rgba(46, 125, 50, 0.2);
+            transition: transform 0.2s;
+        }
+        .btn-guide:hover { background: #1b5e20; transform: translateY(-2px); }
+
+        /* Sidebar Elements */
+        .img-placeholder-wiki { 
+            width: 100%; height: 280px; background: #eee; 
+            display: flex; align-items: center; justify-content: center; 
+            border-radius: 8px; margin-bottom: 25px; overflow: hidden; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .info-card { background: #fafafa; padding: 25px; border-radius: 8px; border: 1px solid #eee; }
+        .info-group { margin-bottom: 20px; border-bottom: 1px dotted #e0e0e0; padding-bottom: 10px; }
+        .info-group:last-child { border-bottom: none; margin-bottom: 0; }
+        .info-label { display: block; font-size: 0.75em; text-transform: uppercase; color: #999; font-weight: bold; margin-bottom: 4px; }
+        .info-value { font-size: 1.0em; font-weight: 500; color: #333; line-height: 1.4; }
+
+        .info-ref-box { 
+            background: #e3f2fd; border-left: 4px solid #2196f3; padding: 15px; 
+            margin-top: 20px; font-size: 0.9em; line-height: 1.5; color: #0d47a1; border-radius: 0 4px 4px 0;
+        }
+
+        /* Content Text */
+        .article-text { font-size: 1.1em; line-height: 1.8; color: #333; }
+        .article-text h2 { 
+            color: #4e342e; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 40px; font-size: 1.4em;
+        }
+        .article-text p { margin-bottom: 20px; text-align: justify; }
+
+        /* Property Box (Tipps) */
+        .property-box { 
+            background: #fffde7; padding: 25px; border-left: 5px solid #fbc02d; 
+            margin-top: 40px; border-radius: 4px; 
+        }
+        .property-box h4 { margin: 0 0 10px 0; color: #f57f17; font-size: 1.1em; display: flex; align-items: center; gap: 8px;}
+
+        /* Linked Recipes */
+        .linked-recipes { margin-top: 60px; padding-top: 30px; border-top: 1px solid #eee; }
+        .recipe-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
+        .recipe-chip { 
+            display: inline-flex; align-items: center; padding: 8px 16px; background: white; 
+            border: 1px solid #ddd; border-radius: 50px; text-decoration: none; color: #333; 
+            transition: all 0.2s; font-weight: 500; box-shadow: 0 2px 5px rgba(0,0,0,0.05); font-size: 0.9em;
+        }
+        .recipe-chip:hover { background: #4e342e; color: white; border-color: #4e342e; transform: translateY(-2px); }
+
+        /* Responsive */
+        @media (max-width: 900px) { 
+            .wiki-grid { grid-template-columns: 1fr; } 
+            .wiki-container { padding: 20px; margin: 10px; }
+            .img-placeholder-wiki { height: auto; max-height: 300px; }
+        }
+        @media print { 
+            .btn, .no-print, .linked-recipes { display: none !important; } 
+            .wiki-container { box-shadow: none; margin: 0; padding: 0; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="no-print" style="max-width:1100px; margin:20px auto; padding: 0 20px; display:flex; justify-content:space-between;">
+    <button class="btn" onclick="location.href='./wissen.html'">← Zur Übersicht</button>
+    <button class="btn" style="background:#757575;" onclick="window.print()">🖨️ Drucken</button>
+</div>
+
+<div id="wikiOutput" class="wiki-container">
+    <div style="text-align:center; padding:80px; color:#aaa; font-style:italic;">
+        Lade Wissensdatenbank...
+    </div>
+</div>
+
+<script>
+(async () => {
+    // 1. Parameter aus URL holen
+    const params = new URLSearchParams(window.location.search);
+    const wissenId = params.get('id');
+
+    const container = document.getElementById('wikiOutput');
+
+    if (!wissenId) {
+        container.innerHTML = "<p style='text-align:center; color:red;'>Fehler: Keine ID übergeben.</p>";
+        return;
+    }
+
+    // --- Helper: CSV Laden mit Semikolon ---
+    // WICHTIG: delimiter: ";" ist hier fest gesetzt für deine neuen Daten
+    const loadCsv = (url) => {
+        return new Promise((resolve) => {
+            Papa.parse(url, {
+                download: true, 
+                header: true, 
+                delimiter: ";", 
+                skipEmptyLines: true,
+                complete: (res) => resolve(res.data),
+                error: (err) => { console.error(err); resolve([]); }
+            });
+        });
+    };
+
+    try {
+        // 2. Daten parallel laden (Wissen + Rezepte für Verknüpfungen)
+        const [wissenData, rezepteData] = await Promise.all([
+            loadCsv('./assets/data/wdb_wissen.csv'),
+            loadCsv('./assets/data/wdb_rezepte.csv')
+        ]);
+
+        // 3. Den passenden Eintrag suchen
+        // Trim() wichtig, falls Leerzeichen in der CSV hängen
+        const entry = wissenData.find(r => r.wissen_id && r.wissen_id.trim() === wissenId);
+
+        if (!entry) {
+            container.innerHTML = `<p style='text-align:center; padding:50px;'>Eintrag mit ID "<b>${wissenId}</b>" nicht gefunden.</p>`;
+            return;
+        }
+
+        // --- 4. Logik für Verknüpfungen ---
+
+        // A) Rezepte finden, die diesen Stoff benutzen
+        const searchName = entry.name ? entry.name.toLowerCase() : "###";
+        const linkedRecipesMap = new Map(); // Map verhindert Doppelte Einträge (wg. mehreren Schritten)
+        
+        rezepteData.forEach(r => {
+            if (!r.zutaten_list) return;
+            // Einfache Suche: Ist der Name der Zutat im Zutatenstring enthalten?
+            if (r.zutaten_list.toLowerCase().includes(searchName)) {
+                if (!linkedRecipesMap.has(r.brot_id)) {
+                    linkedRecipesMap.set(r.brot_id, r.name);
+                }
+            }
+        });
+
+        // B) Checken ob eine Herstellungs-Anleitung verlinkt ist (Spalte: anleitung_rezept_id)
+        let guideButtonHtml = '';
+        if (entry.anleitung_rezept_id && entry.anleitung_rezept_id.trim() !== '') {
+            guideButtonHtml = `
+                <a href="./rezept_ansicht.html?id=${entry.anleitung_rezept_id.trim()}" class="btn btn-guide">
+                    <span>🛠️ Anleitung: Selbst herstellen</span>
+                </a>
+            `;
+        }
+
+        // --- 5. HTML Zusammenbauen ---
+
+        // Bildpfad
+        const imgPath = entry.bild_ref ? `./assets/image/wissen/${entry.bild_ref}` : null;
+        const imgHtml = imgPath 
+            ? `<img src="${imgPath}" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentNode.innerHTML='<span style=\\'color:#999\\'>Bild nicht gefunden</span>'">`
+            : `<span style="color:#aaa;">Kein Bild hinterlegt</span>`;
+
+        // Internationale Refs formatieren (Pipes | zu Zeilenumbrüchen)
+        const intRefHtml = entry.internationale_ref 
+            ? entry.internationale_ref.replace(/\|/g, '<br>') 
+            : null;
+
+        // Technische Daten formatieren (Pipes | zu Zeilenumbrüchen oder Liste)
+        // Falls deine Daten key:value sind, könnte man das hier parsen. 
+        // Falls es nur Text ist, zeigen wir es einfach an.
+        const techDataHtml = entry.technische_daten 
+            ? entry.technische_daten.replace(/\|/g, '<br>') 
+            : '-';
+
+        const html = `
+            <div class="header-section">
+                <span class="badge-cat">${entry.kategorie || 'Allgemein'}</span>
+                <h1>${entry.name}</h1>
+                <div class="subtitle">${entry.typisierung_mahlgrad || ''}</div>
+                ${guideButtonHtml}
+            </div>
+
+            <div class="wiki-grid">
+                
+                <div class="main-content">
+                    <div class="article-text">
+                        <h2>Hintergrund & Geschichte</h2>
+                        <p>${entry.beschreibung_history || 'Keine Beschreibung vorhanden.'}</p>
+                        
+                        <h2>Eigenschaften im Backprozess</h2>
+                        <p>${entry.back_eigenschaften || 'Keine spezifischen Daten vorhanden.'}</p>
+                    </div>
+
+                    ${entry.verwendung_tipps ? `
+                    <div class="property-box">
+                        <h4>💡 Verwendung & Tipps</h4>
+                        <p>${entry.verwendung_tipps}</p>
+                    </div>` : ''}
+
+                    <div class="linked-recipes">
+                        <h3 style="color:#4e342e; font-size:1.1em; margin-bottom:15px;">
+                            ${linkedRecipesMap.size > 0 ? 'Verwendet in diesen Rezepten:' : ''}
+                        </h3>
+                        ${linkedRecipesMap.size > 0 ? `
+                        <div class="recipe-chips">
+                            ${Array.from(linkedRecipesMap).map(([id, name]) => 
+                                `<a href="./rezept_ansicht.html?id=${id}" class="recipe-chip">🍞 ${name}</a>`
+                            ).join('')}
+                        </div>
+                        ` : '<small style="color:#999">Derzeit in keinem erfassten Rezept namentlich gefunden.</small>'}
+                    </div>
+                </div>
+
+                <aside class="sidebar">
+                    <div class="img-placeholder-wiki">
+                        ${imgHtml}
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-group">
+                            <span class="info-label">Technische Daten / Info</span>
+                            <div class="info-value">${techDataHtml}</div>
+                        </div>
+
+                        ${intRefHtml ? `
+                        <div class="info-ref-box">
+                            <span class="info-label" style="color:#1565c0; margin-bottom:8px;">Internationale Referenz</span>
+                            <div>${intRefHtml}</div>
+                        </div>` : ''}
+                    </div>
+                </aside>
+            </div>
+        `;
+
+        container.innerHTML = html;
+
+    } catch (err) {
+        console.error(err);
+        container.innerHTML = `<p style="color:red; padding:30px;">Ein Fehler ist aufgetreten: ${err.message}</p>`;
+    }
+})();
+</script>
+
+</body>
+</html>

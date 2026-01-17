@@ -1,0 +1,14 @@
+Logik-Check für die Zukunft (HTML Anpassung)
+Wenn du das im HTML implementierst, kannst du einfach auf den 3. Teil der ID filtern:
+
+if (id.includes("-B-")) -> Zeige in "Treibmittel & Basics" Liste (oder Pop-up).
+
+if (id.includes("-S-")) -> Zeige in "Warenkunde/Zutaten" Liste.
+
+if (id.includes("-G-") || id.includes("-R-")) -> Zeige in der Haupt-Rezeptliste.
+
+Oder du nutzt die Spalte Gruppe:
+
+Gruppe == 'Treibmittel' -> Ausblenden in Hauptliste.
+
+Gruppe == 'Grundteige' -> Anzeigen (da man sie auch solo machen kann, z.B. Tortillas auf Vorrat).

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – Das zweite Leben: Resteverwertung</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <script src="../assets/js/util.js"></script>
+    <style>
+        body { background-color: #fcfbf9; color: #333; font-family: sans-serif; margin: 0; padding: 0; }
+        .page { min-height: 100vh; display: flex; flex-direction: column; }
+        .header { padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; background: #fff; }
+        .brand { font-weight: bold; font-size: 1.2em; color: #3e2723; }
+        .btn-back { background-color: #4e342e; color: #fff; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 0.95em; text-decoration: none; display: inline-block; }
+        .btn-back:hover { background-color: #5d4037; }
+        .knowledge-layout { display: flex; max-width: 1200px; margin: 40px auto; gap: 40px; padding: 0 20px; align-items: flex-start; flex-grow: 1; }
+        .chapter-nav { width: 250px; flex-shrink: 0; background: white; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow-y: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .chapter-nav h3 { margin-top: 0; border-bottom: 2px solid #8d6e63; padding-bottom: 10px; color: #4e342e; }
+        .chapter-link { display: block; padding: 10px 0; color: #666; text-decoration: none; border-bottom: 1px solid #eee; transition: all 0.2s; }
+        .chapter-link:hover { color: #8d6e63; padding-left: 5px; }
+        .chapter-link.active { font-weight: bold; color: #4e342e; border-left: 3px solid #8d6e63; padding-left: 10px; background: #fafafa; }
+        .content-area { flex-grow: 1; background: white; padding: 40px; border-radius: 8px; border: 1px solid #e0e0e0; line-height: 1.8; color: #333; min-width: 0; }
+        .content-section { margin-bottom: 60px; scroll-margin-top: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 40px; }
+        .content-section:last-child { border-bottom: none; }
+        h1.page-title { font-size: 2.5em; color: #3e2723; margin-top: 0; }
+        h2 { color: #5d4037; border-left: 5px solid #8d6e63; padding-left: 15px; margin-top: 0; margin-bottom: 20px; }
+        .content-img { width: 100%; height: auto; border-radius: 4px; margin-bottom: 10px; border: 1px solid #e0e0e0; cursor: zoom-in; transition: transform 0.2s ease; }
+        .content-img:hover { transform: scale(1.02); }
+        .cycle-box { background: #e8f5e9; border-left: 5px solid #2e7d32; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .cycle-box h4 { margin-top: 0; color: #1b5e20; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
+        .reste-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column; transition: transform 0.2s;}
+        .reste-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .reste-card-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid #eee; cursor: zoom-in; }
+        .reste-card-body { padding: 15px; flex-grow: 1; }
+        .reste-title { font-weight: bold; font-size: 1.1em; color: #3e2723; margin-bottom: 5px; }
+        .reste-desc { font-size: 0.9em; color: #555; }
+        .reste-badge { display: inline-block; font-size: 0.7em; background: #eee; padding: 2px 6px; border-radius: 4px; margin-bottom: 8px; color: #666; font-weight: bold; }
+        @media (max-width: 800px) { .knowledge-layout { flex-direction: column; } .chapter-nav { width: 100%; position: static; margin-bottom: 20px;} .card-grid { grid-template-columns: 1fr; } .header { flex-direction: column; gap: 10px;} }
+        #image-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); align-items: center; justify-content: center; cursor: zoom-out; opacity: 0; transition: opacity 0.3s ease; padding: 20px; box-sizing: border-box; }
+        #image-modal.show { display: flex; opacity: 1; }
+        #modal-img { max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 0 20px rgba(0,0,0,0.5); border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="header"><a href="../baender.html" class="btn-back">← Zurück</a><div class="brand">Wissensbibliothek</div></div>
+        <div class="knowledge-layout">
+            <nav class="chapter-nav">
+                <h3>Inhalt</h3>
+                <a href="#intro" class="chapter-link active">Einleitung</a>
+                <a href="#zutat" class="chapter-link">1. Altbrot als Zutat</a>
+                <a href="#kueche" class="chapter-link">2. In der Küche</a>
+                <a href="#galerie" class="chapter-link">3. Galerie</a>
+            </nav>
+            <main class="content-area">
+                <section id="intro" class="content-section">
+                    <h1 class="page-title">Das zweite Leben: Resteverwertung</h1>
+                    <p class="lead">Brot wegzuwerfen ist in vielen Kulturen tabu. Trockenes Brot ist kein Abfall, sondern ein wertvoller Rohstoff voller Aroma und Röststoffe.</p>
+                    <img src="../assets/image/baender/reste_header.jpg" class="content-img" alt="Altbrot und Semmelbrösel" onerror="this.style.display='none'">
+                </section>
+                <section id="zutat" class="content-section">
+                    <h2>1. Altbrot als Zutat im neuen Brot</h2>
+                    <div class="cycle-box">
+                        <h4>Das Brühstück</h4>
+                        <p>Profis mahlen altes, geröstetes Brot zu Pulver. Dieses Pulver wird mit kochendem Wasser überbrüht.
+                        <br><strong>Der Effekt:</strong> Das Altbrot saugt extrem viel Wasser auf. Gibt man dieses "Brühstück" in einen neuen Teig, bleibt das Brot viel länger frisch und schmeckt aromatischer (durch die doppelte Maillard-Reaktion der alten Kruste).</p>
+                    </div>
+                </section>
+                <section id="kueche" class="content-section">
+                    <h2>2. In der Küche</h2>
+                    <p>Vom Knödel bis zum Salat: Brot ist ein Schwamm für Saucen.</p>
+                    <ul>
+                        <li><strong>Semmelknödel:</strong> Nutzen die Struktur von altbackenen Brötchen, um Milch und Ei zu binden.</li>
+                        <li><strong>Panzanella:</strong> Italienischer Brotsalat. Hartes Brot saugt Tomatensaft und Olivenöl auf.</li>
+                        <li><strong>Armer Ritter (French Toast):</strong> In Ei-Milch getränkt und gebraten.</li>
+                    </ul>
+                </section>
+                <section id="galerie" class="content-section">
+                    <h2>3. Galerie der Verwertung</h2>
+                    <div id="container-reste" class="card-grid"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+    <div id="image-modal"><img id="modal-img" src=""></div>
+    <script>
+        const IMG_PATH = '../assets/image/baender/';
+        const DATA = [
+            { name: "Altbrot-Brühstück", type: "Backen", desc: "Geröstetes, gemahlenes Altbrot mit heißem Wasser. Der beste Frischhalte-Booster für neue Brote.", img: "reste_bruehstueck.jpg" },
+            { name: "Semmelbrösel", type: "Panade", desc: "Paniermehl. Trockenes Weißbrot fein gerieben. Für Wiener Schnitzel oder als Bindung.", img: "reste_broesel.jpg" },
+            { name: "Semmelknödel", type: "Beilage", desc: "Der Klassiker aus Bayern. Altbackene Semmeln, Milch, Eier, Petersilie. Im Wasserbad gegart.", img: "reste_knoedel.jpg" },
+            { name: "Panzanella", type: "Salat", desc: "Toskanischer Brotsalat. Hartes Brot weicht im Saft von reifen Tomaten, Essig und Öl auf.", img: "reste_panzanella.jpg" },
+            { name: "Armer Ritter", type: "Süßspeise", desc: "French Toast / Pain Perdu. Altbrot in Eiermilch getränkt und in Butter goldbraun gebraten.", img: "reste_ritter.jpg" },
+            { name: "Brotchips", type: "Snack", desc: "Dünne Scheiben von Baguette oder Sauerteig, mit Öl und Kräutern gewürzt und im Ofen getrocknet.", img: "reste_chips.jpg" },
+            { name: "Brotsuppe", type: "Suppe", desc: "Herzhafte Suppe aus Schwarzbrot-Resten, Brühe und Ei. Alte Bauernspeise.", img: "reste_suppe.jpg" }
+        ];
+        document.addEventListener('DOMContentLoaded', () => {
+             const sections = document.querySelectorAll('.content-section'); const navLinks = document.querySelectorAll('.chapter-link');
+             window.addEventListener('scroll', () => { let current = ''; sections.forEach(section => { if (scrollY >= section.offsetTop - 250) current = section.getAttribute('id'); }); if (scrollY < 100) current = 'intro'; navLinks.forEach(link => { link.classList.remove('active'); if (link.getAttribute('href').includes(current)) link.classList.add('active'); }); });
+             const container = document.getElementById('container-reste');
+             DATA.forEach(row => { let imageHtml = row.img ? `<img src="${IMG_PATH}${row.img}" class="reste-card-img" alt="${row.name}" onerror="this.outerHTML='<div style=\\'height:180px; background:#eee; color:#ccc; display:flex; align-items:center; justify-content:center;\\'>Bild fehlt</div>'">` : `<div style="height:180px; background:#eee;"></div>`;
+                container.insertAdjacentHTML('beforeend', `<div class="reste-card">${imageHtml}<div class="reste-card-body"><span class="reste-badge">${row.type}</span><div class="reste-title">${row.name}</div><div class="reste-desc">${row.desc}</div></div></div>`); });
+             const modal = document.getElementById('image-modal'); const modalImg = document.getElementById('modal-img');
+             function openModal(imgSrc) { if (!imgSrc) return; modalImg.src = imgSrc; modal.classList.add('show'); }
+             modal.addEventListener('click', () => { modal.classList.remove('show'); setTimeout(() => modalImg.src = '', 300); });
+             document.addEventListener('click', function(e) { if (e.target.classList.contains('content-img') || e.target.classList.contains('reste-card-img')) { openModal(e.target.src); } });
+        });
+    </script>
+</body>
+</html>
+

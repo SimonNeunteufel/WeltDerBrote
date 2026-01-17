@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – Viennoiserie: Die Kunst der Schichten</title>
+    
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <script src="../assets/js/util.js"></script>
+    
+    <style>
+        /* --- Layout & Basis --- */
+        body { background-color: #fcfbf9; color: #333; font-family: sans-serif; margin: 0; padding: 0; }
+        .page { min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* HEADER */
+        .header { 
+            padding: 20px 40px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            background: #fff;
+        }
+        .brand { font-weight: bold; font-size: 1.2em; color: #3e2723; }
+        .btn-back {
+            background-color: #4e342e;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-back:hover { background-color: #5d4037; }
+
+        .knowledge-layout { display: flex; max-width: 1200px; margin: 40px auto; gap: 40px; padding: 0 20px; align-items: flex-start; flex-grow: 1; }
+        
+        /* Navigation Sidebar */
+        .chapter-nav { width: 250px; flex-shrink: 0; background: white; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow-y: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .chapter-nav h3 { margin-top: 0; border-bottom: 2px solid #8d6e63; padding-bottom: 10px; color: #4e342e; }
+        .chapter-link { display: block; padding: 10px 0; color: #666; text-decoration: none; border-bottom: 1px solid #eee; transition: all 0.2s; }
+        .chapter-link.sub-link { padding-left: 15px; font-size: 0.95em; border-left: 2px solid transparent; }
+        .chapter-link:hover { color: #8d6e63; padding-left: 5px; }
+        .chapter-link.active { font-weight: bold; color: #4e342e; border-left: 3px solid #8d6e63; padding-left: 10px; background: #fafafa; }
+        
+        /* Content Area */
+        .content-area { flex-grow: 1; background: white; padding: 40px; border-radius: 8px; border: 1px solid #e0e0e0; line-height: 1.8; color: #333; min-width: 0; }
+        .content-section { margin-bottom: 60px; scroll-margin-top: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 40px; }
+        .content-section:last-child { border-bottom: none; }
+        
+        /* Typografie */
+        h1.page-title { font-size: 2.5em; color: #3e2723; margin-top: 0; }
+        h2 { color: #5d4037; border-left: 5px solid #8d6e63; padding-left: 15px; margin-top: 0; margin-bottom: 20px; }
+        h3 { color: #6d4c41; margin-top: 30px; font-size: 1.3em; border-bottom: 1px solid #eee; padding-bottom: 8px;}
+        p { margin-bottom: 20px; font-size: 1.05em; }
+        .lead { font-size: 1.2em; color: #555; }
+        
+        /* Bilder */
+        .content-img { width: 100%; height: auto; border-radius: 4px; margin-bottom: 10px; border: 1px solid #e0e0e0; cursor: zoom-in; transition: transform 0.2s ease; display: block; }
+        .content-img:hover { transform: scale(1.02); }
+        .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+        
+        /* Boxen & Karten */
+        .temp-box { background: #e3f2fd; border-left: 5px solid #2196f3; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .temp-box h4 { margin-top: 0; color: #1565c0; }
+        
+        .history-box { background: #fce4ec; border-left: 5px solid #c2185b; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .history-box h4 { margin-top: 0; color: #880e4f; }
+
+        /* Karten Grid */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
+        .spec-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: transform 0.2s; display: flex; flex-direction: column; }
+        .spec-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .spec-card-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid #eee; cursor: zoom-in; }
+        .spec-card-body { padding: 15px; flex-grow: 1; }
+        .spec-card-title { font-weight: bold; font-size: 1.1em; color: #3e2723; margin-bottom: 5px; }
+        .spec-card-desc { font-size: 0.9em; color: #555; }
+        .spec-badge { display: inline-block; font-size: 0.75em; background: #eee; padding: 2px 6px; border-radius: 4px; margin-bottom: 8px; color: #666; }
+
+        @media (max-width: 800px) {
+            .knowledge-layout { flex-direction: column; }
+            .chapter-nav { width: 100%; position: static; margin-bottom: 20px; max-height: none;}
+            .header { flex-direction: column; gap: 10px;}
+        }
+        
+        /* Lightbox */
+        #image-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); align-items: center; justify-content: center; cursor: zoom-out; opacity: 0; transition: opacity 0.3s ease; padding: 20px; box-sizing: border-box; }
+        #image-modal.show { display: flex; opacity: 1; }
+        #modal-img { max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 0 20px rgba(0,0,0,0.5); border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <a href="../baender.html" class="btn-back">← Zurück</a>
+            <div class="brand">Wissensbibliothek</div>
+        </div>
+
+        <div class="knowledge-layout">
+            <nav class="chapter-nav">
+                <h3>Inhalt</h3>
+                <a href="#intro" class="chapter-link active">Einleitung</a>
+                <a href="#definition" class="chapter-link">1. Was ist Viennoiserie?</a>
+                <a href="#physik" class="chapter-link">2. Thermodynamik & Butter</a>
+                <a href="#kategorie" class="chapter-link">3. Laminiert vs. Nicht-Laminiert</a>
+                <a href="#galerie" class="chapter-link">4. Galerie</a>
+            </nav>
+
+            <main class="content-area">
+                <section id="intro" class="content-section">
+                    <h1 class="page-title">Viennoiserie: Die Kunst der Schichten</h1>
+                    <p class="lead">Es ist der "Sweet Spot" zwischen Bäcker und Konditor. Viennoiserie ("Dinge aus Wien") nutzt Hefeteige, die mit Butter, Eiern und Zucker angereichert sind.</p>
+                    <img src="../assets/image/baender/vien_header.jpg" class="content-img" alt="Aufgeschnittenes Croissant mit Wabenstruktur" onerror="this.style.display='none'">
+                </section>
+
+                <section id="definition" class="content-section">
+                    <h2>1. Das Erbe von August Zang</h2>
+                    <p>Das Croissant ist französisch? Jein. Der österreichische Offizier <strong>August Zang</strong> eröffnete 1839 die "Boulangerie Viennoise" in Paris und brachte das Kipferl mit.</p>
+                    <div class="history-box">
+                        <h4>Die Evolution</h4>
+                        <p>Die Franzosen liebten das Kipferl, ersetzten aber den einfachen Brioche-Teig durch die Technik des <strong>Tourierens</strong> (Faltens). So entstand das moderne, blättrige Croissant. Eine perfekte Symbiose aus österreichischer Form und französischer Butter-Technik.</p>
+                    </div>
+                </section>
+
+                <section id="physik" class="content-section">
+                    <h2>2. Thermodynamik: Der Risikobereich</h2>
+                    <p>Warum ist Croissant-Backen so schwer? Weil man gegen zwei physikalische Gegner gleichzeitig kämpft.</p>
+                    <div class="temp-box">
+                        <h4>Das Temperatur-Fenster (14°C - 18°C)</h4>
+                        <p>Beim Tourieren (Falten von Teig und Butter) darf der Teig weder zu warm noch zu kalt sein.</p>
+                        <ul>
+                            <li><strong>Zu warm (> 20°C):</strong> Die Butter schmilzt in den Teig hinein. Resultat: Ein brioche-artiges Brötchen ohne Schichten.</li>
+                            <li><strong>Zu kalt (< 10°C):</strong> Die Butter wird hart und bricht beim Ausrollen in Splitter. Resultat: Unregelmäßige Löcher und Fettlachen.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="kategorie" class="content-section">
+                    <h2>3. Laminiert vs. Nicht-Laminiert</h2>
+                    <p>Viennoiserie teilt sich in zwei Lager:</p>
+                    <div class="img-grid">
+                        <div>
+                            <h3>Pâte Levée Feuilletée</h3>
+                            <p><strong>(Tourierter Hefeteig)</strong><br>
+                            Hefeteig + Butterplatte gefaltet. Hier wirken Hefe (Poren) und Dampf (Schichten) zusammen ("Double Lift").
+                            <br><em>Beispiele: Croissant, Pain au Chocolat, Franzbrötchen.</em></p>
+                        </div>
+                        <div>
+                            <h3>Pâte à Brioche</h3>
+                            <p><strong>(Reicher Hefeteig)</strong><br>
+                            Keine Schichten. Butter und Eier werden direkt eingeknetet. Der Teig ist wattig, weich und kuchenartig.
+                            <br><em>Beispiele: Brioche, Panettone, Krapfen.</em></p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="galerie" class="content-section">
+                    <h2>4. Galerie der Meisterwerke</h2>
+                    <div id="container-vien" class="card-grid"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div id="image-modal"><img id="modal-img" src=""></div>
+
+    <script>
+        // PFAD GEÄNDERT: Zeigt jetzt in den Unterordner baender
+        const IMG_PATH = '../assets/image/baender/';
+        
+        // Daten für die Karten (Alte Namen erhalten + Neue Erweiterungen)
+        const DATA = [
+            // Bestehende Bilder (Alte Dateinamen)
+            { name: "Croissant", origin: "FR / AT", desc: "Der König. 27 Schichten Butter (3x3x3). Die offene Wabenstruktur im Inneren ('Alveolage') ist das Qualitätsmerkmal.", img: "vien_croissant.jpg" },
+            { name: "Pain au Chocolat", origin: "FR", desc: "Chocolatine. Rechteckig gerollt, gefüllt mit zwei Stäbchen dunkler, backfester Schokolade.", img: "vien_chocolat.jpg" },
+            { name: "Franzbrötchen", origin: "DE (HH)", desc: "Hamburger Spezialität. Plunderteig mit Zimt & Zucker, der beim Backen karamellisiert. Wird in der Mitte gedrückt.", img: "vien_franz.jpg" },
+            { name: "Brioche à tête", origin: "FR", desc: "Klassische Form mit dem 'Köpfchen'. Extrem hoher Buttergehalt (>50% aufs Mehl). Wattig und goldgelb.", img: "vien_brioche.jpg" },
+            { name: "Danish Pastry", origin: "DK", desc: "Spandauer / Wienerbrød. Plunderteig, oft kunstvoll gefaltet und mit Vanillecreme (Patissière) oder Früchten gefüllt.", img: "vien_danish.jpg" },
+            { name: "Pastel de Nata", origin: "PT", desc: "Blätterteig-Schälchen (ohne Hefe), gefüllt mit Eiercreme. Wird extrem heiß gebacken für die typischen schwarzen Flecken.", img: "vien_nata.jpg" },
+            
+            // Neue Erweiterungen (Neue Dateinamen)
+            { name: "Kouign-Amann", origin: "FR (Bretagne)", desc: "Der 'Butterkuchen'. Blätterteig, bei dem Zucker direkt in die Schichten einlaminiert wird. Extrem knusprige Karamellkruste.", img: "vien_kouign.jpg" },
+            { name: "Pain aux Raisins", origin: "FR", desc: "Schnecke (Escargot). Tourierter Teig, bestrichen mit Vanillecreme und bestreut mit Rosinen.", img: "vien_escargot.jpg" },
+            { name: "Cruffin", origin: "USA / AUS", desc: "Hybrid aus Croissant und Muffin. Der Teig wird in einer Muffinform gebacken, oft gefüllt und in Zucker gewälzt.", img: "vien_cruffin.jpg" },
+            { name: "Palmier", origin: "FR", desc: "Schweineohr. Blätterteig (ohne Hefe), der in Zucker gewälzt und von beiden Seiten zur Mitte gerollt wird.", img: "vien_palmier.jpg" },
+            { name: "Nussschnecke", origin: "DE", desc: "Klassiker. Plunderteig mit Haselnussfüllung, oft mit Aprikotur (Glanz) und Fondant-Streifen.", img: "vien_nuss.jpg" }
+        ];
+
+        // --- RENDER LOGIC ---
+        (function() {
+            // Navigation
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.chapter-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => { if (scrollY >= section.offsetTop - 250) current = section.getAttribute('id'); });
+                if (scrollY < 100) current = 'intro';
+                navLinks.forEach(link => { link.classList.remove('active'); if (link.getAttribute('href').includes(current)) link.classList.add('active'); });
+            });
+
+            // Grid
+            const container = document.getElementById('container-vien');
+            DATA.forEach(row => {
+                let imageHtml = `<div style="height:180px; background:#eee; color:#ccc; display:flex; align-items:center; justify-content:center;">Kein Bild</div>`;
+                if(row.img) {
+                    imageHtml = `<img src="${IMG_PATH}${row.img}" class="spec-card-img" alt="${row.name}" onerror="this.outerHTML='<div style=\'height:180px; background:#eee; color:#ccc; display:flex; align-items:center; justify-content:center;\'>Bild nicht verfügbar</div>'">`;
+                }
+                const cardHtml = `
+                    <div class="spec-card">
+                        ${imageHtml}
+                        <div class="spec-card-body">
+                            <span class="spec-badge">${row.origin}</span>
+                            <div class="spec-card-title">${row.name}</div>
+                            <div class="spec-card-desc">${row.desc}</div>
+                        </div>
+                    </div>`;
+                container.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        })();
+
+        // Lightbox
+        document.addEventListener('DOMContentLoaded', () => {
+             const modal = document.getElementById('image-modal'); 
+             const modalImg = document.getElementById('modal-img');
+             
+             function openModal(imgSrc) { 
+                 if (!imgSrc) return; 
+                 modalImg.src = imgSrc; 
+                 modal.classList.add('show'); 
+             }
+             
+             modal.addEventListener('click', () => { 
+                 modal.classList.remove('show'); 
+                 setTimeout(() => modalImg.src = '', 300); 
+             });
+             
+             document.addEventListener('click', function(e) { 
+                 if (e.target.classList.contains('content-img') || e.target.classList.contains('spec-card-img')) { 
+                     openModal(e.target.src); 
+                 } 
+             });
+        });
+    </script>
+</body>
+</html>

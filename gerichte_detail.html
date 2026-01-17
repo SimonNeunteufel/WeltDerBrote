@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – Gericht Detail</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+        /* Grundlayout */
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #fff3e0; color: #333; height: 100vh; overflow: hidden; }
+        .btn { padding: 8px 15px; background: #d84315; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9em; text-decoration: none; display: inline-block;}
+        .btn:hover { background: #bf360c; }
+
+        .app-layout { display: flex; height: 100%; width: 100%; }
+
+        /* Sidebar */
+        .sidebar { width: 260px; background: white; border-right: 1px solid #ffcc80; display: flex; flex-direction: column; flex-shrink: 0; z-index: 10; }
+        .sidebar-top { padding: 20px; border-bottom: 1px solid #ffe0b2; background: #fff8e1; }
+        .sidebar-scroll { padding: 20px; overflow-y: auto; flex-grow: 1; }
+        .sidebar-header { font-weight: bold; margin-bottom: 15px; color: #d84315; text-transform: uppercase; font-size: 0.9em; letter-spacing: 1px;}
+        .sidebar-list { list-style: none; padding: 0; margin: 0; }
+        .sidebar-list li { margin-bottom: 5px; }
+        .sidebar-list a { text-decoration: none; color: #555; display: block; padding: 10px 12px; border-radius: 6px; transition: all 0.2s; font-size: 0.95em; border-left: 3px solid transparent; cursor: pointer; }
+        .sidebar-list a:hover { background: #fff3e0; color: #000; }
+        .sidebar-list a.active { background: #ffe0b2; color: #d84315; font-weight: bold; border-left-color: #d84315;}
+
+        /* Content */
+        .main-content { flex-grow: 1; overflow-y: auto; padding: 40px; position: relative; background: #fff3e0; }
+        .recipe-sheet { background: white; padding: 50px; border-radius: 12px; box-shadow: 0 5px 25px rgba(216,67,21,0.1); margin-bottom: 40px; max-width: 950px; margin-left: auto; margin-right: auto; }
+
+        /* Header */
+        .meta-info { text-align:center; margin-bottom:30px; padding-bottom: 20px; border-bottom: 2px solid #eee; }
+        .cat-tag { text-transform: uppercase; letter-spacing: 1px; color: #ef6c00; font-size: 0.8em; font-weight: bold; margin-bottom: 10px; display: block;}
+        .recipe-title { font-size: 2.8em; margin: 0 0 15px 0; color: #bf360c; }
+        
+        .story-block { 
+            background: #fff8e1; color: #5d4037; padding: 15px 20px; margin: 20px auto; 
+            border-radius: 6px; font-style: italic; font-size: 0.95em; display: inline-block; border: 1px solid #ffe0b2;
+        }
+        .story-part { margin: 0 10px; display: inline-block; }
+        .story-label { font-weight: bold; text-transform: uppercase; font-size: 0.8em; color: #e65100; margin-right: 5px; }
+
+        .lead-image-wrapper { margin-top: 25px; margin-bottom: 10px; }
+        .lead-image { width: 100%; max-height: 450px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+
+        /* Steps */
+        .phase-section { margin-bottom: 50px; border-bottom: 1px solid #eee; padding-bottom: 30px; }
+        .phase-section:last-child { border-bottom: none; }
+        .phase-title { background: #d84315; color: white; padding: 8px 15px; border-radius: 4px; display: inline-block; margin-bottom: 25px; font-weight: bold; font-size: 0.95em; }
+        .recipe-grid { display: grid; grid-template-columns: 320px 1fr; gap: 40px; }
+        .ing-box { background: #fafafa; padding: 25px; border-radius: 8px; border: 1px solid #eee; align-self: start; }
+        .ing-list { list-style: none; padding: 0; margin: 0; }
+        .ing-list li { padding: 8px 0; border-bottom: 1px dotted #ccc; font-size: 0.95em; display: flex; justify-content: space-between; }
+        .step-text { font-size: 1.15em; line-height: 1.7; color: #333; white-space: pre-wrap; }
+        .tech-badge { background: #eef2f6; color: #4e342e; padding: 4px 10px; border-radius: 12px; font-size: 0.85em; margin-right: 5px; border: 1px solid #d1d5db; display: inline-block; margin-top: 8px; }
+        
+        .instruction-box img { max-width: 100%; height: auto; border-radius: 8px; display: block; margin-top: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: zoom-in; transition: transform 0.2s; border: 1px solid #eee; }
+        .instruction-box img:hover { transform: scale(1.02); }
+
+        /* Cross Link Box */
+        .cross-link-box { 
+            margin-top: 30px; background: #e3f2fd; border-left: 5px solid #2196f3; padding: 20px; border-radius: 4px; 
+        }
+        .cross-link-header { font-weight: bold; color: #0d47a1; display: block; margin-bottom: 5px; font-size: 1.1em; }
+        .cross-btn {
+            display: inline-block; margin-top: 10px; padding: 8px 15px; background: white; border: 1px solid #2196f3; color: #0d47a1; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 0.9em; transition: all 0.2s;
+        }
+        .cross-btn:hover { background: #2196f3; color: white; }
+
+        /* Nav */
+        .floating-nav { position: fixed; bottom: 30px; right: 40px; background: white; padding: 8px; border-radius: 50px; box-shadow: 0 6px 20px rgba(0,0,0,0.15); display: flex; gap: 10px; z-index: 100; border: 1px solid #eee; }
+        .nav-btn { width: 45px; height: 45px; border-radius: 50%; border: 1px solid #eee; background: #f9f9f9; color: #333; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.4em; text-decoration: none; transition: all 0.2s; user-select: none; }
+        .nav-btn:hover { background: #d84315; color: white; border-color: #d84315; transform: translateY(-2px); }
+        .nav-btn.disabled { opacity: 0.4; cursor: default; pointer-events: none; background: #eee; }
+
+        #imageOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 40px; cursor: zoom-out; backdrop-filter: blur(5px); }
+        #imageOverlay.active { display: flex; animation: fadeIn 0.2s ease-out; }
+        #overlayImage { max-width: 100%; max-height: 100%; box-shadow: 0 5px 30px rgba(0,0,0,0.5); border-radius: 4px; object-fit: contain; transform: scale(0.95); transition: transform 0.3s ease-out; }
+        #imageOverlay.active #overlayImage { transform: scale(1); }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        @media print { .no-print, .sidebar, .floating-nav { display: none !important; } }
+    </style>
+</head>
+<body>
+
+<div id="imageOverlay" class="no-print"><img id="overlayImage" src="" alt="Großansicht"></div>
+
+<div class="app-layout">
+    <aside class="sidebar no-print">
+        <div class="sidebar-top"><a href="./gerichte_liste.html" class="btn" style="width:100%; text-align:center;">← Gerichte Liste</a></div>
+        <div class="sidebar-scroll">
+            <div class="sidebar-header">Auswahl</div>
+            <ul id="sidebarLinkList" class="sidebar-list"></ul>
+        </div>
+    </aside>
+
+    <main class="main-content" id="mainContentArea">
+        <div class="floating-nav no-print">
+            <a id="navPrev" class="nav-btn disabled">←</a>
+            <a href="javascript:window.print()" class="nav-btn" style="font-size: 1.1em;">🖨️</a>
+            <a id="navNext" class="nav-btn disabled">→</a>
+        </div>
+        <div id="recipeContainer">
+            <div style="text-align: center; color: #666; padding: 50px;">Lade Daten...</div>
+        </div>
+    </main>
+</div>
+
+<script>
+const CSV_FILE = './assets/data/wdb_rezepte.csv'; 
+const IMG_PATH = './assets/image/';
+
+(async () => {
+    // --- Helper ---
+    const parseTags = (str) => (!str ? [] : str.split(/,|\|/).map(s => s.trim()).filter(Boolean));
+    const formatIng = (str) => (!str) ? "<li>Keine Zutaten</li>" : str.split(/,|\|/).map(s => `<li>${s.trim()}</li>`).join('');
+
+    const loadData = () => {
+        return new Promise((resolve, reject) => {
+            Papa.parse(CSV_FILE, {
+                download: true, delimiter: ";", skipEmptyLines: true,
+                complete: (res) => resolve(mapData(res.data)),
+                error: (err) => reject(err)
+            });
+        });
+    };
+
+    function mapData(rows) {
+        let startIdx = 0;
+        if (rows[0] && (rows[0][0]||"").toLowerCase().includes('status')) startIdx = 1;
+        const recipes = [];
+        for (let i = startIdx; i < rows.length; i++) {
+            const c = rows[i];
+            if (c.length < 5) continue; 
+            recipes.push({
+                brot_id: c[2],
+                name: c[4],
+                gruppe: c[5],
+                schritt_nr: parseInt(c[6]) || 0,
+                zutaten_list: c[7],
+                anweisung: c[8],
+                techniken_tags: c[9],
+                zeit_aufwand: c[10],
+                bild_ref: c[11],
+                quelle: c[12],
+                bild_lead: c[13],
+                tipps: c[18],
+                herkunft: c[21],
+                geschichte: c[22],
+                tradition: c[23]
+            });
+        }
+        return recipes;
+    }
+
+    // --- Main Logic ---
+    const params = new URLSearchParams(window.location.search);
+    const idParam = params.get('id');
+    const recipeContainer = document.getElementById('recipeContainer');
+    const sidebarList = document.getElementById('sidebarLinkList');
+    
+    if (!idParam) {
+        recipeContainer.innerHTML = "<p style='text-align:center; padding:50px;'>Keine ID angegeben.</p>";
+        return;
+    }
+
+    const allIds = idParam.split(',').map(s => s.trim()).filter(Boolean);
+    let currentRecipeIndex = 0;
+    let allData = [];
+
+    try {
+        allData = await loadData();
+    } catch(e) {
+        recipeContainer.innerHTML = `<p style='text-align:center; color:red;'>Fehler beim Laden.</p>`;
+        return;
+    }
+
+    // Sidebar
+    let sidebarHtml = "";
+    allIds.forEach((breadId, index) => {
+        const firstStep = allData.find(r => r.brot_id === breadId);
+        const name = firstStep ? firstStep.name : breadId;
+        sidebarHtml += `<li><a class="sidebar-link" data-index="${index}">${name}</a></li>`;
+    });
+    sidebarList.innerHTML = sidebarHtml;
+
+    // FIND BASIC RECIPE FUNCTION
+    // Sucht, ob in den Zutaten dieses Gerichts ein Grundteig (-G-) erwähnt wird
+    const findRequiredBase = (currentIngredients) => {
+        if (!currentIngredients) return null;
+        
+        // Suche nach -G- IDs oder Namen in der Zutatenliste des aktuellen Gerichts
+        // Da die IDs oft direkt in der Zutatenliste der CSV stehen (z.B. "12 Maistortillas (BAS-00003)")
+        // können wir direkt danach suchen.
+        
+        const baseRecipe = allData.find(r => {
+            // Wir suchen nur nach Grundteigen (-G-)
+            if (r.brot_id.includes('-G-')) {
+                // Check ob ID oder Name in den Zutaten vorkommt
+                if (currentIngredients.includes(r.brot_id) || currentIngredients.includes(r.name)) {
+                    return true;
+                }
+            }
+            return false;
+        });
+
+        if (baseRecipe) {
+            return { id: baseRecipe.brot_id, name: baseRecipe.name };
+        }
+        return null;
+    };
+
+    // Show Recipe
+    window.showRecipe = (index) => {
+        if (index < 0 || index >= allIds.length) return;
+        currentRecipeIndex = index;
+        const breadId = allIds[index];
+        
+        const steps = allData.filter(r => r.brot_id === breadId);
+        if (steps.length === 0) {
+            recipeContainer.innerHTML = `<div class="recipe-sheet"><p>Nicht gefunden.</p></div>`;
+            updateUI(); return;
+        }
+
+        steps.sort((a, b) => a.schritt_nr - b.schritt_nr);
+        const meta = steps[0];
+
+        // CHECK CROSS LINK
+        const requiredBase = findRequiredBase(meta.zutaten_list);
+
+        let html = `<div class="recipe-sheet">`;
+
+        // Header
+        let storyHTML = "";
+        let infoParts = [];
+        if(meta.herkunft) infoParts.push(`<span class="story-part"><span class="story-label">Region:</span> ${meta.herkunft}</span>`);
+        if(meta.geschichte) infoParts.push(`<span class="story-part"><span class="story-label">Story:</span> ${meta.geschichte}</span>`);
+        if (infoParts.length > 0) storyHTML = `<div class="story-block">${infoParts.join(' ')}</div>`;
+
+        let leadImgFile = meta.bild_lead || (meta.brot_id + ".jpg");
+
+        html += `
+            <div class="meta-info">
+                <span class="cat-tag">${meta.gruppe || 'Gericht'}</span>
+                <h1 class="recipe-title">${meta.name}</h1>
+                ${storyHTML}
+                <div class="lead-image-wrapper">
+                    <img src="${IMG_PATH}${leadImgFile}" class="lead-image" onerror="this.style.display='none'" alt="${meta.name}">
+                </div>
+            </div>
+        `;
+
+        // CROSS LINK DISPLAY
+        if (requiredBase) {
+            html += `
+                <div class="cross-link-box">
+                    <span class="cross-link-header">🛠️ Benötigter Grundteig / Basis</span>
+                    <div>Für dieses Gericht wird folgendes Basis-Rezept benötigt:</div>
+                    <a href="./rezept_ansicht.html?id=${requiredBase.id}" class="cross-btn">
+                        🥖 Zum Rezept: ${requiredBase.name}
+                    </a>
+                </div>
+            `;
+        }
+
+        // Steps
+        steps.forEach((s, i) => {
+            html += `
+                <div class="phase-section">
+                    <div class="phase-title">Schritt ${s.schritt_nr || (i+1)}</div>
+                    <div class="recipe-grid">
+                        <div class="ing-box">
+                            <h3 style="margin-top:0; border-bottom: 2px solid #eee; padding-bottom: 10px;">Zutaten</h3>
+                            <ul class="ing-list">${formatIng(s.zutaten_list)}</ul>
+                        </div>
+                        <div class="instruction-box">
+                            <h3 style="margin-top:0; border-bottom: 2px solid #eee; padding-bottom: 10px;">Zubereitung</h3>
+                            <div class="step-text">${s.anweisung || ''}</div>
+                            <div style="margin-top:20px;">${parseTags(s.techniken_tags).map(t => `<span class="tech-badge">${t}</span>`).join('')}</div>
+                            ${s.bild_ref ? `<img src="${IMG_PATH}${s.bild_ref}" onerror="this.style.display='none'">` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        if(meta.tipps && meta.tipps.trim()) {
+            html += `<div class="tipps-container"><span class="tipps-header">👨‍🍳 Chef-Tipps</span>${meta.tipps}</div>`;
+        }
+
+        html += `</div>`; 
+        recipeContainer.innerHTML = html;
+        document.getElementById('mainContentArea').scrollTop = 0;
+        updateUI();
+    };
+
+    function updateUI() {
+        document.querySelectorAll('.sidebar-link').forEach(l => l.classList.toggle('active', parseInt(l.dataset.index) === currentRecipeIndex));
+        document.getElementById('navPrev').classList.toggle('disabled', currentRecipeIndex <= 0);
+        document.getElementById('navNext').classList.toggle('disabled', currentRecipeIndex >= allIds.length - 1);
+    }
+
+    sidebarList.addEventListener('click', (e) => { const l = e.target.closest('.sidebar-link'); if(l) showRecipe(parseInt(l.dataset.index)); });
+    document.getElementById('navPrev').addEventListener('click', () => { if(currentRecipeIndex > 0) showRecipe(currentRecipeIndex - 1); });
+    document.getElementById('navNext').addEventListener('click', () => { if(currentRecipeIndex < allIds.length - 1) showRecipe(currentRecipeIndex + 1); });
+    
+    const overlay = document.getElementById('imageOverlay');
+    const overlayImage = document.getElementById('overlayImage');
+    recipeContainer.addEventListener('click', (e) => {
+        if (e.target.tagName === 'IMG' && (e.target.closest('.instruction-box') || e.target.classList.contains('lead-image'))) {
+            overlayImage.src = e.target.src;
+            overlay.classList.add('active');
+        }
+    });
+    overlay.addEventListener('click', () => overlay.classList.remove('active'));
+
+    if(allIds.length > 0) showRecipe(0);
+})();
+</script>
+</body>
+</html>

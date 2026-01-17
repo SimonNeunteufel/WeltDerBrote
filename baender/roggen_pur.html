@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – Roggen pur: Das schwarze Gold</title>
+    
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <script src="../assets/js/util.js"></script>
+    
+    <style>
+        /* --- Layout & Basis --- */
+        body { background-color: #fcfbf9; color: #333; font-family: sans-serif; margin: 0; padding: 0; }
+        .page { min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* HEADER */
+        .header { 
+            padding: 20px 40px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            background: #fff;
+        }
+        .brand { font-weight: bold; font-size: 1.2em; color: #3e2723; }
+        .btn-back {
+            background-color: #4e342e;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-back:hover { background-color: #5d4037; }
+
+        .knowledge-layout { display: flex; max-width: 1200px; margin: 40px auto; gap: 40px; padding: 0 20px; align-items: flex-start; flex-grow: 1; }
+        
+        /* Navigation Sidebar */
+        .chapter-nav { width: 250px; flex-shrink: 0; background: white; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow-y: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .chapter-nav h3 { margin-top: 0; border-bottom: 2px solid #8d6e63; padding-bottom: 10px; color: #4e342e; }
+        .chapter-link { display: block; padding: 10px 0; color: #666; text-decoration: none; border-bottom: 1px solid #eee; transition: all 0.2s; }
+        .chapter-link.sub-link { padding-left: 15px; font-size: 0.95em; border-left: 2px solid transparent; }
+        .chapter-link:hover { color: #8d6e63; padding-left: 5px; }
+        .chapter-link.active { font-weight: bold; color: #4e342e; border-left: 3px solid #8d6e63; padding-left: 10px; background: #fafafa; }
+        
+        /* Content Area */
+        .content-area { flex-grow: 1; background: white; padding: 40px; border-radius: 8px; border: 1px solid #e0e0e0; line-height: 1.8; color: #333; min-width: 0; }
+        .content-section { margin-bottom: 60px; scroll-margin-top: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 40px; }
+        .content-section:last-child { border-bottom: none; }
+        
+        /* Typografie */
+        h1.page-title { font-size: 2.5em; color: #3e2723; margin-top: 0; }
+        h2 { color: #5d4037; border-left: 5px solid #8d6e63; padding-left: 15px; margin-top: 0; margin-bottom: 20px; }
+        h3 { color: #6d4c41; margin-top: 30px; font-size: 1.3em; border-bottom: 1px solid #eee; padding-bottom: 8px;}
+        p { margin-bottom: 20px; font-size: 1.05em; }
+        .lead { font-size: 1.2em; color: #555; }
+        
+        /* Bilder */
+        .content-img { width: 100%; height: auto; border-radius: 4px; margin-bottom: 10px; border: 1px solid #e0e0e0; cursor: zoom-in; transition: transform 0.2s ease; display: block; }
+        .content-img:hover { transform: scale(1.02); }
+        .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+        
+        /* Boxen & Karten */
+        .rye-box { background: #efebe9; border-left: 5px solid #5d4037; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .rye-box h4 { margin-top: 0; color: #3e2723; }
+        
+        .chem-box { background: #e0f7fa; border-left: 5px solid #006064; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .chem-box h4 { margin-top: 0; color: #006064; }
+
+        /* Karten Grid */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
+        .rye-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column; transition: transform 0.2s;}
+        .rye-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .rye-card-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid #eee; cursor: zoom-in; }
+        .rye-card-body { padding: 15px; flex-grow: 1; }
+        .rye-title { font-weight: bold; font-size: 1.1em; color: #3e2723; margin-bottom: 5px; }
+        .rye-desc { font-size: 0.9em; color: #555; }
+        .rye-badge { display: inline-block; font-size: 0.7em; background: #eee; padding: 2px 6px; border-radius: 4px; margin-bottom: 8px; color: #666; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;}
+
+        @media (max-width: 800px) { 
+            .knowledge-layout { flex-direction: column; } 
+            .chapter-nav { width: 100%; position: static; margin-bottom: 20px;} 
+            .card-grid { grid-template-columns: 1fr; } 
+            .header { flex-direction: column; gap: 10px;}
+        }
+        
+        /* Lightbox */
+        #image-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); align-items: center; justify-content: center; cursor: zoom-out; opacity: 0; transition: opacity 0.3s ease; padding: 20px; box-sizing: border-box; }
+        #image-modal.show { display: flex; opacity: 1; }
+        #modal-img { max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 0 20px rgba(0,0,0,0.5); border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <a href="../baender.html" class="btn-back">← Zurück</a>
+            <div class="brand">Wissensbibliothek</div>
+        </div>
+
+        <div class="knowledge-layout">
+            <nav class="chapter-nav">
+                <h3>Inhalt</h3>
+                <a href="#intro" class="chapter-link active">Einleitung</a>
+                <a href="#pentosane" class="chapter-link">1. Pentosane (Schleim)</a>
+                <a href="#saeure" class="chapter-link">2. Sauerteig-Pflicht</a>
+                <a href="#pumpernickel" class="chapter-link">3. Pumpernickel</a>
+                <a href="#galerie" class="chapter-link">4. Galerie</a>
+            </nav>
+
+            <main class="content-area">
+                <section id="intro" class="content-section">
+                    <h1 class="page-title">Roggen pur: Das schwarze Gold</h1>
+                    <p class="lead">Roggen ist der Individualist unter den Getreiden. Er wächst auf kargen Böden, braucht Kälte und verhält sich im Ofen chemisch völlig anders als Weizen. Wer Roggen verstehen will, muss den Sauerteig meistern.</p>
+                    <img src="../assets/image/baender/roggen_header.jpg" class="content-img" alt="Dunkles Roggenbrot angeschnitten" onerror="this.style.display='none'">
+                </section>
+
+                <section id="pentosane" class="content-section">
+                    <h2>1. Pentosane: Die Schleimstoffe</h2>
+                    <p>Weizenbrot wird durch ein Gluten-Gerüst gehalten. Roggen hat zwar Gluten, aber es kann sich nicht vernetzen. Warum? Wegen der Pentosane.</p>
+                    <div class="rye-box">
+                        <h4>Der Wasser-Speicher</h4>
+                        <p>Pentosane sind Kohlenhydrate (Schleimstoffe), die extrem viel Wasser binden. Sie verhindern, dass sich Gluten bildet. Stattdessen entsteht eine zähe, klebrige Masse. Deshalb darf Roggenteig nicht lange geknetet (sonst reißt der Schleim), sondern nur sanft gemischt werden.</p>
+                    </div>
+                </section>
+
+                <section id="saeure" class="content-section">
+                    <h2>2. Die Sauerteig-Pflicht (Amylase-Bremse)</h2>
+                    <p>Ohne Säure wird reines Roggenbrot ungenießbar. Es bleibt innen nass und klitschig.</p>
+                    <div class="chem-box">
+                        <h4>Der Enzym-Kampf</h4>
+                        <p>Roggen enthält viele <strong>Amylasen</strong> (Enzyme). Im Ofen würden diese Enzyme die Stärke blitzschnell in Zucker abbauen, noch bevor die Stärke verkleistern (fest werden) kann. Das Brotgerüst würde kollabieren.
+                        <br><strong>Die Lösung:</strong> Säure (Sauerteig) deaktiviert die Amylasen. Nur so bleibt die Struktur stabil.</p>
+                    </div>
+                </section>
+
+                <section id="pumpernickel" class="content-section">
+                    <h2>3. Pumpernickel (Karamellisierung)</h2>
+                    <p>Das wohl dunkelste Brot der Welt. Es wird nicht gebacken, sondern <strong>gedämpft</strong>.
+                    <br>Der Teig (reiner Roggenschrot) kommt für 16 bis 24 Stunden bei nur 100°C in den Dampfbackofen. Durch die extrem lange Zeit karamellisiert der Zucker im Korn vollständig (Maillard-Reaktion). Das Brot wird fast schwarz und schmeckt süßlich-herb.</p>
+                </section>
+
+                <section id="galerie" class="content-section">
+                    <h2>4. Galerie der dunklen Laibe (8 Varianten)</h2>
+                    <div id="container-rye" class="card-grid"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div id="image-modal"><img id="modal-img" src=""></div>
+
+    <script>
+        const IMG_PATH = '../assets/image/baender/';
+        
+        const DATA = [
+            // DACH Klassiker
+            { name: "Roggenvollkorn", origin: "DE", desc: "Dicht, saftig, kompakt. Besteht zu 100% aus Roggen. Hält extrem lange frisch.", img: "roggen_vollkorn.jpg" },
+            { name: "Pumpernickel", origin: "DE (Westfalen)", desc: "Das Original. Schwarzer, grober Schrot. Kein Sauerteig-Geschmack, sondern süßlich durch Langzeit-Garen.", img: "roggen_pumpernickel.jpg" },
+            { name: "Vinschgauer", origin: "IT (Südtirol)", desc: "Fladenbrot (Paarl). Gewürzt mit Schabzigerklee, Fenchel und Kümmel. Oft als Proviant für Wanderer.", img: "roggen_vinschgauer.jpg" },
+            { name: "Walliser Roggenbrot", origin: "CH (AOP)", desc: "Kompakter, runder Laib mit typischer Riss-Struktur ('Erde'). Hat eine geschützte Herkunftsbezeichnung.", img: "roggen_walliser.jpg" },
+            { name: "Schüttelbrot", origin: "IT/AT", desc: "Hartes, knackiges Fladenbrot. Wird vor dem Backen auf einem Brett geschüttelt, bis es dünn ist.", img: "roggen_schuettel.jpg" },
+            
+            // International
+            { name: "Borodinsky", origin: "RU", desc: "Russisches Schwarzbrot. Dunkel durch fermentiertes Roggenmalz und Melasse. Oben drauf: Koriandersamen.", img: "roggen_borodinsky.jpg" },
+            { name: "Rugbrød", origin: "DK", desc: "Dänisches Kernbrot. Sehr viele Sonnenblumen- und Kürbiskerne. Die Basis für Smørrebrød.", img: "roggen_rugbrod.jpg" },
+            { name: "Ruisleipä (Reikäleipä)", origin: "FI", desc: "Finnisches Roggenbrot mit Loch in der Mitte. Wurde früher an Stangen unter der Decke getrocknet.", img: "roggen_finnisch.jpg" }
+        ];
+
+        // --- RENDER LOGIC ---
+        (function() {
+            // Navigation
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.chapter-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => { if (scrollY >= section.offsetTop - 250) current = section.getAttribute('id'); });
+                if (scrollY < 100) current = 'intro';
+                navLinks.forEach(link => { link.classList.remove('active'); if (link.getAttribute('href').includes(current)) link.classList.add('active'); });
+            });
+
+            // Cards
+            const container = document.getElementById('container-rye');
+            DATA.forEach(row => {
+                let imageHtml = `<div style="height:180px; background:#eee; color:#ccc; display:flex; align-items:center; justify-content:center;">Kein Bild</div>`;
+                if(row.img) {
+                    imageHtml = `<img src="${IMG_PATH}${row.img}" class="rye-card-img" alt="${row.name}" onerror="this.outerHTML='<div style=\'height:180px; background:#eee; color:#ccc; display:flex; align-items:center; justify-content:center;\'>Bild fehlt</div>'">`;
+                }
+                const cardHtml = `
+                    <div class="rye-card">
+                        ${imageHtml}
+                        <div class="rye-card-body">
+                            <span class="rye-badge">${row.origin}</span>
+                            <div class="rye-title">${row.name}</div>
+                            <div class="rye-desc">${row.desc}</div>
+                        </div>
+                    </div>`;
+                container.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        })();
+
+        // Lightbox
+        document.addEventListener('DOMContentLoaded', () => {
+             const modal = document.getElementById('image-modal'); 
+             const modalImg = document.getElementById('modal-img');
+             
+             function openModal(imgSrc) { 
+                 if (!imgSrc) return; 
+                 modalImg.src = imgSrc; 
+                 modal.classList.add('show'); 
+             }
+             
+             modal.addEventListener('click', () => { 
+                 modal.classList.remove('show'); 
+                 setTimeout(() => modalImg.src = '', 300); 
+             });
+             
+             document.addEventListener('click', function(e) { 
+                 if (e.target.classList.contains('content-img') || e.target.classList.contains('rye-card-img')) { 
+                     openModal(e.target.src); 
+                 } 
+             });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – No-Knead: Zeit statt Kraft</title>
+    
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <script src="../assets/js/util.js"></script>
+    
+    <style>
+        /* --- Layout & Basis --- */
+        body { background-color: #fcfbf9; color: #333; font-family: sans-serif; margin: 0; padding: 0; }
+        .page { min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* HEADER */
+        .header { 
+            padding: 20px 40px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            background: #fff;
+        }
+        .brand { font-weight: bold; font-size: 1.2em; color: #3e2723; }
+        .btn-back {
+            background-color: #4e342e;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-back:hover { background-color: #5d4037; }
+
+        .knowledge-layout { display: flex; max-width: 1200px; margin: 40px auto; gap: 40px; padding: 0 20px; align-items: flex-start; flex-grow: 1; }
+        
+        /* Navigation Sidebar */
+        .chapter-nav { width: 250px; flex-shrink: 0; background: white; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow-y: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .chapter-nav h3 { margin-top: 0; border-bottom: 2px solid #8d6e63; padding-bottom: 10px; color: #4e342e; }
+        .chapter-link { display: block; padding: 10px 0; color: #666; text-decoration: none; border-bottom: 1px solid #eee; transition: all 0.2s; }
+        .chapter-link.sub-link { padding-left: 15px; font-size: 0.95em; border-left: 2px solid transparent; }
+        .chapter-link:hover { color: #8d6e63; padding-left: 5px; }
+        .chapter-link.active { font-weight: bold; color: #4e342e; border-left: 3px solid #8d6e63; padding-left: 10px; background: #fafafa; }
+        
+        /* Content Area */
+        .content-area { flex-grow: 1; background: white; padding: 40px; border-radius: 8px; border: 1px solid #e0e0e0; line-height: 1.8; color: #333; min-width: 0; }
+        .content-section { margin-bottom: 60px; scroll-margin-top: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 40px; }
+        .content-section:last-child { border-bottom: none; }
+        
+        /* Typografie */
+        h1.page-title { font-size: 2.5em; color: #3e2723; margin-top: 0; }
+        h2 { color: #5d4037; border-left: 5px solid #8d6e63; padding-left: 15px; margin-top: 0; margin-bottom: 20px; }
+        h3 { color: #6d4c41; margin-top: 30px; font-size: 1.3em; border-bottom: 1px solid #eee; padding-bottom: 8px;}
+        p { margin-bottom: 20px; font-size: 1.05em; }
+        .lead { font-size: 1.2em; color: #555; }
+        
+        /* Bilder */
+        .content-img { width: 100%; height: auto; border-radius: 4px; margin-bottom: 10px; border: 1px solid #e0e0e0; cursor: zoom-in; transition: transform 0.2s ease; display: block; }
+        .content-img:hover { transform: scale(1.02); }
+        .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+        
+        /* Boxen & Karten */
+        .time-box { background: #e0f2f1; border-left: 5px solid #00695c; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .time-box h4 { margin-top: 0; color: #004d40; }
+        
+        .pot-box { background: #eceff1; border-left: 5px solid #455a64; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .pot-box h4 { margin-top: 0; color: #263238; }
+
+        /* Karten Grid */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
+        .noknead-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column; transition: transform 0.2s;}
+        .noknead-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .noknead-card-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid #eee; cursor: zoom-in; }
+        .noknead-card-body { padding: 15px; flex-grow: 1; }
+        .noknead-title { font-weight: bold; font-size: 1.1em; color: #3e2723; margin-bottom: 5px; }
+        .noknead-desc { font-size: 0.9em; color: #555; }
+        .noknead-badge { display: inline-block; font-size: 0.7em; background: #eee; padding: 2px 6px; border-radius: 4px; margin-bottom: 8px; color: #666; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;}
+
+        @media (max-width: 800px) { 
+            .knowledge-layout { flex-direction: column; } 
+            .chapter-nav { width: 100%; position: static; margin-bottom: 20px;} 
+            .card-grid { grid-template-columns: 1fr; } 
+            .header { flex-direction: column; gap: 10px;}
+        }
+        
+        /* Lightbox */
+        #image-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); align-items: center; justify-content: center; cursor: zoom-out; opacity: 0; transition: opacity 0.3s ease; padding: 20px; box-sizing: border-box; }
+        #image-modal.show { display: flex; opacity: 1; }
+        #modal-img { max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 0 20px rgba(0,0,0,0.5); border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <a href="../baender.html" class="btn-back">← Zurück</a>
+            <div class="brand">Wissensbibliothek</div>
+        </div>
+
+        <div class="knowledge-layout">
+            <nav class="chapter-nav">
+                <h3>Inhalt</h3>
+                <a href="#intro" class="chapter-link active">Einleitung</a>
+                <a href="#chemie" class="chapter-link">1. Die Chemie der Ruhe</a>
+                <a href="#enzym" class="chapter-link">2. Enzym-Boost</a>
+                <a href="#topf" class="chapter-link">3. Der Topf-Effekt</a>
+                <a href="#galerie" class="chapter-link">4. Galerie</a>
+            </nav>
+
+            <main class="content-area">
+                <section id="intro" class="content-section">
+                    <h1 class="page-title">No-Knead: Zeit statt Kraft</h1>
+                    <p class="lead">Lange galt: Brot muss man kneten, bis der Schweiß fließt. Dann kam die "No-Knead"-Revolution (Jim Lahey, New York Times). Das Geheimnis: Gluten bildet sich auch von ganz allein – wenn man ihm 18 Stunden Zeit und viel Wasser gibt.</p>
+                    <img src="../assets/image/baender/noknead_header.jpg" class="content-img" alt="Rustikales Topfbrot mit offener Krume" onerror="this.style.display='none'">
+                </section>
+
+                <section id="chemie" class="content-section">
+                    <h2>1. Die Chemie der Ruhe (Autolyse)</h2>
+                    <p>Mehlproteine (Gliadin und Glutenin) sind wie ungeordnete Wollknäuel. Sobald Wasser dazukommt, entfalten sie sich.
+                    <br><strong>Kneten vs. Warten:</strong> Kneten zwingt die Proteine mechanisch in eine Reihe. Warten (Zeit) erlaubt ihnen, sich durch brownsche Molekularbewegung von selbst zu finden und zu vernetzen. Das Ergebnis ist oft sogar aromatischer, weil durch weniger Kneten weniger Sauerstoff in den Teig gelangt (weniger Oxidation der Carotinoide = gelbere Krume, mehr Geschmack).</p>
+                </section>
+
+                <section id="enzym" class="content-section">
+                    <h2>2. Enzym-Boost (Geschmack)</h2>
+                    <div class="time-box">
+                        <h4>Die 18-Stunden-Regel</h4>
+                        <p>Warum braucht No-Knead so wenig Hefe (nur 1g)? Weil die Zeit für uns arbeitet.
+                        <br>Über 12-18 Stunden zerlegen Enzyme (Amylasen) die Stärke in Zucker. Proteasen zerlegen Eiweiß in Aminosäuren.
+                        <br><strong>Das Ergebnis:</strong> Wenn das Brot in den Ofen kommt, ist es voll mit Aromavorstufen. Die Kruste karamellisiert stärker und schmeckt viel komplexer als ein schnelles Hefebrot.</p>
+                    </div>
+                </section>
+
+                <section id="topf" class="content-section">
+                    <h2>3. Der Topf-Effekt (Dutch Oven)</h2>
+                    <p>No-Knead Teige sind weich (hohe Hydration > 75%). Sie würden auf dem Blech breitlaufen.</p>
+                    <div class="pot-box">
+                        <h4>Der Dampf-Reaktor</h4>
+                        <p>Man kippt den weichen Teig in einen glühend heißen Gusseisen-Topf und schließt den Deckel.
+                        <br><strong>Der Trick:</strong> Der Topf simuliert einen Profi-Etagenofen. Die Eigenfeuchtigkeit des Teigs verdampft, kann aber nicht weg. Der Teig backt in seinem eigenen Dampf. Das hält die Haut elastisch und ermöglicht einen gigantischen Ofentrieb ("Oven Spring"). Nach 20 Min nimmt man den Deckel ab, damit die Kruste kross wird.</p>
+                    </div>
+                </section>
+
+                <section id="galerie" class="content-section">
+                    <h2>4. Galerie der Methoden (7 Varianten)</h2>
+                    <div id="container-noknead" class="card-grid"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div id="image-modal"><img id="modal-img" src=""></div>
+
+    <script>
+        const IMG_PATH = '../assets/image/baender/';
+        
+        const DATA = [
+            { name: "Classic No-Knead", type: "Jim Lahey", desc: "Das Originalrezept. Mehl, Wasser, Salz, 1g Hefe. 18h stehen lassen, im Topf backen. Grobe Poren.", img: "noknead_classic.jpg" },
+            { name: "Topfbrot (Dutch Oven)", type: "Werkzeug", desc: "Der schwere Gusseisentopf speichert Hitze extrem gut und hält den Dampf am Brot. Essentiell für Kruste.", img: "noknead_dutch.jpg" },
+            { name: "Stretch & Fold", type: "Struktur", desc: "Auch ohne Kneten hilft Falten. Man zieht den Teig alle 30 Min lang und legt ihn über sich selbst. Stärkt das Gerüst.", img: "noknead_fold.jpg" },
+            { name: "Baguette (No-Knead)", type: "Form", desc: "Durch kalte Langzeitführung im Kühlschrank (48h) entwickelt sich der Geschmack. Vorsichtig formen, um Luft nicht rauszudrücken.", img: "noknead_baguette.jpg" },
+            { name: "Ciabatta", type: "High Hydration", desc: "Extrem weicher Teig (80% Wasser). Wird nicht geformt, sondern nur abgestochen. Typische riesige Löcher.", img: "noknead_ciabatta.jpg" },
+            { name: "Focaccia", type: "Blech", desc: "Der einfachste No-Knead-Teig. Wird in ein geöltes Blech gekippt und mit den Fingern eingedrückt (Dimpling).", img: "noknead_focaccia.jpg" },
+            { name: "Pfannenbrot", type: "Schnell", desc: "No-Knead Teig, der in der Pfanne als Fladen ausgebacken wird. Ideal, wenn man keinen Ofen hat.", img: "noknead_pfanne.jpg" }
+        ];
+
+        // --- RENDER LOGIC ---
+        (function() {
+            // Navigation
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.chapter-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => { if (scrollY >= section.offsetTop - 250) current = section.getAttribute('id'); });
+                if (scrollY < 100) current = 'intro';
+                navLinks.forEach(link => { link.classList.remove('active'); if (link.getAttribute('href').includes(current)) link.classList.add('active'); });
+            });
+
+            // Cards
+            const container = document.getElementById('container-noknead');
+            DATA.forEach(row => {
+                let imageHtml = `<div style="height:180px; background:#eee; color:#ccc; display:flex; align-items:center; justify-content:center;">Kein Bild</div>`;
+                if(row.img) {
+                    imageHtml = `<img src="${IMG_PATH}${row.img}" class="noknead-card-img" alt="${row.name}" onerror="this.outerHTML='<div style=\'height:180px; background:#eee; color:#ccc; display:flex; align-items:center; justify-content:center;\'>Bild fehlt</div>'">`;
+                }
+                const cardHtml = `
+                    <div class="noknead-card">
+                        ${imageHtml}
+                        <div class="noknead-card-body">
+                            <span class="noknead-badge">${row.type}</span>
+                            <div class="noknead-title">${row.name}</div>
+                            <div class="noknead-desc">${row.desc}</div>
+                        </div>
+                    </div>`;
+                container.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        })();
+
+        // Lightbox
+        document.addEventListener('DOMContentLoaded', () => {
+             const modal = document.getElementById('image-modal'); 
+             const modalImg = document.getElementById('modal-img');
+             
+             function openModal(imgSrc) { 
+                 if (!imgSrc) return; 
+                 modalImg.src = imgSrc; 
+                 modal.classList.add('show'); 
+             }
+             
+             modal.addEventListener('click', () => { 
+                 modal.classList.remove('show'); 
+                 setTimeout(() => modalImg.src = '', 300); 
+             });
+             
+             document.addEventListener('click', function(e) { 
+                 if (e.target.classList.contains('content-img') || e.target.classList.contains('noknead-card-img')) { 
+                     openModal(e.target.src); 
+                 } 
+             });
+        });
+    </script>
+</body>
+</html>
+

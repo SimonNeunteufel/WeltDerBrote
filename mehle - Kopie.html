@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – Mehl- & Stofflexikon</title>
+    <link rel="stylesheet" href="./assets/css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+        .table-wrap { max-height: calc(100vh - 250px); overflow: auto; border: 1px solid #eee; border-radius: 8px; }
+        .cat-chip { padding: 4px 10px; border-radius: 20px; font-size: 0.8em; margin-right: 5px; background: #eee; cursor: pointer; border: 1px solid #ddd; }
+        .cat-chip.active { background: var(--accent-brot); color: white; border-color: var(--accent-brot); }
+        .tech-preview { font-size: 0.85em; color: #666; font-style: italic; }
+        .source-badge { font-size: 0.7em; color: #999; border: 1px solid #eee; padding: 2px 4px; border-radius: 3px; }
+    </style>
+</head>
+<body class="BG_Mehl">
+    <div class="page">
+        <div class="header">
+            <button class="btn" onclick="location.href='./index.html'">← Home</button>
+            <div class="brand">Mehl- & Stofflexikon</div>
+            <nav class="nav">
+                <a href="./rezepte.html">Rezepte</a>
+                <a href="./mehle.html" class="active">Wissen</a>
+            </nav>
+        </div>
+
+        <div class="toolbar" style="flex-direction: column; align-items: flex-start; gap: 15px;">
+            <div id="filterBar" style="display:flex; gap: 5px;">
+                <span class="cat-chip active" onclick="filterCat('Alle', this)">Alle</span>
+                <span class="cat-chip" onclick="filterCat('Mehl', this)">🌾 Mehle</span>
+                <span class="cat-chip" onclick="filterCat('Triebmittel', this)">🧪 Treibmittel & Starter</span>
+                <span class="cat-chip" onclick="filterCat('Technik', this)">⚙️ Techniken</span>
+            </div>
+            <input id="q" placeholder="Nach Mehltyp, Eigenschaften oder Geschichte suchen..." type="search" style="width: 100%; padding: 10px;">
+        </div>
+
+        <div class="table-wrap">
+            <table id="t">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Bezeichnung</th>
+                        <th>Kategorie</th>
+                        <th>Info / Eigenschaften</th>
+                        <th>Aktion</th>
+                    </tr>
+                </thead>
+                <tbody id="wissenBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="./assets/js/util.js"></script>
+    <script>
+    let combinedData = [];
+
+    (async () => {
+        // Lade beide CSVs
+        const [wissenCsv, rezepteCsv] = await Promise.all([
+            window.$util.loadCsv('./assets/data/wdb_wissen.csv'),
+            window.$util.loadCsv('./assets/data/wdb_rezepte.csv')
+        ]);
+
+        // 1. Wissen Daten (Mehle, Techniken -S-)
+        const wissenItems = wissenCsv.map(r => ({
+            id: r.wissen_id,
+            name: r.name,
+            kategorie: r.kategorie || 'Mehl',
+            info: r.technische_daten || r.typisierung_mahlgrad,
+            source: 'wissen',
+            url: `./wissen_detail.html?id=${r.wissen_id}`
+        }));
+
+        // 2. Rezepte Daten (Nur Basics/Treibmittel -B- oder Gruppe Treibmittel)
+        const basicsItems = [];
+        const seen = new Set();
+        rezepteCsv.forEach(r => {
+            if(!r.brot_id) return;
+            // Filterlogik für "Wissen/Basics": ID hat -B- oder Gruppe ist Treibmittel
+            if ( (r.brot_id.includes('-B-') || r.gruppe === 'Treibmittel') && !seen.has(r.brot_id) ) {
+                seen.add(r.brot_id);
+                basicsItems.push({
+                    id: r.brot_id,
+                    name: r.name,
+                    kategorie: 'Triebmittel', // Erzwinge Kategorie für den Filter
+                    info: r.herkunft || 'Rezeptur zur Herstellung',
+                    source: 'rezept',
+                    url: `./rezept_ansicht.html?id=${r.brot_id}` // Link zum Rezeptblatt
+                });
+            }
+        });
+
+        combinedData = [...wissenItems, ...basicsItems];
+        render(combinedData);
+    })();
+
+    function render(list) {
+        const tbody = document.getElementById('wissenBody');
+        tbody.innerHTML = list.map(r => `
+            <tr onclick="location.href='${r.url}'">
+                <td class="col-id">${r.id}</td>
+                <td><b>${r.name}</b></td>
+                <td><span class="tag">${r.kategorie}</span></td>
+                <td class="tech-preview">${r.info ? r.info.replace(/\|/g, ' · ') : ''}</td>
+                <td><button class="btn-sm">Ansehen</button></td>
+            </tr>
+        `).join('');
+    }
+
+    function filterCat(cat, el) {
+        document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+        el.classList.add('active');
+        
+        let filtered = [];
+        if (cat === 'Alle') {
+            filtered = combinedData;
+        } else if (cat === 'Triebmittel') {
+            // Hier fangen wir alles ab, was Treibmittel heisst oder aus der Rezept-CSV kommt (das sind meist Starter)
+            filtered = combinedData.filter(d => d.kategorie === 'Triebmittel' || d.source === 'rezept');
+        } else {
+            filtered = combinedData.filter(d => d.kategorie === cat);
+        }
+        render(filtered);
+    }
+
+    document.getElementById('q').oninput = (e) => {
+        const query = e.target.value.toLowerCase();
+        const hits = combinedData.filter(r => Object.values(r).join(' ').toLowerCase().includes(query));
+        render(hits);
+    };
+    </script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – Gerichte & Snacks</title>
+    <link rel="stylesheet" href="./assets/css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+        /* Styles wie rezepte.html, aber mit Gericht-Akzenten */
+        .table-wrap { max-height: calc(100vh - 250px); overflow: auto; border: 1px solid #eee; border-radius: 8px; }
+        #t { width: 100%; border-collapse: collapse; background: white; }
+        #t th { position: sticky; top: 0; background: #fff3e0; padding: 12px; text-align: left; border-bottom: 2px solid #ffcc80; }
+        #t td { padding: 12px; border-bottom: 1px solid #eee; vertical-align: middle; }
+        #t tr:hover { background-color: #fff8e1; cursor: pointer; }
+        .badge-status { padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; }
+        .status-final { background: #d1fae5; color: #065f46; }
+        .status-test { background: #fef3c7; color: #92400e; }
+        .status-draft { background: #f3f4f6; color: #374151; }
+
+        .col-check { width: 40px; text-align: center; }
+        .recipe-check { transform: scale(1.2); cursor: pointer; }
+        
+        #selectionBar {
+            position: fixed; bottom: -100px; left: 0; right: 0;
+            background: #d84315; color: white;
+            padding: 15px 30px; display: flex; justify-content: center; align-items: center; gap: 20px;
+            transition: bottom 0.3s ease-in-out; box-shadow: 0 -4px 15px rgba(0,0,0,0.2); z-index: 100;
+        }
+        #selectionBar.visible { bottom: 0; }
+        .btn-action { 
+            background: white; color: #d84315; border: none; padding: 10px 25px; 
+            border-radius: 30px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .type-badge { font-size: 0.75em; padding: 2px 6px; border-radius: 4px; background: #fbe9e7; color: #bf360c; border: 1px solid #ffccbc; }
+    </style>
+</head>
+<body class="BG_Gericht">
+    <div class="page">
+        <div class="header">
+            <button class="btn" onclick="location.href='./index.html'">← Home</button>
+            <div class="brand">Gerichte & Snacks</div>
+            <nav class="nav">
+                <a href="./baender.html">Bände</a>
+                <a href="./rezepte.html">Brote</a>
+                <a href="./gerichte_liste.html" class="active">Gerichte</a>
+            </nav>
+        </div>
+
+        <div class="toolbar">
+            <input id="q" placeholder="Gericht suchen (z.B. Tacos, Empanadas)..." type="search" style="flex-grow:1; padding: 10px;">
+            <button class="btn" id="go" style="background:#d84315;">Suchen</button>
+        </div>
+
+        <div class="table-wrap">
+            <table id="t">
+                <thead>
+                    <tr>
+                        <th class="col-check"><input type="checkbox" id="selectAll" style="transform: scale(1.2); cursor: pointer;"></th>
+                        <th>ID</th>
+                        <th>Name des Gerichts</th>
+                        <th>Region / Herkunft</th>
+                        <th>Status</th>
+                        <th>Aktion</th>
+                    </tr>
+                </thead>
+                <tbody id="recipeBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="selectionBar">
+        <div style="font-size: 1.1em;"><span id="countDisplay" style="font-weight: bold;">0</span> ausgewählt</div>
+        <button class="btn-action" onclick="viewSelected()">Auswahl anzeigen</button>
+    </div>
+
+    <script src="./assets/js/util.js"></script>
+    <script>
+    (async () => {
+        const data = await window.$util.loadCsv('./assets/data/wdb_rezepte.csv');
+        const tbody = document.getElementById('recipeBody');
+        const selectAllBox = document.getElementById('selectAll');
+        const selectionBar = document.getElementById('selectionBar');
+        const countDisplay = document.getElementById('countDisplay');
+        
+        // FILTER: Nur IDs mit -R- (Rezepte/Gerichte) anzeigen
+        const filteredData = data.filter(r => {
+            if(!r.brot_id) return false;
+            return r.brot_id.toUpperCase().includes('-R-');
+        });
+
+        const uniqueRecipes = [];
+        const seen = new Set();
+        filteredData.forEach(r => {
+            if (!seen.has(r.brot_id)) {
+                uniqueRecipes.push(r);
+                seen.add(r.brot_id);
+            }
+        });
+
+        const render = (list) => {
+            tbody.innerHTML = list.map(r => `
+                <tr onclick="location.href='./gerichte_detail.html?id=${r.brot_id}'">
+                    <td class="col-check" onclick="event.stopPropagation()">
+                        <input type="checkbox" class="recipe-check" value="${r.brot_id}">
+                    </td>
+                    <td class="col-id">${r.brot_id}</td>
+                    <td><b>${r.name || 'Unbenannt'}</b> <span class="type-badge">Gericht</span></td>
+                    <td><small>${r.atlas_ref_id || ''} (${r.herkunft || ''})</small></td>
+                    <td><span class="badge-status status-${(r.status || 'draft').toLowerCase()}">${r.status || 'Draft'}</span></td>
+                    <td onclick="event.stopPropagation()">
+                        <button class="btn-sm" style="background:#d84315;" onclick="location.href='./gerichte_detail.html?id=${r.brot_id}'">Kochen</button>
+                    </td>
+                </tr>
+            `).join('');
+
+            document.querySelectorAll('.recipe-check').forEach(cb => {
+                cb.addEventListener('change', updateSelectionUI);
+            });
+            updateSelectionUI();
+        };
+
+        const updateSelectionUI = () => {
+            const checkedBoxes = document.querySelectorAll('.recipe-check:checked');
+            const visibleBoxes = document.querySelectorAll('.recipe-check');
+            const count = checkedBoxes.length;
+            
+            countDisplay.innerText = count;
+            if (count > 0) selectionBar.classList.add('visible');
+            else selectionBar.classList.remove('visible');
+
+            if (visibleBoxes.length > 0 && checkedBoxes.length === visibleBoxes.length) {
+                selectAllBox.checked = true; selectAllBox.indeterminate = false;
+            } else if (count > 0) {
+                selectAllBox.checked = false; selectAllBox.indeterminate = true;
+            } else {
+                selectAllBox.checked = false; selectAllBox.indeterminate = false;
+            }
+        };
+
+        selectAllBox.addEventListener('change', (e) => {
+            const isChecked = e.target.checked;
+            document.querySelectorAll('.recipe-check').forEach(cb => { cb.checked = isChecked; });
+            updateSelectionUI();
+        });
+
+        window.viewSelected = () => {
+            const checkedBoxes = document.querySelectorAll('.recipe-check:checked');
+            const ids = Array.from(checkedBoxes).map(cb => cb.value);
+            if (ids.length === 0) return;
+            location.href = `./gerichte_detail.html?id=${ids.join(',')}`;
+        };
+
+        document.getElementById('q').oninput = (e) => {
+            const query = e.target.value.toLowerCase();
+            const filtered = uniqueRecipes.filter(r => 
+                Object.values(r).join(' ').toLowerCase().includes(query)
+            );
+            render(filtered);
+        };
+
+        render(uniqueRecipes);
+    })();
+    </script>
+</body>
+</html>

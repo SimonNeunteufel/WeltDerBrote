@@ -1,0 +1,5 @@
+id;parent_id;typ;name;titelbild_ref;intro_text;tags_liste;sortierung
+ATL-001;;Band;Europa;eu_map.jpg;Die Wiege der Brotkultur;;1
+ATL-002;ATL-001;Land;Schweiz;ch_flag.jpg;Land der 200 Kantonsbrote;;1
+ATL-003;ATL-001;Land;Frankreich;fr_flag.jpg;Baguette und Savoir Vivre;;2
+ATL-004;;Band;Amerika;am_map.jpg;Von Tortillas bis Sourdough;;2

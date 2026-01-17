@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – Spätzle & Knöpfle: Das Gold der Alpen</title>
+    
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <script src="../assets/js/util.js"></script>
+    
+    <style>
+        /* --- Layout & Basis --- */
+        body { background-color: #fcfbf9; color: #333; font-family: sans-serif; margin: 0; padding: 0; }
+        .page { min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* HEADER */
+        .header { 
+            padding: 20px 40px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            background: #fff;
+        }
+        .brand { font-weight: bold; font-size: 1.2em; color: #3e2723; }
+        .btn-back {
+            background-color: #4e342e;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-back:hover { background-color: #5d4037; }
+
+        .knowledge-layout { display: flex; max-width: 1200px; margin: 40px auto; gap: 40px; padding: 0 20px; align-items: flex-start; flex-grow: 1; }
+        
+        /* Navigation Sidebar */
+        .chapter-nav { width: 250px; flex-shrink: 0; background: white; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow-y: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .chapter-nav h3 { margin-top: 0; border-bottom: 2px solid #8d6e63; padding-bottom: 10px; color: #4e342e; }
+        .chapter-link { display: block; padding: 10px 0; color: #666; text-decoration: none; border-bottom: 1px solid #eee; transition: all 0.2s; }
+        .chapter-link:hover { color: #8d6e63; padding-left: 5px; }
+        .chapter-link.active { font-weight: bold; color: #4e342e; border-left: 3px solid #8d6e63; padding-left: 10px; background: #fafafa; }
+        
+        /* Content Area */
+        .content-area { flex-grow: 1; background: white; padding: 40px; border-radius: 8px; border: 1px solid #e0e0e0; line-height: 1.8; color: #333; min-width: 0; }
+        .content-section { margin-bottom: 60px; scroll-margin-top: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 40px; }
+        .content-section:last-child { border-bottom: none; }
+        
+        /* Typografie */
+        h1.page-title { font-size: 2.5em; color: #3e2723; margin-top: 0; }
+        h2 { color: #5d4037; border-left: 5px solid #8d6e63; padding-left: 15px; margin-top: 0; margin-bottom: 20px; }
+        h3 { color: #6d4c41; margin-top: 30px; font-size: 1.3em; border-bottom: 1px solid #eee; padding-bottom: 8px;}
+        p { margin-bottom: 20px; font-size: 1.05em; }
+        
+        /* Bilder */
+        .content-img { width: 100%; height: auto; border-radius: 4px; margin-bottom: 10px; border: 1px solid #e0e0e0; cursor: zoom-in; transition: transform 0.2s ease; display: block; }
+        .content-img:hover { transform: scale(1.02); }
+        .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+        
+        /* Boxen & Karten */
+        .tech-box { background: #fff8e1; border-left: 5px solid #ffc107; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+        .tech-box h4 { margin-top: 0; color: #ff8f00; }
+
+        /* Karten Grid */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; margin-top: 30px; }
+        .spaetzle-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: transform 0.2s; display: flex; flex-direction: column; }
+        .spaetzle-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .spaetzle-card-img { width: 100%; height: 160px; object-fit: cover; border-bottom: 1px solid #eee; cursor: zoom-in; }
+        .spaetzle-card-body { padding: 15px; flex-grow: 1; }
+        .spaetzle-card-title { font-weight: bold; font-size: 1.1em; color: #3e2723; margin-bottom: 5px; }
+        .spaetzle-card-desc { font-size: 0.85em; color: #555; line-height: 1.5; }
+        .spaetzle-badge { display: inline-block; font-size: 0.7em; background: #eee; padding: 2px 6px; border-radius: 4px; margin-bottom: 8px; color: #666; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;}
+
+        @media (max-width: 800px) {
+            .knowledge-layout { flex-direction: column; }
+            .chapter-nav { width: 100%; position: static; margin-bottom: 20px; max-height: none;}
+            .img-grid { grid-template-columns: 1fr; }
+            .header { flex-direction: column; gap: 10px;}
+        }
+        
+        /* Lightbox */
+        #image-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); align-items: center; justify-content: center; cursor: zoom-out; opacity: 0; transition: opacity 0.3s ease; padding: 20px; box-sizing: border-box; }
+        #image-modal.show { display: flex; opacity: 1; }
+        #modal-img { max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 0 20px rgba(0,0,0,0.5); border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <a href="../baender.html" class="btn-back">← Zurück</a>
+            <div class="brand">Wissensbibliothek</div>
+        </div>
+
+        <div class="knowledge-layout">
+            <nav class="chapter-nav">
+                <h3>Inhalt</h3>
+                <a href="#intro" class="chapter-link active">Einleitung</a>
+                <a href="#teig" class="chapter-link">1. Zäh muss er sein</a>
+                <a href="#technik" class="chapter-link">2. Schaben vs. Hobeln</a>
+                <a href="#arten" class="chapter-link">3. Die Spätzle-Familie</a>
+                <a href="#kaese" class="chapter-link">4. Der Mythos Kässpätzle</a>
+            </nav>
+
+            <main class="content-area">
+                <section id="intro" class="content-section">
+                    <h1 class="page-title">Spätzle & Knöpfle: Das Gold der Alpen</h1>
+                    <p class="lead">Während Italien Pasta trocknet, wirft der Alpenraum den Teig direkt ins kochende Wasser. Es ist eine Küche der Frische, der Eier und der Improvisation.</p>
+                    <img src="../assets/image/baender/spaetzle_header.jpg" class="content-img" alt="Frische Spätzle auf dem Brett" onerror="this.style.display='none'">
+                </section>
+
+                <section id="teig" class="content-section">
+                    <h2>1. Zäh muss er sein: Die Physik</h2>
+                    <p>Ein Spätzleteig ist weder flüssig (wie Crêpes) noch fest (wie Nudelteig). Er liegt dazwischen – er ist <strong>viskos</strong>.</p>
+                    <p>Die Formel lautet: 1 Ei auf 100g Mehl. Das Ei ist hier das entscheidende Bindemittel. Es gerinnt im heißen Wasser sofort und gibt der Spätzle ihre Struktur.</p>
+                    
+                    <div class="tech-box">
+                        <h4>Warum "Spätzlemehl" (Dunst)?</h4>
+                        <p>Profis nutzen kein feines 405er Mehl, sondern "Dunst" oder "doppelgriffiges Mehl".
+                        <br><strong>Der Grund:</strong> Die gröberen Mehlpartikel nehmen Wasser langsamer auf. Das verhindert, dass der Teig sofort "verschleimt" und klebrig wird. Die Spätzle bekommen dadurch einen besseren "Biss" (Kern) und lassen sich sauberer schaben.</p>
+                    </div>
+                </section>
+
+                <section id="technik" class="content-section">
+                    <h2>2. Schaben, Hobeln, Pressen</h2>
+                    <p>Die Form der Spätzle erzählt, welches Werkzeug benutzt wurde.</p>
+                    
+                    <div class="img-grid">
+                        <div>
+                            <h3>Handgeschabt (Die Königsdisziplin)</h3>
+                            <p>Der Teig wird auf einem nassen Holzbrett dünn ausgestrichen. Mit einem Schaber wird blitzschnell ein Streifen Teig ins Wasser geschleudert.
+                            <br><strong>Ergebnis:</strong> Unregelmäßige Formen, dünne Enden, dicker Bauch. Soße haftet perfekt.</p>
+                        </div>
+                        <div>
+                            <h3>Gepresst / Gehobelt</h3>
+                            <p>Schwaben nutzen oft die Presse (lange Fäden wie Spaghetti). Schweizer und Allgäuer nutzen den Hobel (kurze Tropfen = Knöpfle).
+                            <br><strong>Ergebnis:</strong> Gleichmäßig, glatter, oft fester im Biss.</p>
+                        </div>
+                    </div>
+                    <img src="../assets/image/baender/spaetzle_schaben.jpg" class="content-img" alt="Spätzle schaben von Hand" onerror="this.style.display='none'">
+                </section>
+
+                <section id="arten" class="content-section">
+                    <h2>3. Die Familie: Spätzle, Knöpfle & Co. (10 Varianten)</h2>
+                    <p>Vom Schwabenland bis Ungarn gibt es viele Varianten dieses "gekochten Teigs".</p>
+                    <div id="container-spaetzle" class="card-grid"></div>
+                </section>
+
+                <section id="kaese" class="content-section">
+                    <h2>4. Der Mythos Kässpätzle</h2>
+                    <p>Kässpätzle (oder "Kässpatzen") sind mehr als nur Nudeln mit Käse. Es ist eine Emulsion.</p>
+                    <p>Traditionell werden Spätzle und geriebener Bergkäse (Emmentaler, Bergkäse, Weißlacker) geschichtet. Wichtig ist das <strong>Kochwasser</strong>: Ein Löffel davon sorgt dafür, dass der Käse cremig schmilzt und nicht nur fettig ausölt. Gekrönt wird alles von "Schmelzzwiebeln" – langsam in Butter karamellisierten Zwiebelringen.</p>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <div id="image-modal"><img id="modal-img" src=""></div>
+
+    <script>
+        const IMG_PATH = '../assets/image/baender/';
+
+        const SPAETZLE_STYLES = [
+            // DACH
+            {
+                name: "Schwäbische Spätzle",
+                origin: "Deutschland (BW)",
+                desc: "Der Klassiker. Länglich, oft handgeschabt oder gepresst. Dient traditionell als Beilage zu Braten ('Soßenfänger') oder Linsen.",
+                img: "spaetzle_schwaebisch.jpg"
+            },
+            {
+                name: "Knöpfle",
+                origin: "Schweiz / Allgäu",
+                desc: "Runder und kompakter. Der Teig wird durch ein Lochblech (Knöpflisieb) gedrückt. Klassisch als 'Käsknöpfle' oder Beilage zu Wild.",
+                img: "spaetzle_knoepfle.jpg"
+            },
+            {
+                name: "Vorarlberger Kässpätzle",
+                origin: "Österreich (Vbg)",
+                desc: "Die Besonderheit ist der Käse: Eine Mischung aus Bergkäse und 'Räßkäse' (sehr würzig). Werden nicht gebacken, sondern frisch im Topf gemischt.",
+                img: "spaetzle_kaesspaetzle.jpg"
+            },
+            {
+                name: "Spinatspätzle",
+                origin: "Südtirol / AT",
+                desc: "Grüne Spätzle. Pürierter Spinat wird direkt in den Teig gemischt. Oft mit einer Schinken-Sahne-Soße serviert.",
+                img: "spaetzle_spinat.jpg"
+            },
+            {
+                name: "Leberspätzle",
+                origin: "Bayern / AT",
+                desc: "Herzhaft! Durchgedrehte Leber im Teig. Werden meist als Suppeneinlage in einer kräftigen Rinderbrühe serviert.",
+                img: "spaetzle_leber.jpg"
+            },
+            {
+                name: "Kräuterspätzle",
+                origin: "Alpenraum",
+                desc: "Fein gehackte Kräuter (Petersilie, Schnittlauch, Bärlauch) im Teig. Eine frische Beilage zu Fisch oder Kalb.",
+                img: "spaetzle_kraeuter.jpg"
+            },
+            {
+                name: "Schupfnudeln",
+                origin: "DE / AT",
+                desc: "Der Hybrid. Ein Teig aus Kartoffeln UND Mehl (ähnlich Gnocchi, aber länglich gerollt). Werden gekocht und dann oft in Sauerkraut gebraten.",
+                img: "spaetzle_schupfnudeln.jpg"
+            },
+            // International
+            {
+                name: "Galuska (Nockerln)",
+                origin: "Ungarn",
+                desc: "Die klassische Beilage zum Pörkölt (Gulasch). Einfacher Teig (oft ohne Ei oder nur wenig), der mit dem Löffel ins Wasser gestochen wird.",
+                img: "spaetzle_galuska.jpg"
+            },
+            {
+                name: "Halušky",
+                origin: "Slowakei",
+                desc: "Nationalgericht (Bryndzové halušky). Kartoffel-Mehl-Teig (wie Gnocchi, aber kleiner gehobelt), serviert mit Schafskäse (Bryndza) und Speck.",
+                img: "spaetzle_halusky.jpg"
+            },
+            {
+                name: "Tarhonya",
+                origin: "Ungarn",
+                desc: "Die 'Eiergraupen'. Ein sehr fester, trockener Teig, der durch ein grobes Sieb gerieben wird. Die Körnchen werden getrocknet und später wie Reis gekocht.",
+                img: "spaetzle_tarhonya.jpg"
+            }
+        ];
+
+        // --- RENDER LOGIC ---
+        (function() {
+            // Navigation Spy
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.chapter-link');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => { if (scrollY >= section.offsetTop - 250) current = section.getAttribute('id'); });
+                if (scrollY < 100) current = 'intro';
+                navLinks.forEach(link => { link.classList.remove('active'); if (link.getAttribute('href').includes(current)) link.classList.add('active'); });
+            });
+
+            // Render Cards
+            const container = document.getElementById('container-spaetzle');
+            SPAETZLE_STYLES.forEach(row => {
+                let imageHtml = `<div style="height:160px; background:#f5f5f5; color:#ccc; display:flex; align-items:center; justify-content:center; font-size:0.8em;">Kein Bild</div>`;
+                if(row.img) {
+                    imageHtml = `<img src="${IMG_PATH}${row.img}" class="spaetzle-card-img" alt="${row.name}" onerror="this.outerHTML='<div style=\'height:160px; background:#eee; color:#ccc; display:flex; align-items:center; justify-content:center;\'>Bild fehlt</div>'">`;
+                }
+                const cardHtml = `
+                    <div class="spaetzle-card">
+                        ${imageHtml}
+                        <div class="spaetzle-card-body">
+                            <span class="spaetzle-badge">${row.origin}</span>
+                            <div class="spaetzle-card-title">${row.name}</div>
+                            <div class="spaetzle-card-desc">${row.desc}</div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        })();
+
+        // Lightbox
+        document.addEventListener('DOMContentLoaded', () => {
+             const modal = document.getElementById('image-modal'); 
+             const modalImg = document.getElementById('modal-img');
+             
+             function openModal(imgSrc) { 
+                 if (!imgSrc) return; 
+                 modalImg.src = imgSrc; 
+                 modal.classList.add('show'); 
+             }
+             
+             modal.addEventListener('click', () => { 
+                 modal.classList.remove('show'); 
+                 setTimeout(() => modalImg.src = '', 300); 
+             });
+             
+             document.addEventListener('click', function(e) { 
+                 if (e.target.classList.contains('content-img') || e.target.classList.contains('spaetzle-card-img')) { 
+                     openModal(e.target.src); 
+                 } 
+             });
+        });
+    </script>
+</body>
+</html>

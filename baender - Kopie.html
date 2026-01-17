@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WdB – Bibliothek der Bände</title>
+    <link rel="stylesheet" href="./assets/css/styles.css">
+    
+    <style>
+        body { background-color: #fcfbf9; color: #333; font-family: sans-serif; margin: 0; }
+        
+        .library-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        
+        .library-header { text-align: center; margin-bottom: 60px; padding-top: 20px; }
+        .library-title { font-size: 3em; color: #3e2723; margin-bottom: 10px; }
+        .library-subtitle { color: #6d4c41; font-size: 1.2em; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+
+        /* Regale Design */
+        .shelf-title { 
+            font-size: 1.5em; color: #8d6e63; border-bottom: 2px solid #e0e0e0; 
+            padding-bottom: 10px; margin: 70px 0 30px 0; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;
+        }
+
+        .volume-grid { 
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 30px; 
+        }
+
+        /* Das Design der "Buch"-Karten */
+        .volume-card {
+            background: white; border-radius: 12px; overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #f0f0f0;
+            transition: all 0.3s ease; text-decoration: none; color: inherit;
+            display: flex; flex-direction: column; height: 100%; position: relative;
+        }
+        
+        .volume-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border-color: #d7ccc8;
+        }
+
+        .volume-img-wrapper {
+            height: 160px; background-color: #eee; overflow: hidden; position: relative;
+        }
+        
+        .volume-img {
+            width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;
+        }
+        
+        .volume-card:hover .volume-img { transform: scale(1.05); }
+
+        .volume-content { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
+        
+        .volume-number { 
+            font-size: 0.75em; text-transform: uppercase; color: #8d6e63; 
+            font-weight: bold; margin-bottom: 8px; letter-spacing: 1px;
+        }
+        
+        .volume-title { 
+            font-size: 1.4em; font-weight: bold; color: #3e2723; margin-bottom: 10px; line-height: 1.2;
+        }
+        
+        .volume-desc { 
+            font-size: 0.95em; color: #666; line-height: 1.6; flex-grow: 1;
+        }
+
+        .volume-arrow {
+            margin-top: 20px; font-weight: bold; color: #8d6e63; font-size: 0.9em;
+            display: flex; align-items: center;
+        }
+        
+        .volume-card:hover .volume-arrow { color: #5d4037; }
+        .volume-card:hover .volume-arrow::after { content: ' →'; margin-left: 5px; }
+
+        @media (max-width: 600px) {
+            .library-title { font-size: 2em; }
+        }
+    </style>
+</head>
+<body>
+
+    <div style="padding: 20px; text-align: right; background: #fff; border-bottom: 1px solid #eee;">
+        <button class="btn" onclick="location.href='./index.html'" style="padding: 8px 16px; cursor: pointer; border: 1px solid #ccc; background: #fcfbf9; border-radius: 4px; font-weight: bold; color: #555;">Zur Startseite</button>
+    </div>
+
+    <div class="library-container">
+        
+        <header class="library-header">
+            <h1 class="library-title">Wissensbibliothek</h1>
+            <p class="library-subtitle">Eine umfassende Reise durch die Welt des Getreides. 22 Bände von der Chemie des Korns bis zur globalen Küche und Zukunftsvisionen.</p>
+        </header>
+
+        <div class="shelf-title">I. Die Theorie (Grundlagen)</div>
+        <div class="volume-grid">
+            
+            <a href="./brot_geschichte.html" class="volume-card">
+                <div class="volume-img-wrapper">
+                    <img src="./assets/image/brot_origin.jpg" class="volume-img" alt="Urzeitliches Brot" onerror="this.style.display='none'">
+                </div>
+                <div class="volume-content">
+                    <div class="volume-number">Band 1</div> <div class="volume-title">Die Entstehung</div>
+                    <div class="volume-desc">Vom heißen Stein der Urzeit bis zum modernen Sauerteigbrot. Wie Zivilisation und Backen zusammenhängen.</div>
+                    <div class="volume-arrow">Lesen</div>
+                </div>
+            </a>
+
+            <a href="./mehle.html" class="volume-card">
+                <div class="volume-img-wrapper">
+                    <img src="./assets/image/layout_intro_header.jpg" class="volume-img" alt="Weizenfeld" onerror="this.style.display='none'">
+                </div>
+                <div class="volume-content">
+                    <div class="volume-number">Band 2</div> <div class="volume-title">Geschichte der Mehle</div>
+                    <div class="volume-desc">Atlas der 39 Mehle. Von Weizen und Roggen bis zu Masa Harina, Teff und Insektenmehl.</div>
+                    <div class="volume-arrow">Lesen</div>
+                </div>
+            </a>
+
+            <a href="./triebmittel.html" class="volume-card">
+                <div class="volume-img-wrapper">
+                    <img src="./assets/image/hefe_sauerteig.jpg" class="volume-img" alt="Hefe" onerror="this.style.display='none'">
+                </div>
+                <div class="volume-content">
+                    <div class="volume-number">Band 3</div> <div class="volume-title">Triebmittel</div>
+                    <div class="volume-desc">Der Motor des Teigs. Hefe, Sauerteig, Backpulver und die Chemie dahinter.</div>
+                    <div class="volume-arrow">Lesen</div>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="shelf-title">II. Brot & Brötchen (Klassisch)</div>
+        <div class="volume-grid">
+
+            <a href="./brot_laib.html" class="volume-card">
+                <div class="volume-img-wrapper">
+                    <img src="./assets/image/brot_laib_header.jpg" class="volume-img" alt="Große Brotlaibe" onerror="this.style.display='none'">
+                </div>
+                <div class="volume-content">
+                    <div class="volume-number">Band 4</div> <div class="volume-title">Die großen Laibe</div>
+                    <div class="volume-desc">Das tägliche Brot. Sauerteig, wilde Porung und warum Dampf im Ofen so wichtig ist.</div>
+                    <div class="volume-arrow">Lesen</div>
+                </div>
+            </a>
+
+            <a href="./kleinbrote.html" class="volume-card">
+                <div class="volume-img-wrapper">
+                    <img src="./assets/image/kleinbrot_header.jpg" class="volume-img" alt="Brötchenkorb" onerror="this.style.display='none'">
+                </div>
+                <div class="volume-content">
+                    <div class="volume-number">Band 5</div> <div class="volume-title">Kleinbrote</div>
+                    <div class="volume-desc">Das Glück im Korb. Kaisersemmel, Schrippe und warum Brötchen so schnell altbacken werden.</div>
+                    <div class="volume-arrow">Lesen</div>
+                </div>
+            </a>
+
+            <a href="./soft_buns.html" class="volume-card">
+                <div class="volume-img-wrapper">
+                    <img src="./assets/image/soft_header.jpg" class="volume-img" alt="Zopf und Buns" onerror="this.style.display='none'">
+                </div>
+                <div class="volume-content">
+                    <div class="volume-number">Band 6</div> <div class="volume-title">Soft Buns & Zöpfe</div>
+                    <div class="volume-desc">Reiche Teige. Warum Fett weich macht, Burger Buns und der Unterschied Zopf vs. Challah.</div>
+                    <div class="volume-arrow">Lesen</div>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="shelf-title">III. Flach, Gefüllt & Global</div>
+        <div class="volume-grid">
+
+            <a href="./fladenbrote.html" class="volume-card">
+                <div class="volume-img-wrapper">
+                    <img src="./assets/image/fladenbrot_header.jpg" class="volume-img" alt="Fladenbrote" onerror="this.style.display='none'">
+                </div>
+                <div class="volume-content">
+                    <div class="volume-number">Band 7</div> <div class="volume-title">Fladenbrote</div>
+                    <div class="volume-desc">Die Mutter aller Brote. Von Naan aus dem Tandoor bis zur Dampftasche der Pita.</div>
+                    <div class="volume-arrow">Lesen</div>
+                </div>
+            </a>
+
+            <a href="./pizza.html" class="volume-card">
+                <div class="volume-img-wrapper">
+                    <img src="./assets/image/pizza_header.jpg" class="volume-img" alt="Pizza" onerror="this.style.display='none'">
+                </div>
+                <div class="volume-content">
+                    <div class="volume-number">Band 8</div> <div class="volume-title">Pizza & Focaccia</div>
+                    <div class="volume-desc">Die Physik der Hitze (485°C), Hydration und die großen Stile von Neapel bis New York.</div>
+                    <div class="volume-arrow">Lesen</div>
+                </div>
+            </a>
+
+            <a href="./tortillas.html" class="volume-card">
+                <div class="volume-img-wrapper">
+                    <img src="./assets/image/tortilla_header.jpg" class="volume-img" alt="Tortillas" onerror="this.style.display='none'">
+                </div>
+                <div class="volume-content">
+                    <div class="volume-number">Band 9</div> <div class="volume-title">Tortillas</div>
+                    <div class="volume-desc">Die Sonne Mexikos. Nixtamalisation, Tacos und der Unterschied zwischen Mais und Weizen.</div>
+                    <div class="volume-arrow">Lesen</div>
+                </div>
+            </a>
+
+            <a href="./empanadas.html" class="volume-card">
+                <div class="volume-img-wrapper">
+                    <img src="./assets/image/empanadas_header.jpg" class="volume-img" alt="Empanadas" onerror="this.style.display='none'">
+                </div>
+                <div class="volume-content">
+                    <div class="volume-number">Band 10</div> <div class="volume-title">Empanadas</div>
+                    <div class="volume-desc">Die Kunst des Einhüllens. Mürbeteig, Falttechniken (Repulgue) und südamerikanische Stile.</div>
+                    <div class="volume-arrow">Lesen</div>
+                </div>
+            </a>
+
+            <a href="./spezialitaeten.html" class="volume-card">
+                <div class="volume-img-wrapper">
+                    <img src="./assets/image/global_intro.jpg" class="volume-img" alt="Global Food" onerror="this.style.display='none'">
+                </div>
+                <div class="volume-content">
+                    <div class="volume-number">Band 11</div> <div class="volume-title">Globale Spezialitäten</div>
+                    <div class="volume-desc">Wenn der Ofen fehlt: Afrikas Swallows, Arktis-Bannock, Indische Idli und Japanische Mochi.</div>
+                    <div class="volume-arrow">Lesen</div>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="shelf-title">IV. Wasser, Dampf & Fett (Ohne Ofen)</div>
+        <div class="volume-grid">
+
+            <a href="./pasta.html" class="volume-card">
+                <div class="volume-img-wrapper">
+                    <img src="./assets/image/pasta_header.jpg" class="volume-img" alt="Pasta" onerror="this.style.display='none'">
+                </div>
+                <div class="volume-content">
+                    <div class="volume-number">Band 12</div> <div class="volume-title">Pasta</div>
+                    <div class="volume-desc">Architektur zum Essen. Hartweizen vs. Ei, Bronze-Matrizen und die perfekte Form für jede Soße.</div>
+                    <div class="volume-arrow">Lesen</div>
+                </div>
+            </a>
+
+            <a href="./spaetzle.html" class="volume-card">
+                <div class="volume-img-wrapper">
+                    <img src="./assets/image/spaetzle_header.jpg" class="volume-img" alt="Spätzle" onerror="this.style.display='none'">
+                </div>
+                <div class="volume-content">
+                    <div class="volume-number">Band 13</div> <div class="volume-title">Spätzle & Knöpfle</div>
+                    <div class="volume-desc">Das Gold der Alpen. Warum man "Dunst" braucht und die Kunst des Schabens.</div>
+                    <div class="volume-arrow">Lesen</div>
+                </div>
+            </a>
+
+            <a href="./knoedel.html" class="volume-card">
+                <div class="volume-img-wrapper">
+                    <img src="./assets/image/knoedel_header.jpg" class="volume-img" alt="Knödel" onerror="this.style.display='none'">
+                </div>
+                <div class="volume-content">
+                    <div class="volume-number">Band 14</div> <div class="volume-title">Knödel & Dumplings</div>
+                    <div class="volume-desc">Rund, gefüllt, gekocht. Von Thüringer Klößen bis zu chinesischen Dim Sum.</div>
+                    <div class="volume-arrow">Lesen</div>
+                </div>
+            </a>
+
+            <a href="./siedegebaeck.html" class="volume-card">
+                <div class="volume-img-wrapper">
+                    <img src="./assets/image/fry_header.jpg" class="volume-img" alt="Berliner" onerror="this.style.display='none'">
+                </div>
+                <div class="volume-content">
+                    <div class="volume-number">Band 15</div> <div class="volume-title">Siedegebäck</div>
+                    <div class="volume-desc">Gold aus dem Fett. Berliner, Fasnachtschüechli und die Physik der Fettbarriere.</div>
+                    <div class="volume-arrow">Lesen</div>
+                </div>
+            </a>
+
+            <a href="./asia_bakery.html" class="volume-card">
+                <div class="volume-img-wrapper">
+                    <img src="./assets/image/asia_header.jpg" class="volume-img" alt="Shokupan" onerror="this.style.display='none'">
+                </div>
+                <div class="volume-content">
+                    <div class="volume-number">Band 16</div> <div class="volume-title">Asia Bakery</div>
+                    <div class="volume-desc">Die Wissenschaft der Weichheit. Tangzhong (Water Roux), Shokupan und Melon Pan.</div>
+                    <div class="volume-arrow">Lesen</div>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="shelf-title">V. Feinbäckerei & Spezialwissen</div>
+        <div class="volume-grid">
+
+            <a href="./pfannkuchen.html" class="volume-card">
+                <div class="volume-img-wrapper">
+                    <img src="./assets/image/pancake_crepe.jpg" class="volume-img" alt="Crêpes" onerror="this.style.display='none'">
+                </div>
+                <div class="volume-content">
+                    <div class="volume-number">Band 17</div> <div class="volume-title">Pfannkuchen & Crêpes</div>
+                    <div class="volume-desc">Die Kunst des flüssigen Teigs. Viskosität, Galettes, Kaiserschmarrn und Schweizer Omeletten.</div>
+                    <div class="volume-arrow">Lesen</div>
+                </div>
+            </a>
+
+            <a href="./viennoiserie.html" class="volume-card">
+                <div class="volume-img-wrapper">
+                    <img src="./assets/image/vien_header.jpg" class="volume-img" alt="Croissant Struktur" onerror="this.style.display='none'">
+                </div>
+                <div class="volume-content">
+                    <div class="volume-number">Band 18</div> <div class="volume-title">Viennoiserie</div>
+                    <div class="volume-desc">Die hohe Kunst der Schichten. Croissants, Plunder und das Geheimnis des Tourierens.</div>
+                    <div class="volume-arrow">Lesen</div>
+                </div>
+            </a>
+
+            <a href="./lauge_bagel.html" class="volume-card">
+                <div class="volume-img-wrapper">
+                    <img src="./assets/image/lauge_header.jpg" class="volume-img" alt="Brezeln" onerror="this.style.display='none'">
+                </div>
+                <div class="volume-content">
+                    <div class="volume-number">Band 19</div> <div class="volume-title">Lauge & Bagels</div>
+                    <div class="volume-desc">Die Chemie der Bräunung. Warum Natronlauge Brezeln braun macht und warum Bagels gekocht werden.</div>
+                    <div class="volume-arrow">Lesen</div>
+                </div>
+            </a>
+
+            <a href="./dauergebaeck.html" class="volume-card">
+                <div class="volume-img-wrapper">
+                    <img src="./assets/image/dry_header.jpg" class="volume-img" alt="Zwieback" onerror="this.style.display='none'">
+                </div>
+                <div class="volume-content">
+                    <div class="volume-number">Band 20</div> <div class="volume-title">Hart & Trocken</div>
+                    <div class="volume-desc">Konservierung durch Wasserentzug. Vom Wikinger-Knäckebrot zum Zwieback und Matze.</div>
+                    <div class="volume-arrow">Lesen</div>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="shelf-title">VI. Praxis & Zeitreise</div>
+        <div class="volume-grid">
+            
+            <a href="./brot_technik.html" class="volume-card">
+                <div class="volume-img-wrapper">
+                    <img src="./assets/image/tech_header.jpg" class="volume-img" alt="Teig falten" onerror="this.style.display='none'">
+                </div>
+                <div class="volume-content">
+                    <div class="volume-number">Band 21</div> <div class="volume-title">Das Handwerk</div>
+                    <div class="volume-desc">Die Techniken der Profis: Fenstertest, Rundwirken, Kaisersemmel falten und Zöpfe flechten.</div>
+                    <div class="volume-arrow">Lesen</div>
+                </div>
+            </a>
+
+            <a href="./brot_zeitreise.html" class="volume-card">
+                <div class="volume-img-wrapper">
+                    <img src="./assets/image/zeitreise_header.jpg" class="volume-img" alt="Mittelalter Brot" onerror="this.style.display='none'">
+                </div>
+                <div class="volume-content">
+                    <div class="volume-number">Band 22</div> <div class="volume-title">Verlorene Brote & Zukunft</div>
+                    <div class="volume-desc">Notbrote aus Rinde, Kommissbrot und der Blick in die Zukunft: Insekten, Algen und 3D-Druck.</div>
+                    <div class="volume-arrow">Lesen</div>
+                </div>
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
