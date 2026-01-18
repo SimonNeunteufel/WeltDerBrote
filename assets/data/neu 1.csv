@@ -133,7 +133,7 @@ Dateiname;Thema;Prompt
             { name: "Burger Bun", origin: "USA", desc: "Brioche-Teig. Weich, süßlich, stabil. Soll den Fleischsaft aufsaugen, ohne zu zerfallen.", img: "roll_burgerbun.jpg" },
             { name: "Pão de Queijo", origin: "Brasilien", desc: "Glutenfrei. Brandteig aus Tapiokastärke (Maniok) und Käse. Innen hohl und gummiartig-elastisch.", img: "roll_paodequeijo.jpg" }
 
-
+bis hier
 
             { name: "Serviettenknödel", origin: "AT/CZ", desc: "Semmelknödelteig, der als Rolle in einem Tuch (Serviette) im Wasserdampf gegart und dann in Scheiben geschnitten wird.", img: "knoedel_servietten.jpg" },
             { name: "Leberknödel", origin: "DE/AT", desc: "Herzhaft! Semmelteig gemischt mit durchgedrehter Rinderleber. Klassisch als Suppeneinlage.", img: "knoedel_leber.jpg" },
