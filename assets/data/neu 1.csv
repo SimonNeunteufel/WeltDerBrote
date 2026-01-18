@@ -44,7 +44,35 @@ Dateiname;Thema;Prompt
             { name: "Mie Nudeln", origin: "China/Indo", desc: "Der Klassiker für Wok-Gerichte (Bami Goreng). Weizenmehl und Ei, oft vorgegart und getrocknet als Block.", img: "asia_mie.jpg" },
             { name: "Somen", origin: "Japan", desc: "Extrem dünne, weiße Weizennudeln (dünner als Capellini). Werden im Sommer eiskalt auf Eiswürfeln serviert.", img: "asia_somen.jpg" }
 
-
+                name: "Cornish Pasty (UK)",
+                type: "Mürbeteig",
+                desc: "Der Vorfahre. Robuster Teig mit dicker Kante (zum Festhalten für Bergarbeiter). Füllung: Rindfleisch, Kartoffeln, Steckrüben.",
+                img: "global_pasty.jpg"
+            },
+            {
+                name: "Samosa (Indien)",
+                type: "Maida-Mehl (Frittiert)",
+                desc: "Dreieckig, würzig. Teig oft mit Ajwain-Samen. Füllung meist Kartoffeln, Erbsen, Ingwer und Garam Masala.",
+                img: "global_samosa.jpg"
+            },
+            {
+                name: "Gyoza (Japan)",
+                type: "Nudelteig (Gedämpft/Gebraten)",
+                desc: "Dünner Teig. Füllung: Schweinehack, Kohl, Nira (Schnittknoblauch). Unten knusprig gebraten, oben weich gedämpft.",
+                img: "global_gyoza.jpg"
+            },
+            {
+                name: "Pierogi (Polen)",
+                type: "Nudelteig (Gekocht)",
+                desc: "Halbmondförmig, gekocht (und oft danach in Butter geschwenkt). Füllung: Kartoffeln & Quark (Ruskie), Fleisch oder Sauerkraut.",
+                img: "global_pierogi.jpg"
+            },
+            {
+                name: "Börek (Türkei/Balkan)",
+                type: "Yufka/Filo (Geschichtet/Gerollt)",
+                desc: "Hauchdünne Teigblätter. Oft als 'Sigara Börek' (Zigarrenform) mit Schafskäse und Petersilie frittiert oder gebacken.",
+                img: "global_borek.jpg"
+            }
 
 
 
